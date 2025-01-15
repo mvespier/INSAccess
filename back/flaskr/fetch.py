@@ -5,6 +5,14 @@ import re
 
 CURRENT_YEAR = "2024"
 
+
+def description_parsing():
+    pass
+
+def item_to_String():
+    pass
+
+
 def xml_to_list(url : str) -> list:
         
     response = requests.get(url)
@@ -19,7 +27,6 @@ def xml_to_list(url : str) -> list:
             "ev": "http://purl.org/rss/1.0/modules/event/"
         }
         pattern_for_parsing_1 = r'(?<=<br/>).*'
-        #pattern_for_parsing_2 = r"^(.*?(<br/>.*?){2}<br/>)"
 
 
         output =[]
@@ -30,6 +37,10 @@ def xml_to_list(url : str) -> list:
             end_date = item.find("ev:enddate", namespaces).text 
             description = item.find("description").text
             location = item.find("ev:location", namespaces).text
+
+            
+
+
 
             description_without_beginning =re.findall(pattern_for_parsing_1, description )[0]
             #description_without_end = re.findall(pattern_for_parsing_2, description_without_beginning)[0][0]
