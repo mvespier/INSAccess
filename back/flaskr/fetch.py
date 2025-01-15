@@ -6,11 +6,27 @@ import re
 CURRENT_YEAR = "2024"
 
 
-def description_parsing():
-    pass
+def description_parsing(description):
+    pattern_for_parsing = r'(?<=<br/>).*'
 
-def item_to_String():
-    pass
+    description_without_beginning =re.findall(pattern_for_parsing, description )[0]
+    final_description = description_without_beginning.split(r'<br/>')[1:-2]
+
+    i= get_name_index(final_description)
+
+
+    return final_description [:i+1]
+
+def get_name_index(list : list):
+    for i in range(len(list)):
+        if len(list[i].split(' ')) >1 :
+            return i 
+    
+
+
+def item_to_string(item):
+
+    return item.text if item != None else "None"
 
 
 def xml_to_list(url : str) -> list:
@@ -26,25 +42,22 @@ def xml_to_list(url : str) -> list:
         namespaces = {
             "ev": "http://purl.org/rss/1.0/modules/event/"
         }
-        pattern_for_parsing_1 = r'(?<=<br/>).*'
+        
 
 
         output =[]
 
         for item in root.findall("./channel/item"):
-            title = item.find("title").text
-            start_date = item.find("ev:startdate", namespaces).text
-            end_date = item.find("ev:enddate", namespaces).text 
-            description = item.find("description").text
-            location = item.find("ev:location", namespaces).text
+            title = item_to_string(item.find("title"))
+            start_date = item_to_string(item.find("ev:startdate", namespaces))
+            end_date = item_to_string(item.find("ev:enddate", namespaces))
+            description = item_to_string(item.find("description"))
+            location = item_to_string(item.find("ev:location", namespaces))
 
             
+            final_description =  description_parsing(description)
 
 
-
-            description_without_beginning =re.findall(pattern_for_parsing_1, description )[0]
-            #description_without_end = re.findall(pattern_for_parsing_2, description_without_beginning)[0][0]
-            final_description = description_without_beginning.split(r'<br/>')[1:-2]
             
             
 
