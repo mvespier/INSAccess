@@ -1,7 +1,7 @@
 :root {
     --numDays: 5;
     --numHours: 10;
-    --timeHeight: 60px;
+    --timeHeight: 80px;
     --calBgColor: #fff1f8;
     --eventBorderColor: #f2d3d8;
     --eventColor1: #ffd6d1;
@@ -36,54 +36,61 @@
     background: var(--calBgColor);
   }
   
-  .start-1 {
+  .start-0 {
     grid-row-start: 1;
   }
 
-  .start-2 {
+  .start-1 {
     grid-row-start: 2;
   }
 
-  .start-3 {
+  .start-2 {
     grid-row-start: 3;
   }
 
-  .start-4 {
+  .start-3 {
     grid-row-start: 4;
   }
   
-  .start-5 {
+  .start-4 {
     grid-row-start: 5;
   }
   
-  .start-6 {
+  .start-5 {
     grid-row-start: 6;
   }
   
-  .start-7 {
-    grid-row-start: 7;
+  .end-0 {
+    grid-row-end: 1;
+  }
+
+  .end-1 {
+    grid-row-end: 2;
   }
   
   .end-2 {
-    grid-row-end: 4;
+    grid-row-end: 3;
   }
   
   .end-3 {
-    grid-row-end: 5;
+    grid-row-end: 4;
   }
   
   .end-4 {
-    grid-row-end: 6;
+    grid-row-end: 5;
   }
   
   .end-5 {
-    grid-row-end: 7;
-  }
-  
-  .end-6 {
     grid-row-end: 6;
   }
-  
+
+  .end-6 {
+    grid-row-end: 7;
+  }
+
+  .end-7 {
+    grid-row-end: 8;
+  }
   
   .title {
     font-weight: 600;
