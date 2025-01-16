@@ -1,8 +1,9 @@
 :root {
     --numDays: 5;
-    --numHours: 21;
-    --timeHeight: 90px;
-    --subTimeHeight: 30px;
+    --numSubHours: 124;
+    --numHours: 7;
+    --timeHeight: 60px;
+    --subTimeHeight: 5px;
     --calBgColor: #fff1f8;
     --eventBorderColor: #f2d3d8;
     --eventColor1: #57caff;
@@ -20,7 +21,7 @@
   
   .timeline {
     display: grid;
-    grid-template-rows: repeat(var(--numHours), var(--timeHeight));
+    grid-template-rows: repeat(var(--numHours), var(--timeimeHeight));
   }
   
   .days {
@@ -32,10 +33,9 @@
   
   .events {
     display: grid;
-    grid-template-rows: repeat(var(--numHours), var(--subTimeHeight));
+    grid-template-rows: repeat(var(--numSubHours), var(--subTimeHeight));
     border-radius: 5px;
     background: var(--calBgColor);
-    //gap: 0.5rem;
   }
   
   .title {
