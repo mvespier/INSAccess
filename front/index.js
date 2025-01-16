@@ -1,4 +1,4 @@
-const hours_start = ["8h", "9h45", "11h30", "13h15", "15h", "16h45"]
+const hours_start = ["8h00", "9h45", "11h30", "13h15", "15h00", "16h45"]
 const hours_end = ["9h30", "11h15", "13h", "14h45", "16h30", "18h15"]
 
 function SingleEvent({start, end, label}){
@@ -20,16 +20,14 @@ function AllEvents(){
 }
 
 function TimeBar(){
+  const hours = [];
+  hours.push(<div key={-1} className="spacer"></div>);
+  for (let i = 0; i < hours_start.length; i++){
+    hours.push(<div key={i} className="time-marker">{hours_start[i]}</div>)
+  }
   return (
     <>
-        <div class="space"></div>
-        <div class="time-marker">8h00</div>
-        <div class="time-marker">9h30</div>
-        <div class="time-marker">11h15</div>
-        <div class="time-marker">13h00</div>
-        <div class="time-marker">14h45</div>
-        <div class="time-marker">16h30</div>
-        <div class="time-marker">18h15</div>
+        {hours}
     </>
   );
 }
