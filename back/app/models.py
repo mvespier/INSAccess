@@ -15,3 +15,19 @@ class User(UserMixin, db.Model):
     admin = db.Column(db.Boolean, default=False)
     # incremental user id - used for authentication
     seqid = db.Column(db.Integer, default=0)
+
+    
+
+
+
+# class cours (idcours, desc, dateD, dateF, groupeTD, Prof, Salle)
+
+#classe cours/groupeTD (idCours, TD)
+
+# class eleve(cleeUser, depart,annee , groupeTD, langue, ECAOplusieurs?,( filiaire, trucfalcutatif ) ) 
+
+# DEPART&ANNEE&SEMESTRE-NOMCOURS-TD/TP-XX
+# DEPART&ANNEE&SEMESTRE-TP/TD-XX
+# DEPART&ANNEE&SEMESTRE-TD/TPX-X
+# Nom de depart pas forcement correlee a nom request (ex : GC =/ GCU)
+# PLUSIEURS NOM POSSIBLE PAR DEPART PERFISP ING PERF
