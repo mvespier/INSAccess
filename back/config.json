@@ -1,0 +1,17 @@
+{
+	"APP_URL": "http://localhost:5000",
+	"SECRET_KEY": "the-secret-key-for-password-hashing",
+	"SQLALCHEMY_DATABASE_URI": "mysql+pymysql://user:toto@localhost/app?charset=utf8mb4",
+	"SQLALCHEMY_TRACK_MODIFICATIONS": true,
+	"PAGE_SIZE": 10,
+	"MAX_CONTENT_LENGTH": 16777216,
+	"ALLOWED_EXTENSIONS": ["jpg", "jpeg", "png"],
+	"UPLOAD_FOLDER": "PATHTO/repairkawapp/uploads",
+	"URL_SERIALIZER_SECRET": "url-sanitizer-secret-for-tokens",
+    "MAIL_SERVER": "MAIL_SERVER",
+    "MAIL_PORT": 465,
+    "MAIL_USERNAME": "USER",
+    "MAIL_PASSWORD": "PASSWORD",
+    "MAIL_USE_TLS": false,
+    "MAIL_USE_SSL": true
+}
