@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 from . import db
 import enum
+import sqlalchemy as sa
 
 class User(UserMixin, db.Model):
     """User definition, inherit from UserMixin for authentication"""
@@ -17,6 +18,13 @@ class User(UserMixin, db.Model):
     seqid = db.Column(db.Integer, default=0)
 
     
+class InsaClass(db.Model):
+    """INSA Class definition,to store class from insa with a foreign key to link the TD group to it""" 
+    id = db.Column(db.Integer, primary_key = True)
+    
+    desc = db.Column(db.String(255))
+    dateD = db.Column(db.)
+
 
 
 

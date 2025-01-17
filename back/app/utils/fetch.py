@@ -3,7 +3,7 @@ import requests
 from xml.etree import ElementTree
 import re
 
-def description_parsing(description):
+def description_parsing(description, list_of_depart, depart_year):
     pattern_for_parsing = r'(?<=<br/>).*'
 
     description_without_beginning =re.findall(pattern_for_parsing, description )[0]
@@ -11,15 +11,22 @@ def description_parsing(description):
 
     i= get_name_index(final_description)
 
-    if i==None:
-        return final_description,"none"
-    return final_description [:i], final_description[i]
+    name = final_description.pop(i) if i!=None else 'none'
+
+    
+    
+    
+
+    """if i==None:
+        return [],"none",final_description
+    return final_description [:i], final_description[i], final_description[i+1:]"""
+    return [],name,[]
 
 def get_name_index(list : list):
     for i in range(len(list)):
         if len(list[i].split(' ')) >1 :
             return i 
-    
+
 
 def item_to_string(item):
 
@@ -42,15 +49,15 @@ def xml_to_list(url : str) -> list:
 
         for item in root.findall("./channel/item"):
             title = item_to_string(item.find("title"))
-            start_date = item_to_string(item.find("ev:startdate", namespaces))
-            end_date = item_to_string(item.find("ev:enddate", namespaces))
+            date, start_hour = item_to_string(item.find("ev:startdate", namespaces)).split('T')
+            _, end_hour = item_to_string(item.find("ev:enddate", namespaces)).split('T')
             description = item_to_string(item.find("description"))
             location = item_to_string(item.find("ev:location", namespaces))
 
             
-            group_td, teacher =  description_parsing(description)
+            group_td, teacher, group_depart =  description_parsing(description)
 
-            output.append((title, start_date, end_date, group_td, teacher, location))
+            output.append((date, start_hour, end_hour, location, teacher, title, group_td, group_depart))
         
         return output
     else:
