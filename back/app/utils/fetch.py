@@ -91,4 +91,4 @@ if __name__== "__main__" :
         get_calendar_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
 
     else :
-        print(f"ERROR : wrong number of arguments : must be 3 arguments, were given {len(sys.argv)-1}")
+        print(f"ERROR : wrong number of arguments : must be 5 arguments, were given {len(sys.argv)-1}")
