@@ -1,0 +1,38 @@
+{
+    "monday" : [
+        {
+            "label":"PROGRAV",
+            "start_time":"8h00",
+            "end_time":"9h30"
+        },
+        {
+            "label":"AUTO",
+            "start_time":"9h45",
+            "end_time":"13h00"  
+        }
+    ],
+
+    "tuesday" : [
+        {
+
+        }
+    ],
+
+    "wednesday" : [
+        {
+
+        }
+    ],
+
+    "thursday" : [
+        {
+
+        }
+    ],
+
+    "friday" : [
+        {
+
+        }
+    ]
+}
