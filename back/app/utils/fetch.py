@@ -85,12 +85,12 @@ def xml_to_list(url : str, list_of_depart, depart_year) -> list:
             date, start_hour = item_to_string(item.find("ev:startdate", namespaces)).split('T')
             _, end_hour = item_to_string(item.find("ev:enddate", namespaces)).split('T')
             description = item_to_string(item.find("description"))
-            location = item_to_string(item.find("ev:location", namespaces))
+            locations = item_to_string(item.find("ev:location", namespaces)).split('%2C')
 
             
             group_td, teacher_list, group_depart =  description_parsing(description, list_of_depart, depart_year)
 
-            output.append((date, start_hour, end_hour, location, teacher_list, title, group_td, group_depart))
+            output.append((date, start_hour, end_hour, locations, teacher_list, title, group_td, group_depart))
         
         return output
     else:
@@ -114,8 +114,9 @@ def get_calendar_data(current_year :int, department : str , depart_year : int, d
             print("Nothing found with those parameters")
             return []
         else : 
-            for i in out:
-                print(i)
+            """for i in out:
+                print(i)"""
+            print("Success!")
             return out
         print("-"*150) 
 
@@ -127,8 +128,6 @@ def get_calendar_data(current_year :int, department : str , depart_year : int, d
 def description_parsing(description, list_of_depart, depart_year):
     """I am fully aware that this part of the code isnt great because it is fitted"""
     """for very specific type of data but couldnt do better because of the chaos in the XML of Insa"""
-
-
 
     #pre-treatement of the description
     pattern_for_parsing = r'(?<=<br/>).*'
@@ -142,10 +141,10 @@ def description_parsing(description, list_of_depart, depart_year):
 
 
     #get and remove the name if there is one
-    i = get_name_index(desc_item_list)
-    name = desc_item_list.pop(i) if i!=None else get_default_name()
+    list_of_indexes = get_name_indexes(desc_item_list)
+    name_list, desc_item_list = pop_multiple_element(desc_item_list, list_of_indexes)
 
-
+    
     # separate the department and tdgroup from the description into 2 list
     department_set = set(i+depart_year for i in list_of_depart)
     depart_in_desc, td_group_in_desc = [],[]
@@ -162,13 +161,19 @@ def description_parsing(description, list_of_depart, depart_year):
             td_group_in_desc.pop(i)
 
 
-    return td_group_in_desc, name, depart_in_desc
+    return td_group_in_desc, name_list, depart_in_desc
 
-def get_name_index(list : list):
+def get_name_indexes(list : list):
+    list_of_indexes=[]
     for i in range(len(list)):
         if len(list[i].split(' ')) >1 :
-            return i 
+            list_of_indexes.append(i)
+    return list_of_indexes 
 
+def pop_multiple_element(list, list_of_indexes):
+    deleted_element = [list[i] for i in list_of_indexes]
+    filtered_list = [list[i] for i in range(len(list)) if i not in list_of_indexes]
+    return deleted_element, filtered_list
 
 def item_to_string(item):
     return item.text if item != None else get_default_string()
