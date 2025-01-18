@@ -97,29 +97,30 @@ def xml_to_list(url : str, list_of_depart, depart_year) -> list:
         print(f"Failed to fetch XML data. HTTP Status Code: {response.status_code}")
         return []
 
-def get_calendar_data(current_year :int, department : str , depart_year : int, date : int, period :str) -> list :
+
+def get_calendar_data(current_year :str, department : str , depart_year : str, date : str, period :str) -> list :
+    """
+    get_calendar_data fetch the processed data from insa ALL PARAMETERS ARE STR.
+
+    :param current_year: the current school year (i.e if 2024-2025 then = 2024)
+    :param department: the department ("CGC", "EP", "GCU", "GM", "GPGR", "ITI", "MECA", "PERF-E", "PERF-II", "PERF-ISP", "PERF-NI" ...)
+    :param depart_year: the year in the department (i.e ITI3 if third year and in ITI)
+    :param date: the date you want to fetch (if you fetch for a week or month, give the month/week where the date is)
+    :param period: the period you want (i.e day, week, month )
+
+    :return: return a list of tuples (the days fetched)
+    """ 
+
 
     list_of_depart = ["CGC", "EP", "GCU", "GM", "GPGR", "ITI", "MECA", "PERF-E", "PERF-II", "PERF-ISP", "PERF-NI"]
     list_of_period = ["day", "week", "month"]
 
     if ( (department in list_of_depart) and (3 <= int(depart_year) <= 5 ) and (period in list_of_period) ) or (department =="STPI" and 1<= int(depart_year) <= 2) :
 
-        url = "http://agendas.insa-rouen.fr/rss/rss2.0.php?cal=" + current_year+"-"+ department + depart_year + "&cpath=&rssview=" + period + "&getdate=" + date
-        print("-"*150)
-        print("URL : " + url)
-        print("-"*150)
+        url = "http://agendas.insa-rouen.fr/rss/rss2.0.php?cal=" + current_year+ "-" + department + depart_year + "&cpath=&rssview=" + period + "&getdate=" + date
         out = xml_to_list(url, list_of_depart, depart_year)
 
-        if (len(out) == 0) :
-            print("Nothing found with those parameters")
-            return []
-        else : 
-            """for i in out:
-                print(i)"""
-            print("Success!")
-            return out
-        print("-"*150) 
-
+        return url, out
 
     else :
         print(f"ERROR : wrong arguments given : department = {list_of_depart}, 3 <= year <= 5, period = {list_of_period}" )
@@ -181,7 +182,16 @@ def item_to_string(item):
 
 if __name__== "__main__" :
     if len(sys.argv)==6:
-        out = get_calendar_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
-        
+        url, out = get_calendar_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+        print("-"*150)
+        if (len(out) == 0) :
+            print("Nothing found with those parameters")
+        else : 
+            print(f"Successfully fetched the data from : \n {url}")
+            print("-"*150)
+            for item in out :
+                print(item) 
+
+        print("-"*150) 
     else :
         print(f"ERROR : wrong number of arguments : must be 5 arguments, were given {len(sys.argv)-1}")
