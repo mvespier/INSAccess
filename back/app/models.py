@@ -3,6 +3,8 @@ from sqlalchemy.sql import func
 from . import db
 import enum
 import sqlalchemy as sa
+from sqlalchemy import ForeignKey
+
 
 class User(UserMixin, db.Model):
     """User definition, inherit from UserMixin for authentication"""
@@ -19,23 +21,63 @@ class User(UserMixin, db.Model):
 
     
 class InsaClass(db.Model):
-    """INSA Class definition,to store class from insa with a foreign key to link the TD group to it""" 
-    id = db.Column(db.Integer, primary_key = True)
+    """INSA Class definition,to store class from insa""" 
+    __tablename__ = 'insa_class'
+    id = db.Column(db.Integer, primary_key = True, autoincrement=True)
     
+    date = db.Column(db.String(10))
+    start_hour = db.Column(db.String(8))
+    end_hour = db.Column(db.String(8))
     desc = db.Column(db.String(255))
-    dateD = db.Column(db.String(1))
+
+    
+class GroupTD(db.Model):
+    """ GroupTD definition """
+    __tablename__ = 'td_group'
+    name = db.Column(db.String(100), primary_key = True)
+
+class Department(db.Model):
+    """ Department definition """
+    __tablename__ = 'department'
+    name = db.Column(db.String(100), primary_key = True)
 
 
+class Teacher(db.Model):
+    """ Teacher definition"""
+    __tablename__ = 'teacher'
+    name = db.Column(db.String(255), primary_key = True)
+    user_id = db.Column(ForeignKey("user.id"))
+
+class Student(db.Model):
+    """ Student definition"""
+    __tablename__ = 'student'
+    user_id = db.Column(ForeignKey("user.id"), primary_key = True)
+    department = db.Column(ForeignKey("department.name"))
+    
+
+class Room(db.Model):
+    __tablename__ = 'room'
+    name = db.Column(db.String(100), primary_key = True)
 
 
-# class cours (idcours, desc, dateD, dateF, groupeTD, Prof, Salle)
+""" LINK TABLES """
+class TDXClass(db.Model):
+    __tablename__ = 'td_x_class'
+    td_id = db.Column(ForeignKey('td_group.name'), primary_key = True)
+    class_id = db.Column(ForeignKey('insa_class.id'), primary_key = True)
 
-#classe cours/groupeTD (idCours, TD)
+class RoomXClass(db.Model):
+    __tablename__ = 'room_x_class'
+    room_id = db.Column(ForeignKey('room.name'), primary_key = True)
+    class_id = db.Column(ForeignKey('insa_class.id'), primary_key = True)
 
-# class eleve(cleeUser, depart,annee , groupeTD, langue, ECAOplusieurs?,( filiaire, trucfalcutatif ) ) 
+class TeacherXClass(db.Model): 
+    __tablename__ = 'teacher_x_class'
+    teacher_id = db.Column(ForeignKey('teacher.name'), primary_key = True)
+    class_id = db.Column(ForeignKey('insa_class.id'), primary_key = True)
 
-# DEPART&ANNEE&SEMESTRE-NOMCOURS-TD/TP-XX
-# DEPART&ANNEE&SEMESTRE-TP/TD-XX
-# DEPART&ANNEE&SEMESTRE-TD/TPX-X
-# Nom de depart pas forcement correlee a nom request (ex : GC =/ GCU)
-# PLUSIEURS NOM POSSIBLE PAR DEPART PERFISP ING PERF
+class DepartXClass(db.Model):
+    __tablename__ = 'depart_x_class'
+    depart_id = db.Column(ForeignKey('department.name'), primary_key = True)
+    class_id = db.Column(ForeignKey('insa_class.id'), primary_key = True)
+
