@@ -23,7 +23,7 @@ class InsaClass(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     
     desc = db.Column(db.String(255))
-    dateD = db.Column(db.)
+    dateD = db.Column(db.String(1))
 
 
 

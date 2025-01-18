@@ -2,6 +2,7 @@ import sys
 import requests
 from xml.etree import ElementTree
 import re
+import html
 
 def description_parsing(description, list_of_depart, depart_year):
     pattern_for_parsing = r'(?<=<br/>).*'
@@ -36,12 +37,66 @@ def item_to_string(item):
     return item.text if item != None else "None"
 
 
+
+""" XML ENCODING ISSUE CLEANING """
+
+def replace_entities(content, replacements):
+    for entity, replacement in replacements.items():
+        content = content.replace(entity, replacement)
+    return content
+
+def get_clean_xml(xml_data :str ) -> str :
+    entity_replacements = {
+    '&eacute;': 'é',
+    '&Eacute;': 'É',
+    '&agrave;': 'à',
+    '&Agrave;': 'À',
+    '&ocirc;': 'ô',
+    '&ucirc;': 'û',
+    '&icirc;': 'î',
+    '&ccedil;': 'ç',
+    '&nbsp;': ' ',
+    '&': '&amp;'
+    }
+
+    
+    return replace_entities(xml_data, entity_replacements)
+
+
+
+def remove_invalid_chars(content):
+    # Valid XML characters (see XML spec)
+    valid_xml_characters = (
+        r"[\u0009\u000A\u000D\u0020-\uD7FF\uE000-\uFFFD\u10000-\u10FFFF]"
+    )
+    return re.sub(f"[^{valid_xml_characters}]+", "", content)
+
+
+def replace_entities(content, replacements):
+    for entity, replacement in replacements.items():
+        content = content.replace(entity, replacement)
+        
+    content = html.unescape(content)
+    content = remove_invalid_chars(content)
+    return content
+
+
 def xml_to_list(url : str, list_of_depart, depart_year) -> list:
         
     response = requests.get(url)
 
+
+
     if response.status_code == 200: #request is successful
-        xml_data = response.text  
+        response.encoding = 'utf-8'
+        xml_data = get_clean_xml(response.text)
+        #print(xml_data)
+
+        try:
+            root = ElementTree.fromstring(xml_data)
+        except ElementTree.ParseError as e:
+            print(f"XML parsing error: {e}")
+            return []
 
         root = ElementTree.fromstring(xml_data)
 
@@ -81,16 +136,18 @@ def get_calendar_data(current_year :int, department : str , depart_year : int, d
         out = xml_to_list(url, list_of_depart, depart_year)
 
         if (len(out) == 0) :
-            print("ERROR : no match found")
+            print("Nothing found with those parameters")
+            return []
         else : 
             for i in out:
                 print(i)
-            #return get_calendar_data
-        print("-"*150)
+            return out
+        print("-"*150) 
+
 
     else :
         print(f"ERROR : wrong arguments given : department = {list_of_depart}, 3 <= year <= 5, period = {list_of_period}" )
-    return 
+        return []
 
 
 
@@ -98,7 +155,7 @@ def get_calendar_data(current_year :int, department : str , depart_year : int, d
 
 if __name__== "__main__" :
     if len(sys.argv)==6:
-        get_calendar_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
-
+        out = get_calendar_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+        
     else :
         print(f"ERROR : wrong number of arguments : must be 5 arguments, were given {len(sys.argv)-1}")
