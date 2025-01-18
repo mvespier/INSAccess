@@ -4,38 +4,16 @@ from xml.etree import ElementTree
 import re
 import html
 
-def description_parsing(description, list_of_depart, depart_year):
-    pattern_for_parsing = r'(?<=<br/>).*'
+"""DEFAULT VALUE GETTER"""
 
-    description_without_beginning =re.findall(pattern_for_parsing, description )[0]
-    final_description = description_without_beginning.split(r'<br/>')[1:-2]
+def get_default_string() -> str:
+    return "None"
 
-    i= get_name_index(final_description)
+def get_default_name() -> str:
+    return "None"
 
-    name = final_description.pop(i) if i!=None else 'none'
-
-
-    department_set = set(i+depart_year for i in list_of_depart)
-
-    depart_in_desc, td_group_in_desc = [], []
-    for item in final_description:
-        if item in department_set:
-            depart_in_desc.append(item)
-        else:
-            td_group_in_desc.append(item)
-
-    return [item for item in td_group_in_desc if item != 'examens'], name, depart_in_desc
-
-def get_name_index(list : list):
-    for i in range(len(list)):
-        if len(list[i].split(' ')) >1 :
-            return i 
-
-
-def item_to_string(item):
-
-    return item.text if item != None else "None"
-
+def get_item_to_be_removed() -> list:
+    return ['examens']
 
 
 """ XML ENCODING ISSUE CLEANING """
@@ -59,9 +37,7 @@ def get_clean_xml(xml_data :str ) -> str :
     '&': '&amp;'
     }
 
-    
     return replace_entities(xml_data, entity_replacements)
-
 
 
 def remove_invalid_chars(content):
@@ -78,14 +54,13 @@ def replace_entities(content, replacements):
         
     content = html.unescape(content)
     content = remove_invalid_chars(content)
+
     return content
 
-
+""" MAIN FUNCTIONS """ 
 def xml_to_list(url : str, list_of_depart, depart_year) -> list:
         
     response = requests.get(url)
-
-
 
     if response.status_code == 200: #request is successful
         response.encoding = 'utf-8'
@@ -113,9 +88,9 @@ def xml_to_list(url : str, list_of_depart, depart_year) -> list:
             location = item_to_string(item.find("ev:location", namespaces))
 
             
-            group_td, teacher, group_depart =  description_parsing(description, list_of_depart, depart_year)
+            group_td, teacher_list, group_depart =  description_parsing(description, list_of_depart, depart_year)
 
-            output.append((date, start_hour, end_hour, location, teacher, title, group_td, group_depart))
+            output.append((date, start_hour, end_hour, location, teacher_list, title, group_td, group_depart))
         
         return output
     else:
@@ -149,8 +124,54 @@ def get_calendar_data(current_year :int, department : str , depart_year : int, d
         print(f"ERROR : wrong arguments given : department = {list_of_depart}, 3 <= year <= 5, period = {list_of_period}" )
         return []
 
+def description_parsing(description, list_of_depart, depart_year):
+    """I am fully aware that this part of the code isnt great because it is fitted"""
+    """for very specific type of data but couldnt do better because of the chaos in the XML of Insa"""
 
 
+
+    #pre-treatement of the description
+    pattern_for_parsing = r'(?<=<br/>).*'
+    try :
+        desc_string = re.findall(pattern_for_parsing, description )[0]
+    except IndexError as e:
+        print(f"List Index error: {e}")
+        return [],get_default_name() ,[]
+
+    desc_item_list = desc_string.split(r'<br/>')[1:-2] # 1 to -2 because the last and first are empty and the -2 is just the date of submission 
+
+
+    #get and remove the name if there is one
+    i = get_name_index(desc_item_list)
+    name = desc_item_list.pop(i) if i!=None else get_default_name()
+
+
+    # separate the department and tdgroup from the description into 2 list
+    department_set = set(i+depart_year for i in list_of_depart)
+    depart_in_desc, td_group_in_desc = [],[]
+    for item in desc_item_list:
+        if item in department_set:
+            depart_in_desc.append(item)
+        else:
+            td_group_in_desc.append(item)
+
+
+    #remove weird specific string that can appear in the td group thanks to INSA
+    for i in range(len(td_group_in_desc)):
+        if td_group_in_desc[i] in get_item_to_be_removed():
+            td_group_in_desc.pop(i)
+
+
+    return td_group_in_desc, name, depart_in_desc
+
+def get_name_index(list : list):
+    for i in range(len(list)):
+        if len(list[i].split(' ')) >1 :
+            return i 
+
+
+def item_to_string(item):
+    return item.text if item != None else get_default_string()
 
 
 if __name__== "__main__" :
