@@ -36,18 +36,16 @@ function createHours(){
   return result;
 }
 
-let hours_events = createHours();
-let data;
-let data_file = document.currentScript.getAttribute('data_json')
-
-fetch(data_file)
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error fetching JSON:', error));
+async function fetchData(){
+  const response = await fetch('../static/data.json');
+  const result = await response.json();
+  return result;
+}
 
 function SingleEvent({start_time, end_time, label, color}){
   let start_index = hours_events.indexOf(start_time)+1;
   let end_index = hours_events.indexOf(end_time)+1;
+  const hours_events = createHours();
 
   const eventStyle = {
     gridRowStart: start_index, 
@@ -62,10 +60,15 @@ function SingleEvent({start_time, end_time, label, color}){
   );
 }
 
-function AllEvents(){
+async function AllEvents(){
   const events_list = [];
-  for (element in data.monday){
-    events_list.push(<SingleEvent start_time={element.start_time} end_time={end_time} label={element.label} color={Color.DefaultColor} />);
+  const data = await fetchData()
+
+  let i = 0;
+  for (let element in data.monday){
+    console.log(element.label)
+    events_list.push(<SingleEvent key={i} start_time={element.start_time} end_time={element.end_time} label={element.label} color={Color.DefaultColor} />);
+    i += 1;
   } 
     return (
       <>
@@ -87,6 +90,6 @@ function TimeBar(){
   );
 }
 
-ReactDOM.createRoot(document.getElementById('events-mon')).render(<AllEvents />);
+ReactDOM.createRoot(document.getElementById('eventsMon')).render(<AllEvents />);
 
 ReactDOM.createRoot(document.getElementById('hours')).render(<TimeBar />);
