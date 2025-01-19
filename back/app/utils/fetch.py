@@ -4,13 +4,18 @@ from xml.etree import ElementTree
 import re
 import html
 
+ERROR_FAILED_TO_PARSE = 666
+ERROR_WRONG_ARG = 42
+SUCESS_CODE = 0
+
+
 """DEFAULT VALUE GETTER"""
 
 def get_default_string() -> str:
-    return "None"
+    return ""
 
 def get_default_name() -> str:
-    return "None"
+    return ""
 
 def get_item_to_be_removed() -> list:
     return ['examens']
@@ -59,7 +64,7 @@ def replace_entities(content, replacements):
 
 """ MAIN FUNCTIONS """ 
 def xml_to_list(url : str, list_of_depart, depart_year) -> list:
-        
+    global ERROR_FAILED_TO_PARSE
     response = requests.get(url)
 
     if response.status_code == 200: #request is successful
@@ -71,7 +76,7 @@ def xml_to_list(url : str, list_of_depart, depart_year) -> list:
             root = ElementTree.fromstring(xml_data)
         except ElementTree.ParseError as e:
             print(f"XML parsing error: {e}")
-            return []
+            return ERROR_FAILED_TO_PARSE, []
 
         root = ElementTree.fromstring(xml_data)
 
@@ -90,7 +95,7 @@ def xml_to_list(url : str, list_of_depart, depart_year) -> list:
             
             group_td, teacher_list, group_depart =  description_parsing(description, list_of_depart, depart_year)
 
-            output.append((date, start_hour, end_hour, locations, teacher_list, title, group_td, group_depart))
+            output.append((date, start_hour, end_hour, title, locations, teacher_list, group_td, group_depart))
         
         return output
     else:
@@ -110,7 +115,7 @@ def get_calendar_data(current_year :str, department : str , depart_year : str, d
 
     :return: return a list of tuples (the days fetched)
     """ 
-
+    global ERROR_WRONG_ARG
 
     list_of_depart = ["CGC", "EP", "GCU", "GM", "GPGR", "ITI", "MECA", "PERF-E", "PERF-II", "PERF-ISP", "PERF-NI"]
     list_of_period = ["day", "week", "month"]
@@ -120,11 +125,11 @@ def get_calendar_data(current_year :str, department : str , depart_year : str, d
         url = "http://agendas.insa-rouen.fr/rss/rss2.0.php?cal=" + current_year+ "-" + department + depart_year + "&cpath=&rssview=" + period + "&getdate=" + date
         out = xml_to_list(url, list_of_depart, depart_year)
 
-        return url, out
+        return SUCESS_CODE, out
 
     else :
         print(f"ERROR : wrong arguments given : department = {list_of_depart}, 3 <= year <= 5, period = {list_of_period}" )
-        return []
+        return ERROR_WRONG_ARG, []
 
 def description_parsing(description, list_of_depart, depart_year):
     """I am fully aware that this part of the code isnt great because it is fitted"""
@@ -192,6 +197,6 @@ if __name__== "__main__" :
             for item in out :
                 print(item) 
 
-        print("-"*150) 
+        print("-"*150)
     else :
         print(f"ERROR : wrong number of arguments : must be 5 arguments, were given {len(sys.argv)-1}")

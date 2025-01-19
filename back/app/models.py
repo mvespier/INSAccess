@@ -23,12 +23,10 @@ class User(UserMixin, db.Model):
 class InsaClass(db.Model):
     """INSA Class definition,to store class from insa""" 
     __tablename__ = 'insa_class'
-    id = db.Column(db.Integer, primary_key = True, autoincrement=True)
-    
     date = db.Column(db.String(10))
-    start_hour = db.Column(db.String(8))
-    end_hour = db.Column(db.String(8))
-    desc = db.Column(db.String(255))
+    start_hour = db.Column(db.String(8), primary_key = True)
+    end_hour = db.Column(db.String(8), primary_key = True)
+    desc = db.Column(db.String(255), primary_key = True)
 
     
 class GroupTD(db.Model):
@@ -46,7 +44,6 @@ class Teacher(db.Model):
     """ Teacher definition"""
     __tablename__ = 'teacher'
     name = db.Column(db.String(255), primary_key = True)
-    user_id = db.Column(ForeignKey("user.id"))
 
 class Student(db.Model):
     """ Student definition"""
