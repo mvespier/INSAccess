@@ -29,7 +29,7 @@ function createHours(){
       string += `${currentMinute}`;
       result.push(string);
       currentMinute += 5;
-      if (string == "1815"){
+      if (string === "1815"){
         return result;
       }
     }
@@ -39,10 +39,16 @@ function createHours(){
   return result;
 }
 
+function presentableHour(hour){
+  return hour[0]+hour[1]+":"+hour[2]+hour[3]
+}
+
 function SingleEvent({start_time, end_time, label, color}){
   const hours_events = createHours();
   let start_index = hours_events.indexOf(start_time)+1;
   let end_index = hours_events.indexOf(end_time)+1;
+
+  //console.log(start_time, end_time)
 
   const eventStyle = {
     gridRowStart: start_index, 
@@ -52,7 +58,7 @@ function SingleEvent({start_time, end_time, label, color}){
   return (
     <div className={`event ${color}`} style={eventStyle}>
       <p className="title">{label}</p>
-      <p className="time">{hours_events[start_index-1]} - {hours_events[end_index-1]}</p>
+      <p className="time">{presentableHour(hours_events[start_index-1])} - {presentableHour(hours_events[end_index-1])}</p>
     </div>
   );
 }
@@ -62,7 +68,8 @@ function EventsOfDay(day){
 
   let i = 0;
   for (let element in data.monday){
-    events_list.push(<SingleEvent key={i} start_time={element.start_time} end_time={element.end_time} label={element.label} color={Color.DefaultColor} />);
+    console.log(element)
+    events_list.push(<SingleEvent key={i} start_time={data.monday[element].start_time} end_time={data.monday[element].end_time} label={data.monday[element].label} color={Color.DefaultColor} />);
     i += 1;
   } 
     return (

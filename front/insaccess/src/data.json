@@ -2,45 +2,45 @@
     "monday" : [
         {
             "label":"PROGRAV",
-            "start_time":"8h00",
-            "end_time":"9h30"
+            "start_time":"0800",
+            "end_time":"0930"
         },
         {
             "label":"AUTO",
-            "start_time":"9h45",
-            "end_time":"13h00"  
+            "start_time":"0945",
+            "end_time":"1300"  
         }
     ],
 
     "tuesday" : [
         {
             "label":"AUTO",
-            "start_time":"9h45",
-            "end_time":"13h00"  
+            "start_time":"0945",
+            "end_time":"1300"  
         }
     ],
 
     "wednesday" : [
         {
             "label":"AUTO",
-            "start_time":"9h45",
-            "end_time":"13h00"  
+            "start_time":"0945",
+            "end_time":"1300"  
         }
     ],
 
     "thursday" : [
         {
             "label":"AUTO",
-            "start_time":"9h45",
-            "end_time":"13h00"  
+            "start_time":"0945",
+            "end_time":"1300"  
         }
     ],
 
     "friday" : [
         {
             "label":"AUTO",
-            "start_time":"9h45",
-            "end_time":"13h00"  
+            "start_time":"0945",
+            "end_time":"1300"  
         }
     ]
 }
