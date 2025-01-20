@@ -28,6 +28,8 @@ class InsaClass(db.Model):
     end_hour = db.Column(db.String(8), primary_key = True)
     desc = db.Column(db.String(255), primary_key = True)
 
+    link = db.relationship("ClassLink", back_populates = "insa_class")
+
     
 class GroupTD(db.Model):
     """ GroupTD definition """
@@ -53,6 +55,7 @@ class Student(db.Model):
     
 
 class Room(db.Model):
+    """ Room definition"""
     __tablename__ = 'room'
     name = db.Column(db.String(100), primary_key = True)
 
@@ -61,10 +64,10 @@ class Room(db.Model):
 class ClassLink(db.Model):
     __tablename__ = 'class_link'
 
-    class_start_hour = db.Column(ForeignKey('insa_class.start_hour'), primary_key = True)
-    class_end_hour = db.Column(ForeignKey('insa_class.end_hour'), primary_key = True)
-    class_desc = db.Column(ForeignKey('insa_class.desc'), primary_key = True)
-    insa_class = db.relationship("InsaClass")
+    class_start_hour = db.Column(db.String(8), primary_key = True)
+    class_end_hour = db.Column(db.String(8), primary_key = True)
+    class_desc = db.Column(db.String(255), primary_key = True)
+    insa_class = db.relationship("InsaClass", back_populates="link")
 
     td_id = db.Column(ForeignKey('td_group.name'), nullable = False)
     td = db.relationship("GroupTD")
