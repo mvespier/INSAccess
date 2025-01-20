@@ -44,7 +44,7 @@ function presentableHour(hour){
   return hour[0]+hour[1]+":"+hour[2]+hour[3]
 }
 
-function SingleEvent({start_time, end_time, label, color}){
+function SingleEvent({start_time, end_time, label, color, teacher, room}){
   const hours_events = createHours();
   let start_index = hours_events.indexOf(start_time)+1;
   let end_index = hours_events.indexOf(end_time)+1;
@@ -57,25 +57,58 @@ function SingleEvent({start_time, end_time, label, color}){
   return (
     <div className={`event ${color}`} style={eventStyle}>
       <p className="title">{label}</p>
+      <p className="room">{room}</p>
+      <p className="teacher">{teacher}</p>
       <p className="time">{presentableHour(hours_events[start_index-1])} - {presentableHour(hours_events[end_index-1])}</p>
     </div>
   );
 }
 
-function EventsOfDay(day){
-  const events_list = [];
+function getEventsOfDay(date){
+  const events = []
+  data.forEach(ev => {
+    if (ev.date == date) {
+      events.push(ev)
+    }
+  })
+    return events;
+}
 
+function getDateInfo(date){
+  const dayList = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+  const year = parseInt(date.slice(0, 4))
+  const month = parseInt(date.slice(4, 6))
+  const day = parseInt(date.slice(6, 8))
+  const date_object = new Date(year, month-1, day)
+  return [dayList[date_object.getDay()-1], date_object.getDate()]
+
+}
+
+function EventsOfDay(date){
+  const events_list = [];
+  
   let i = 0;
-  for (let element in data.monday){
-    console.log(element)
-    events_list.push(<SingleEvent key={i} start_time={data.monday[element].start_time} end_time={data.monday[element].end_time} label={data.monday[element].label} color={Color.DefaultColor} />);
+  const events_of_day = getEventsOfDay(date.date)
+  const infos = getDateInfo(date.date)
+
+  for (let element in events_of_day){
+    const object = events_of_day[element]
+    events_list.push(<SingleEvent key={i} start_time={object.start_time} end_time={object.end_time} label={object.label} color={Color.DefaultColor} teacher={object.teacher} room={object.room} />);
     i += 1;
   } 
-    return (
-      <>
-        {events_list}        
-      </>
-    );
+
+
+  return (
+    <div className="day">
+      <div className="date">
+        <p className="date-day">{infos[0]}</p>
+        <p className="date-num">{infos[1]}</p> 
+      </div>
+      <div className="events">
+        {events_list}
+      </div>
+    </div>
+  );
 }
 
 function TimeBar(){
@@ -117,52 +150,11 @@ function Calendar(){
     <div className="calendar">
       <TimeBar />
       <div className="days">
-          <div className="day mon">
-            <div className="date">
-                <p className="date-num">9</p>
-                <p className="date-day">Mon</p>
-            </div>
-            <div className="events">
-              <EventsOfDay day="monday" />
-            </div>
-          </div>
-          
-          <div className="day tues">
-            <div className="date">
-                <p className="date-num">10</p>
-                <p className="date-day">Tues</p>
-            </div>
-            <div className="events">
-            </div>
-          </div>
-
-          <div className="day wed">
-            <div className="date">
-                <p className="date-num">11</p>
-                <p className="date-day">Wed</p>
-            </div>
-            <div className="events">
-            </div>
-          </div>
-
-          <div className="day thurs">
-            <div className="date">
-                <p className="date-num">12</p>
-                <p className="date-day">Thurs</p>
-            </div>
-            <div className="events">
-            </div>
-          </div>
-
-          <div className="day fri">
-            <div className="date">
-                <p className="date-num">13</p>
-                <p className="date-day">Fri</p>
-            </div>
-            <div className="events">
-            </div>
-          </div>
-
+          <EventsOfDay date="20250120"/>
+          <EventsOfDay date="20250121"/>
+          <EventsOfDay date="20250122"/>
+          <EventsOfDay date="20250123"/>
+          <EventsOfDay date="20250124"/>
       </div>
   </div>
       

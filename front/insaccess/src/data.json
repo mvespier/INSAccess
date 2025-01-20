@@ -1,46 +1,21 @@
-{
-    "monday" : [
-        {
-            "label":"PROGRAV",
-            "start_time":"0800",
-            "end_time":"0930"
-        },
-        {
-            "label":"AUTO",
-            "start_time":"0945",
-            "end_time":"1300"  
-        }
-    ],
+[
+    
+    {
+        "label":"PROGRAV",
+        "start_time":"0800",
+        "end_time":"0930",
+        "room":["Ma-H-R1-1"],
+        "teacher":["Nico le GOOOOAT"],
+        "date":"20250120"
 
-    "tuesday" : [
-        {
-            "label":"AUTO",
-            "start_time":"0945",
-            "end_time":"1300"  
-        }
-    ],
+    },
+    {
+        "label":"AUTO",
+        "start_time":"0945",
+        "end_time":"1300",
+        "room":["Ma-H-R1-1"],
+        "teacher":["Jsp qui t'es chef"],
+        "date":"20250122" 
+    }
 
-    "wednesday" : [
-        {
-            "label":"AUTO",
-            "start_time":"0945",
-            "end_time":"1300"  
-        }
-    ],
-
-    "thursday" : [
-        {
-            "label":"AUTO",
-            "start_time":"0945",
-            "end_time":"1300"  
-        }
-    ],
-
-    "friday" : [
-        {
-            "label":"AUTO",
-            "start_time":"0945",
-            "end_time":"1300"  
-        }
-    ]
-}
+]
