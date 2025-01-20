@@ -59,10 +59,12 @@ function SingleEvent({start_time, end_time, label, color, teacher, room}){
       <p className="title">{label}</p>
       <p className="room">{room}</p>
       <p className="teacher">{teacher}</p>
-      <p className="time">{presentableHour(hours_events[start_index-1])} - {presentableHour(hours_events[end_index-1])}</p>
-    </div>
+      </div>
   );
 }
+
+//<p className="time">{presentableHour(hours_events[start_index-1])} - {presentableHour(hours_events[end_index-1])}</p>
+    
 
 function getEventsOfDay(date){
   const events = []
@@ -150,11 +152,11 @@ function Calendar(){
     <div className="calendar">
       <TimeBar />
       <div className="days">
-          <EventsOfDay date="20250120"/>
-          <EventsOfDay date="20250121"/>
-          <EventsOfDay date="20250122"/>
-          <EventsOfDay date="20250123"/>
-          <EventsOfDay date="20250124"/>
+        <EventsOfDay date="20250120"/>
+        <EventsOfDay date="20250121"/>
+        <EventsOfDay date="20250122"/>
+        <EventsOfDay date="20250123"/>
+        <EventsOfDay date="20250124"/>
       </div>
   </div>
       
