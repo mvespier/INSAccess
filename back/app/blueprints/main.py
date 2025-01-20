@@ -11,7 +11,7 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def default_page():
-    return render_template('index.html', toto = get_calendar_data('2024', 'ITI', '3', '20250116', 'day')[1])
+    return render_template('auth.html')
 
 @main.route('/redirect')
 def redirect_test():

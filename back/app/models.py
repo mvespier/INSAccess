@@ -64,29 +64,6 @@ class Room(db.Model):
 
 
 """ LINK TABLES """
-"""class ClassLink(db.Model):
-    __tablename__ = 'class_link'
-
-    class_start_hour = db.Column(db.String(8), primary_key = True)
-    class_end_hour = db.Column(db.String(8), primary_key = True)
-    class_desc = db.Column(db.String(255), primary_key = True)
-    insa_class = db.relationship("InsaClass", back_populates="link")
-
-    td_id = db.Column(ForeignKey('td_group.name'), nullable = False)
-    td = db.relationship("GroupTD")
-    room_id = db.Column(ForeignKey('room.name'), nullable = False)
-    room = db.relationship("Room")
-    teacher_id = db.Column(ForeignKey('teacher.name'), nullable = False)
-    teacher = db.relationship("Teacher")
-    depart_id = db.Column(ForeignKey('department.name'), nullable = False)
-    depart = db.relationship("Department")
-
-
-
-    __table_args__ = (
-        ForeignKeyConstraint(['class_start_hour', 'class_end_hour', 'class_desc'],
-         ['insa_class.start_hour', 'insa_class.end_hour','insa_class.desc']),
-    )"""
 
 class ClassLinkTD(db.Model):
     __tablename__ = 'class_link_td'
