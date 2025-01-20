@@ -1,46 +1,60 @@
-{
-    "monday" : [
-        {
-            "label":"PROGRAV",
-            "start_time":"0800",
-            "end_time":"0930"
-        },
-        {
-            "label":"AUTO",
-            "start_time":"0945",
-            "end_time":"1300"  
-        }
-    ],
+[
+    {
+        "label":"CAPT",
+        "start_time":"0800",
+        "end_time":"0930",
+        "room":["Ma-H-R1-1"],
+        "teacher":["VAUGEOIS Antoine"],
+        "date":"20250120"
 
-    "tuesday" : [
-        {
-            "label":"AUTO",
-            "start_time":"0945",
-            "end_time":"1300"  
-        }
-    ],
+    },
+    {
+        "label":"STAT",
+        "start_time":"0945",
+        "end_time":"1115",
+        "room":["Ma-H-R1-1"],
+        "teacher":["ROGOZAN Alexandrina"],
+        "date":"20250120" 
+    },
+    {
+        "label":"UMLP",
+        "start_time":"1315",
+        "end_time":"1445",
+        "room":["Ma-H-R1-1"],
+        "teacher":["VERCOUTER Laurent"],
+        "date":"20250120" 
+    },
+    {
+        "label":"UMLP",
+        "start_time":"1500",
+        "end_time":"1630",
+        "room":["Ma-H-R2-12"],
+        "teacher":["ZANNI-MERK Cecilia"],
+        "date":"20250120" 
+    },
+    {
+        "label":"PROGAV",
+        "start_time":"1645",
+        "end_time":"1815",
+        "room":["Ma-H-R1-1"],
+        "teacher":["MALANDAIN Nicolas"],
+        "date":"20250120" 
+    },
+    {
+        "label":"ANGLAIS",
+        "start_time":"0945",
+        "end_time":"1115",
+        "room":["Ma-I-R2-8"],
+        "teacher":["LARCHEVEQUE Hortense"],
+        "date":"20250123" 
+    },
+    {
+        "label":"ALLEMAND",
+        "start_time":"1130",
+        "end_time":"1300",
+        "room":["Ma-H-R1-6"],
+        "teacher":["RENOUX Mariana"],
+        "date":"20250123" 
+    }
 
-    "wednesday" : [
-        {
-            "label":"AUTO",
-            "start_time":"0945",
-            "end_time":"1300"  
-        }
-    ],
-
-    "thursday" : [
-        {
-            "label":"AUTO",
-            "start_time":"0945",
-            "end_time":"1300"  
-        }
-    ],
-
-    "friday" : [
-        {
-            "label":"AUTO",
-            "start_time":"0945",
-            "end_time":"1300"  
-        }
-    ]
-}
+]

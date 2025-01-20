@@ -2,8 +2,9 @@
   --numDays: 5;
   --numSubHours: 124;
   --numHours: 7;
-  --timeHeight: 5rem;
-  --subTimeHeight: 0.25rem;
+  --timeHeight: 4.8rem;
+  --subTimeHeight: 0.24rem;
+  --dateHeight: 3rem;
   --calBgColor: #fff1f8;
   --eventBorderColor: #f2d3d8;
   --eventColor1: #57caff;
@@ -16,7 +17,7 @@
   display: grid;
   gap: 10px;
   grid-template-columns: auto 1fr;
-  margin: 2rem;
+  margin: 0.2rem 1rem;
 }
 
 .timeline {
@@ -40,13 +41,20 @@
 
 .title {
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.1rem;
+  font-size: 0.9rem;
+}
+
+.time, .teacher, .room {
+  font-weight: 500;
+  margin-bottom: 0.1rem;
+  font-size: 0.7rem;
 }
 
 .event {
   border: 1px solid var(--eventBorderColor);
   border-radius: 5px;
-  padding: 0.5rem;
+  padding: 0.1rem 0.5rem;
   margin: 0 0.5rem;
   background: white;
 }
@@ -54,6 +62,9 @@
 .spacer,
 .date {
   height: var(--timeHeight);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 body {
@@ -82,14 +93,14 @@ body {
 }
 
 .date-num {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 600;
   display: inline;
 }
 
 .date-day {
   display: inline;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 100;
 }
 
