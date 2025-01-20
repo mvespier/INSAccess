@@ -13,6 +13,7 @@ const Color = {
 
 function createHours(){
   let result = [];
+  result.push("0755");
   let string = "";
   let currentHour = 8;
   let currentMinute = 0;
@@ -47,8 +48,6 @@ function SingleEvent({start_time, end_time, label, color}){
   const hours_events = createHours();
   let start_index = hours_events.indexOf(start_time)+1;
   let end_index = hours_events.indexOf(end_time)+1;
-
-  //console.log(start_time, end_time)
 
   const eventStyle = {
     gridRowStart: start_index, 
@@ -86,7 +85,7 @@ function TimeBar(){
     hours.push(<div key={i} className="time-marker">{hours_timeline[i]}</div>)
   }
   return (
-    <div>
+    <div className="timeline">
         {hours}
     </div>
   );
