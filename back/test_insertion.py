@@ -16,10 +16,10 @@ with create_app().app_context():
                 (email, name) = line.strip().split("\t")
                 db.session.add(User(email=email,
                                     name=name,
-                                    password=generate_password_hash("password-rco",)))
+                                    password=generate_password_hash("password-rco")))
     db.session.commit()
 
-    error_code, list_of_records = get_calendar_data('2024', 'ITI', '3', '20250120', 'week')
+    error_code, list_of_records = get_calendar_data('2024', 'ITI', '3', '20250120', 'day')
 
     if error_code == 0:
         insert_list_record(db.session, list_of_records)

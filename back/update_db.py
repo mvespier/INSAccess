@@ -5,11 +5,34 @@ from sqlalchemy.exc import IntegrityError
 
 
 def insert_list_record(session, list_of_records):
+    """ 
+    ###insert_list_record :
+    Insert the list of records (in this case fetched from insa.agenda)
+    following the pattern : \n
+    [(date, start_hour, end_hour, description, room_list, teacher_list, tdgroup_list, department_list), (...), ...]
+
+    It is done by checking the existence of the record in the database and inserting it if necessary
+
+    :param session: The current app session where the given records will be inserted
+    :param list_of_records: The list of record to be inserted
+
+    """
     for record in list_of_records:
         insert_record_in_db(session, record)
 
 
 def insert_record_in_db(session, record):
+    """
+    ###insert_record_in_db : 
+    Insert a single record in the given session
+    following the pattern : \n
+    (date, start_hour, end_hour, description, room_list, teacher_list, tdgroup_list, department_list)
+
+    It is done by checking the existence of the record in the database and inserting it if necessary
+    :param session: The current app session where the given record will be inserted
+    :param record: The record to be inserted
+
+    """
     date, start_hour, end_hour, desc = record[:4]
     room_list, teacher_list, td_list, depart_list = record[4:]
     
@@ -183,6 +206,17 @@ def insert_classlink_teacher_in_db(session, insa_class, name):
 
 
 def insert_generic_in_db(session, exists, new_class):
+    """
+    ###insert_generic_in_db:
+    Method use by the others inserting methods in update_db\n
+    Tries to insert in the database and if it create an Integrity error 
+    rollsback the database to the given instance
+
+    :param session: The current app session where the given record will be inserted
+    :param exists:  A boolean given (typically a session.query to know if a record already exist)
+    :param new_class: The transformed_record created by the calling methods
+
+    """
     if not exists:
         try:
             session.add(new_class)
@@ -195,3 +229,4 @@ def insert_generic_in_db(session, exists, new_class):
     else:
         print("Record already exists. No insertion performed.")
     return True
+
