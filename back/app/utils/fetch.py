@@ -3,6 +3,7 @@ import requests
 from xml.etree import ElementTree
 import re
 import html
+import itertools
 
 ERROR_FAILED_TO_PARSE = 666
 ERROR_WRONG_ARG = 42
@@ -63,7 +64,7 @@ def replace_entities(content, replacements):
     return content
 
 """ MAIN FUNCTIONS """ 
-def xml_to_list(url : str, list_of_depart, depart_year) -> list:
+def xml_to_list(url : str, depart_list, depart_year) -> list:
     global ERROR_FAILED_TO_PARSE
     response = requests.get(url)
 
@@ -92,8 +93,10 @@ def xml_to_list(url : str, list_of_depart, depart_year) -> list:
             description = item_to_string(item.find("description"))
             locations = item_to_string(item.find("ev:location", namespaces)).split('%2C')
 
+            title = title_parsing(title)
             
-            group_td, teacher_list, group_depart =  description_parsing(description, list_of_depart, depart_year)
+
+            group_td, teacher_list, group_depart =  description_parsing(description, depart_list)
 
             output.append((date, start_hour, end_hour, title, locations, teacher_list, group_td, group_depart))
         
@@ -117,21 +120,27 @@ def get_calendar_data(current_year :str, department : str , depart_year : str, d
     """ 
     global ERROR_WRONG_ARG
 
-    list_of_depart = ["CGC", "EP", "GCU", "GM", "GPGR", "ITI", "MECA", "PERF-E", "PERF-II", "PERF-ISP", "PERF-NI"]
+    depart_list = ["CGC", "EP", "GCU", "GM", "GPGR", "ITI", "MECA", "PERF-E", "PERF-II", "PERF-ISP", "PERF-NI"]
     list_of_period = ["day", "week", "month"]
 
-    if ( (department in list_of_depart) and (3 <= int(depart_year) <= 5 ) and (period in list_of_period) ) or (department =="STPI" and 1<= int(depart_year) <= 2) :
+    if ( (department in depart_list) and (3 <= int(depart_year) <= 5 ) and (period in list_of_period) ) or (department =="STPI" and 1<= int(depart_year) <= 2) :
 
         url = "http://agendas.insa-rouen.fr/rss/rss2.0.php?cal=" + current_year+ "-" + department + depart_year + "&cpath=&rssview=" + period + "&getdate=" + date
-        out = xml_to_list(url, list_of_depart, depart_year)
+        out = xml_to_list(url, depart_list, depart_year)
 
         return SUCESS_CODE, out
 
     else :
-        print(f"ERROR : wrong arguments given : department = {list_of_depart}, 3 <= year <= 5, period = {list_of_period}" )
+        print(f"ERROR : wrong arguments given : department = {depart_list}, 3 <= year <= 5, period = {list_of_period}" )
         return ERROR_WRONG_ARG, []
 
-def description_parsing(description, list_of_depart, depart_year):
+def title_parsing(title):
+    class_name = title.split(': ')[1]
+    class_name = class_name.replace('-', ' ')
+    return class_name
+
+
+def description_parsing(description, depart_list):
     """I am fully aware that this part of the code isnt great because it is fitted"""
     """for very specific type of data but couldnt do better because of the chaos in the XML of Insa"""
 
@@ -152,7 +161,11 @@ def description_parsing(description, list_of_depart, depart_year):
 
     
     # separate the department and tdgroup from the description into 2 list
-    department_set = set(i+depart_year for i in list_of_depart)
+    depart_years =['3', '4', '5']
+    department_set = set(map(''.join, itertools.product(depart_list,depart_years)))
+    department_set.add('STPI1')
+    department_set.add('STPI2')
+    
     depart_in_desc, td_group_in_desc = [],[]
     for item in desc_item_list:
         if item in department_set:
@@ -162,9 +175,11 @@ def description_parsing(description, list_of_depart, depart_year):
 
 
     #remove weird specific string that can appear in the td group thanks to INSA
+    list_of_indexes_filter=[]
     for i in range(len(td_group_in_desc)):
         if td_group_in_desc[i] in get_item_to_be_removed():
-            td_group_in_desc.pop(i)
+            list_of_indexes_filter.append(i)
+    pop_multiple_element(td_group_in_desc,list_of_indexes_filter)
 
 
     return td_group_in_desc, name_list, depart_in_desc
