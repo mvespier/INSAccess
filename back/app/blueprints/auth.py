@@ -1,4 +1,4 @@
-import time
+import time, sys
 from flask import current_app, Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -15,7 +15,7 @@ def login():
 
 @auth.route('/login', methods=['POST'])
 def login_post():
-    email = request.form.get('email')
+    email = request.form.get('name')
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
 
@@ -29,7 +29,7 @@ def login_post():
 
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
-    return redirect(url_for('main.profile'))
+    return redirect(url_for('main.default_page'))
 
 
 

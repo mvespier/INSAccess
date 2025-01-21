@@ -4,5 +4,8 @@
     <h1>{% block title %} Index {% endblock %}</h1>
     <h1>Hello World!</h1>
     <h2>Welcome to FlaskApp!</h2>
+    <a href="{{url_for('auth.logout')}}" class="txt2">
+        Logout
+    </a>
     <h3>{{ toto }}</h3>
 {% endblock %}

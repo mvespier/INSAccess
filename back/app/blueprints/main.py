@@ -10,8 +10,9 @@ from ..utils.fetch import get_calendar_data
 main = Blueprint('main', __name__)
 
 @main.route('/')
+@login_required
 def default_page():
-    return render_template('auth.html')
+    return render_template('index.html')
 
 @main.route('/redirect')
 def redirect_test():
