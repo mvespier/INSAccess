@@ -8,6 +8,7 @@ from .. import db, mail, serializer
 
 auth = Blueprint('auth', __name__)
 
+"""////////////////////////////////////////////////////////////////////////"""
 @auth.route('/login')
 def login():
     logout_user()
@@ -30,16 +31,26 @@ def login_post():
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
     return redirect(url_for('main.default_page'))
-
-
+"""////////////////////////////////////////////////////////////////////////"""
 
 @auth.route('/forgot_password')
 def forgot_password():
     return render_template('forgot_password.html')
 
+"""////////////////////////////////////////////////////////////////////////"""
+
+@auth.route('/sign_up')
+def sign_up():
+    return render_template('sign_up.html')
+
+"""////////////////////////////////////////////////////////////////////////"""
+
+@auth.route('/change_password')
+def change_password():
+    return render_template('change_password.html')
 
 @auth.route('/change_password', methods=['POST'])
-def change_password():
+def change_password_post():
     email = request.form.get('email')
     user = User.query.filter_by(email=email).first()
 
@@ -62,6 +73,7 @@ rendez-vous sur cette url: %s%s''' % (current_app.config["APP_URL"], current_app
     mail.send(msg)
 
     return jsonify([True, "Vérifiez vos emails"])
+"""////////////////////////////////////////////////////////////////////////"""
 
 
 @auth.route('/init_password/<string:token>', methods=['GET'])

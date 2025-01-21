@@ -2,52 +2,40 @@
 {%block form %}
 				<form class="login100-form validate-form" method="POST" action="{{url_for('auth.login')}}">
 					<span class="login100-form-title p-b-49">
-						Login
+						Sign Up
 					</span>
 
-					<div class="wrap-input100 validate-input m-b-23" data-validate = "Username is required">
+					<div class="wrap-input100 validate-input m-b-30" data-validate = "Username is required">
 						<span class="label-input100">Username</span>
 						<input class="input100" type="text" name="name" placeholder="Type your username">
 						<span class="focus-input100" data-symbol="&#xf206;"></span>
 					</div>
 
-					<div class="wrap-input100 validate-input" data-validate="Password is required">
+					<div class="wrap-input100 validate-input m-b-10" data-validate="Password is required">
 						<span class="label-input100">Password</span>
 						<input class="input100" type="password" name="password" placeholder="Type your password">
-						<span class="focus-input100" data-symbol="&#xf190;"></span>
+						<span class="focus-input100" data-symbol="&#xf191;"></span>
 					</div>
 					
-					<div class="align-between">
-						<!-- Checkbox and Label -->
-						<div class="styled-checkbox-container">
-							<input
-								type="checkbox"
-								id="remember"
-								name="remember"
-								class="styled-checkbox">
-							<label for="remember" class="styled-checkbox-label">
-								Remember?
-							</label>
-						</div>
-					
-						<!-- Forgot Password -->
-						<a href="{{url_for('auth.forgot_password')}}" class="forgot-password">
-							Forgot password?
-						</a>
+					<div class="wrap-input100 validate-input m-b-23" data-validate="Password is required">
+						<span class="label-input100">Confirm Password</span>
+						<input class="input100" type="password" name="password" placeholder="Type your password">
+						<span class="focus-input100" data-symbol="&#xf191;"></span>
 					</div>
 
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
 							<button class="login100-form-btn">
-								Login
+								Sign Up
 							</button>
 						</div>
 					</div>
 
+
 					<div class="txt1 text-center p-t-24 p-b-20">
-						<a href="{{url_for('auth.sign_up')}}" class="txt2">
-							Sign Up
+						<a href="{{url_for('auth.login')}}" class="txt1">
+							Go back to login
 						</a>
 					</div>
 
