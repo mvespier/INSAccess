@@ -37,6 +37,31 @@ def login_post():
 def forgot_password():
     return render_template('forgot_password.html')
 
+@auth.route('/forgot_password', methods=['POST'])
+def forgot_password_post():
+    email = request.form.get('email')
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify([False, "Cet user n'a pas de compte"])
+
+    data = {"i":str(user.id), "s": user.seqid, "t": int(time.time()/3600)}
+    token = serializer.dumps(data)
+
+    msg = Message( 
+                'Mot de passe oublié', 
+                sender ='toto', 
+                recipients = [email]
+    ) 
+    msg.body = '''Hello, 
+
+Vous recevez cet email car quelqu'un a demandé une réinitalisation de votre password
+sur %s. Si c'est bien vous, pour réinitialiser votre mot de passe, 
+rendez-vous sur cette url: %s%s''' % (current_app.config["APP_URL"], current_app.config["APP_URL"], url_for('auth.init_password', token=token))
+    mail.send(msg)
+
+    return jsonify([True, "Vérifiez vos emails"])
+
 """////////////////////////////////////////////////////////////////////////"""
 
 @auth.route('/sign_up')
