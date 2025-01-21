@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sass public/style.scss src/index.css
-sass public/style.scss src/App.css
+sass public/style.scss src/css/index.css
+sass public/style.scss src/css/App.css
 
 clear
