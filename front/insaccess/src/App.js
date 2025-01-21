@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import utils from './utils.js';
+import utils from './js/utils.js';
 
 function App() {
   return (

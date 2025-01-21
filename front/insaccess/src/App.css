@@ -2,8 +2,8 @@
   --numDays: 5;
   --numSubHours: 124;
   --numHours: 7;
-  --timeHeight: 4.8rem;
-  --subTimeHeight: 0.24rem;
+  --timeHeight: 5.25rem;
+  --subTimeHeight: 0.25rem;
   --dateHeight: 3rem;
   --calBgColor: #fff1f8;
   --eventBorderColor: #f2d3d8;
@@ -11,6 +11,7 @@
   --eventColor2: #ff4423;
   --eventColor3: #16ff6f;
   --eventColor4: #ffe54f;
+  --dateTextSize: 2vmax;
 }
 
 .calendar {
@@ -22,7 +23,7 @@
 
 .timeline {
   display: grid;
-  grid-template-rows: repeat(var(--numHours), var(--timeHeight));
+  grid-template-rows: [firstline] var(--dateHeight) repeat(var(--numHours-2), var(--timeHeight)) [line7] 4.5rem [line8] 3rem;
 }
 
 .days {
@@ -61,10 +62,14 @@
 
 .spacer,
 .date {
-  height: var(--timeHeight);
+  height: var(--dateHeight);
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.date-num, .date-day {
+  font-size: var(--dateTextSize);
 }
 
 body {
@@ -93,14 +98,12 @@ body {
 }
 
 .date-num {
-  font-size: 2rem;
   font-weight: 600;
   display: inline;
 }
 
 .date-day {
   display: inline;
-  font-size: 2rem;
   font-weight: 100;
 }
 
