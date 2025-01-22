@@ -10,6 +10,7 @@ db= SQLAlchemy()
 def create_app(test_config=None):
     app = Flask(__name__)
 
+
     # load the instance config, if it exists, when not testing
     if test_config is None:
         config_file_name = "config.json"
@@ -21,6 +22,20 @@ def create_app(test_config=None):
         for k, v in config_json.items():
             app.config[k] = v
 
+
+    #initialize the login manager from Flask
+    from .models import User
+
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'# set the login view to the one defined in auth.py
+    login_manager.login_message = "Vous avez besoin d'être connecté pour accéder à cette page"
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))# use the primary key of the User database as the user_id
+
+
     # utilities
     global serializer
     serializer = URLSafeSerializer(app.config['URL_SERIALIZER_SECRET'], salt="chpassword")
@@ -31,16 +46,6 @@ def create_app(test_config=None):
     #initialize the database
     db.init_app(app)
 
-    #initialize the login manager from Flask
-    from .models import User
-
-    login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'# set the login view to the one defined in auth.py
-    login_manager.init_app(app)
-
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))#ze use the primary key of the User database as the user_id
 
     from .blueprints.auth import auth as auth_blueprint
     from .blueprints.main import main as main_blueprint

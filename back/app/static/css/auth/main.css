@@ -526,6 +526,14 @@ iframe {
 }
 
 
+.wrong-password {
+  font-family: Poppins-Regular, sans-serif;
+  font-size: 14px;
+  color: #666666;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
 /*//////////////////////////////////////////////////////////////////
 [ Responsive ]*/
 

@@ -44,6 +44,15 @@
 							</button>
 						</div>
 					</div>
+					{% with messages = get_flashed_messages() %}
+					{% if messages %}
+						<ul class="wrong-password text-center">
+						{% for message in messages %}
+						<li>{{ message }}</li>
+						{% endfor %}
+						</ul>
+					{% endif %}
+					{% endwith %}
 
 					<div class="txt1 text-center p-t-24 p-b-20">
 						<a href="{{url_for('auth.sign_up')}}" class="txt2">
