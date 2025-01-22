@@ -1,4 +1,4 @@
-import time
+import time, sys
 from flask import current_app, Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,6 +8,7 @@ from .. import db, mail, serializer
 
 auth = Blueprint('auth', __name__)
 
+"""////////////////////////////////////////////////////////////////////////"""
 @auth.route('/login')
 def login():
     logout_user()
@@ -29,17 +30,17 @@ def login_post():
 
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
-    return redirect(url_for('main.profile'))
+    return redirect(url_for('main.default_page'))
 
 
+"""////////////////////////////////////////////////////////////////////////"""
 
 @auth.route('/forgot_password')
 def forgot_password():
     return render_template('forgot_password.html')
 
-
-@auth.route('/change_password', methods=['POST'])
-def change_password():
+@auth.route('/forgot_password', methods=['POST'])
+def forgot_password_post():
     email = request.form.get('email')
     user = User.query.filter_by(email=email).first()
 
@@ -62,6 +63,73 @@ rendez-vous sur cette url: %s%s''' % (current_app.config["APP_URL"], current_app
     mail.send(msg)
 
     return jsonify([True, "Vérifiez vos emails"])
+
+"""////////////////////////////////////////////////////////////////////////"""
+
+@auth.route('/sign_up')
+def sign_up():
+    logout_user()
+    return render_template('sign_up.html')
+
+
+@auth.route('/sign_up', methods =['POST'])
+def sign_up_post():
+    logout_user()
+    name = request.form.get('name')
+    email = request.form.get('email')
+    new_password = request.form.get('new_password')
+    confirmed_password = request.form.get('confirmed_password')
+
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        flash('cet email est deja utilisé')
+        return render_template('sign_up.html', name=name, email=email)
+    
+    if new_password != confirmed_password:
+        flash("les mdp ne sont pas egaux")
+        return render_template('sign_up.html', name=name, email=email)
+    
+    db.session.add(User(email=email,
+                                    name=name,
+                                    password=generate_password_hash(new_password)))
+    db.session.commit()
+    flash("Success!")
+    return redirect(url_for('auth.login'))
+    
+
+
+"""////////////////////////////////////////////////////////////////////////"""
+
+@auth.route('/change_password')
+def change_password():
+    return render_template('change_password.html')
+
+@auth.route('/change_password', methods=['POST'])
+def change_password_post():
+    email = request.form.get('email')
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify([False, "Cet user n'a pas de compte"])
+
+    data = {"i":str(user.id), "s": user.seqid, "t": int(time.time()/3600)}
+    token = serializer.dumps(data)
+
+    msg = Message( 
+                'Mot de passe oublié', 
+                sender ='toto', 
+                recipients = [email]
+    ) 
+    msg.body = '''Hello, 
+
+Vous recevez cet email car quelqu'un a demandé une réinitalisation de votre password
+sur %s. Si c'est bien vous, pour réinitialiser votre mot de passe, 
+rendez-vous sur cette url: %s%s''' % (current_app.config["APP_URL"], current_app.config["APP_URL"], url_for('auth.init_password', token=token))
+    mail.send(msg)
+
+    return jsonify([True, "Vérifiez vos emails"])
+"""////////////////////////////////////////////////////////////////////////"""
 
 
 @auth.route('/init_password/<string:token>', methods=['GET'])

@@ -7,22 +7,22 @@
 
 @font-face {
   font-family: Poppins-Regular;
-  src: url('../fonts/poppins/Poppins-Regular.ttf'); 
+  src: url('../../fonts/poppins/Poppins-Regular.ttf'); 
 }
 
 @font-face {
   font-family: Poppins-Medium;
-  src: url('../fonts/poppins/Poppins-Medium.ttf'); 
+  src: url('../../fonts/poppins/Poppins-Medium.ttf'); 
 }
 
 @font-face {
   font-family: Poppins-Bold;
-  src: url('../fonts/poppins/Poppins-Bold.ttf'); 
+  src: url('../../fonts/poppins/Poppins-Bold.ttf'); 
 }
 
 @font-face {
   font-family: Poppins-SemiBold;
-  src: url('../fonts/poppins/Poppins-SemiBold.ttf'); 
+  src: url('../../fonts/poppins/Poppins-SemiBold.ttf'); 
 }
 
 
@@ -442,27 +442,97 @@ iframe {
 
 
 /*//////////////////////////////////////////////////////////////////
-[ Social item ]*/
-.login100-social-item {
-  font-size: 25px;
-  color: #fff;
-
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
+[ Checkbox style ]*//* Checkbox container styling */
+/* Parent container for alignment */
+.align-between {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin: 5px;
+  justify-content: space-between;
+  align-items: center; /* Aligns checkbox and link vertically */
+  margin-bottom: 20px;
 }
 
-.login100-social-item:hover {
+/* Styled checkbox container */
+.styled-checkbox-container {
+  display: flex;
+  align-items: center; /* Centers checkbox and label vertically */
+}
+
+/* Hide the default checkbox */
+.styled-checkbox {
+  display: none;
+}
+
+/* Custom checkbox design */
+.styled-checkbox + .styled-checkbox-label {
+  font-family: Poppins-Regular, sans-serif;
+  font-size: 14px;
+  color: #666666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  position: relative;
+  padding-left: 24px; /* Space for the custom checkbox */
+}
+
+/* Checkbox box */
+.styled-checkbox + .styled-checkbox-label::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid #666666;
+  border-radius: 4px; /* Rounded corners */
+  background-color: transparent;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+
+/* Checkbox checked state */
+.styled-checkbox:checked + .styled-checkbox-label::before {
+  background-color: #a64bf4; /* Match "Forgot password?" hover color */
+  border-color: #a64bf4;
+}
+
+/* Checkmark for checked state */
+.styled-checkbox:checked + .styled-checkbox-label::after {
+  content: "✔";
+  font-size: 12px;
   color: #fff;
-  background-color: #333333;
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Hover effect */
+.styled-checkbox + .styled-checkbox-label:hover::before {
+  border-color: #a64bf4; /* Hover border color */
+}
+
+/* Forgot password link */
+.forgot-password {
+  font-family: Poppins-Regular, sans-serif;
+  font-size: 14px;
+  color: #666666;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+  color: #a64bf4; /* Hover color for forgot password */
+}
+
+
+.wrong-password {
+  font-family: Poppins-Regular, sans-serif;
+  font-size: 15px;
+  color: #666666;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  
 }
 
 /*//////////////////////////////////////////////////////////////////
