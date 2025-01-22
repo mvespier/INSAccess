@@ -11,3 +11,4 @@ pandas
 PyYAML
 mysqlclient
 Jinja2
+email-validator

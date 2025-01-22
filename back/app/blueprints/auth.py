@@ -5,6 +5,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from ..models import User
 from flask_mail import Message
 from .. import db, mail, serializer
+from email_validator import validate_email,EmailNotValidError
+
 
 auth = Blueprint('auth', __name__)
 
@@ -16,9 +18,14 @@ def login():
 
 @auth.route('/login', methods=['POST'])
 def login_post():
-    email = request.form.get('email')
-    password = request.form.get('password')
-    remember = True if request.form.get('remember') else False
+    #checking if email is valid
+    email_checker('auth.login')
+    
+    #request the elements from the form 
+    request_dict = request.form
+    email = request_dict['email']
+    password = request_dict['password']
+    remember = True if request_dict['remember'] else False
 
     user = User.query.filter_by(email=email).first()# here the first() is used only to increase the speed, since email is unique
 
@@ -26,7 +33,7 @@ def login_post():
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
     if not user or not check_password_hash(user.password, password):
         flash('Mot de passe incorrect')
-        return redirect(url_for('auth.login'))
+        return render_template('login.html', email = email)
 
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
@@ -37,19 +44,28 @@ def login_post():
 
 @auth.route('/forgot_password')
 def forgot_password():
+    logout_user()
     return render_template('forgot_password.html')
 
 @auth.route('/forgot_password', methods=['POST'])
 def forgot_password_post():
+    #checking if email is valid
+    email_checker('auth.forgot_password')
+
+    #request the element from the form 
     email = request.form.get('email')
+
     user = User.query.filter_by(email=email).first()
 
+    # check if the user actually exists
     if not user:
         return jsonify([False, "Cet user n'a pas de compte"])
 
+    # create a token to be given within the reset password link
     data = {"i":str(user.id), "s": user.seqid, "t": int(time.time()/3600)}
     token = serializer.dumps(data)
 
+    #create and send the mail to the user
     msg = Message( 
                 'Mot de passe oublié', 
                 sender ='toto', 
@@ -57,9 +73,9 @@ def forgot_password_post():
     ) 
     msg.body = '''Hello, 
 
-Vous recevez cet email car quelqu'un a demandé une réinitalisation de votre password
-sur %s. Si c'est bien vous, pour réinitialiser votre mot de passe, 
-rendez-vous sur cette url: %s%s''' % (current_app.config["APP_URL"], current_app.config["APP_URL"], url_for('auth.init_password', token=token))
+        Vous recevez cet email car quelqu'un a demandé une réinitalisation de votre password
+        sur %s. Si c'est bien vous, pour réinitialiser votre mot de passe, 
+        rendez-vous sur cette url: %s%s''' % (current_app.config["APP_URL"], current_app.config["APP_URL"], url_for('auth.init_password', token=token))
     mail.send(msg)
 
     return jsonify([True, "Vérifiez vos emails"])
@@ -75,10 +91,14 @@ def sign_up():
 @auth.route('/sign_up', methods =['POST'])
 def sign_up_post():
     logout_user()
-    name = request.form.get('name')
-    email = request.form.get('email')
-    new_password = request.form.get('new_password')
-    confirmed_password = request.form.get('confirmed_password')
+    #check if email is valid
+    email_checker('auth.sign_up')
+
+    request_dict = request.form
+    name = request_dict['name']
+    email = request_dict['email']
+    new_password = request_dict['new_password']
+    confirmed_password = request_dict['confirmed_password']
 
     user = User.query.filter_by(email=email).first()
 
@@ -177,3 +197,14 @@ def logout():
     logout_user()
     return redirect(url_for('auth.login'))
 
+
+
+def email_checker(redirect_path : str):
+    try:
+        valid = validate_email(request.form['email'])   
+    except EmailNotValidError as e:
+        flash('email is wrong, please try again')
+        return redirect(url_for(redirect_path))
+    if not valid :
+        flash('email is wrong, please try again')
+        return redirect(url_for(redirect_path))
