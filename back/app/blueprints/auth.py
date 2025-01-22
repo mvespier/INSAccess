@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from ..models import User
 from flask_mail import Message
 from .. import db, mail, serializer
-from email_validator import validate_email,EmailNotValidError
+from email_validator import validate_email, EmailNotValidError
 
 
 auth = Blueprint('auth', __name__)
@@ -18,14 +18,24 @@ def login():
 
 @auth.route('/login', methods=['POST'])
 def login_post():
-    #checking if email is valid
-    email_checker('auth.login')
-    
+
     #request the elements from the form 
     request_dict = request.form
-    email = request_dict['email']
-    password = request_dict['password']
-    remember = True if request_dict['remember'] else False
+    email = request_dict.get('email')
+    password = request_dict.get('password')
+    remember = True if request_dict.get('remember') else False
+
+    #checking if email is valid
+    try:
+        valid = validate_email(email)   
+    except EmailNotValidError as e:
+        flash('email is wrong, please try again')
+        return redirect(url_for('auth.login'))
+    if not valid :
+        flash('email is wrong, please try again')
+        return redirect(url_for('auth.login'))
+    
+
 
     user = User.query.filter_by(email=email).first()# here the first() is used only to increase the speed, since email is unique
 
@@ -50,8 +60,15 @@ def forgot_password():
 @auth.route('/forgot_password', methods=['POST'])
 def forgot_password_post():
     #checking if email is valid
-    email_checker('auth.forgot_password')
-
+    try:
+        valid = validate_email(request.form['email'])   
+    except EmailNotValidError as e:
+        flash('email is wrong, please try again')
+        return redirect(url_for('auth.forgot_password'))
+    if not valid :
+        flash('email is wrong, please try again')
+        return redirect(url_for('auth.forgot_password'))
+    
     #request the element from the form 
     email = request.form.get('email')
 
@@ -92,14 +109,22 @@ def sign_up():
 def sign_up_post():
     logout_user()
     #check if email is valid
-    email_checker('auth.sign_up')
 
     request_dict = request.form
-    name = request_dict['name']
-    email = request_dict['email']
-    new_password = request_dict['new_password']
-    confirmed_password = request_dict['confirmed_password']
+    name = request_dict.get('name')
+    email = request_dict.get('email')
+    new_password = request_dict.get('new_password')
+    confirmed_password = request_dict.get('confirmed_password')
 
+    try:
+        valid = validate_email(email)   
+    except EmailNotValidError as e:
+        flash('email is wrong, please try again')
+        return redirect(url_for('auth.sign_up'))
+    if not valid or not email.endswith('@insa-rouen.fr'):
+        flash('email is wrong, please try again (use insa\'s email)')
+        return redirect(url_for('auth.sign_up'))
+    
     user = User.query.filter_by(email=email).first()
 
     if user:
@@ -184,7 +209,7 @@ def post_new_password():
         return redirect(url_for('auth.login'))
 
     user.seqid = user.seqid+1
-    user.password = generate_password_hash(password, method='sha256')
+    user.password = generate_password_hash(password)
     db.session.commit()
 
     return render_template('login.html')
@@ -198,13 +223,3 @@ def logout():
     return redirect(url_for('auth.login'))
 
 
-
-def email_checker(redirect_path : str):
-    try:
-        valid = validate_email(request.form['email'])   
-    except EmailNotValidError as e:
-        flash('email is wrong, please try again')
-        return redirect(url_for(redirect_path))
-    if not valid :
-        flash('email is wrong, please try again')
-        return redirect(url_for(redirect_path))
