@@ -16,7 +16,7 @@ def login():
 
 @auth.route('/login', methods=['POST'])
 def login_post():
-    email = request.form.get('name')
+    email = request.form.get('email')
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
 
@@ -31,6 +31,8 @@ def login_post():
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
     return redirect(url_for('main.default_page'))
+
+
 """////////////////////////////////////////////////////////////////////////"""
 
 @auth.route('/forgot_password')
@@ -66,7 +68,36 @@ rendez-vous sur cette url: %s%s''' % (current_app.config["APP_URL"], current_app
 
 @auth.route('/sign_up')
 def sign_up():
+    logout_user()
     return render_template('sign_up.html')
+
+
+@auth.route('/sign_up', methods =['POST'])
+def sign_up_post():
+    logout_user()
+    name = request.form.get('name')
+    email = request.form.get('email')
+    new_password = request.form.get('new_password')
+    confirmed_password = request.form.get('confirmed_password')
+
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        flash('cet email est deja utilisé')
+        return render_template('sign_up.html', name=name, email=email)
+    
+    if new_password != confirmed_password:
+        flash("les mdp ne sont pas egaux")
+        return render_template('sign_up.html', name=name, email=email)
+    
+    db.session.add(User(email=email,
+                                    name=name,
+                                    password=generate_password_hash(new_password)))
+    db.session.commit()
+    flash("Success!")
+    return redirect(url_for('auth.login'))
+    
+
 
 """////////////////////////////////////////////////////////////////////////"""
 
