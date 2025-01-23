@@ -9,9 +9,55 @@
         "years" : [3, 4, 5],
         "names" : {
             "ITI" : {
+
+                "default_tags" : ["DPT-ITI", "ITI"],
+
                 "3" : {
-                    "TD" : ["01", "02", "03"],
-                    "TP" : ["1", "2"]
+                    "TD" : {
+                        "tags_starts_with" : ["ITI32-TD-", "ITI31-APS-TD-"],
+                        "ends_with" : {
+                            "1" : ["01"],
+                            "2" : ["02"],
+                            "3" : ["03"]
+                        }
+                    },
+                    "TP" : {
+                        "tags_starts_with" : ["ITI31-TP-GR-", "ITI32-TP"],
+                        "1" : {
+                            "tags+" : ["1"],
+                            "ends_with" : {
+                                "1" : ["1"],
+                                "2" : ["2"]
+                            }
+
+                        },
+                        "2" : {
+                            "tags+" : ["2"],
+                            "ends_with" : {
+                                "1" : ["1"],
+                                "2" : ["2"]
+                            }
+
+                        },
+                        "3" : {
+                            "tags+" : ["3"],
+                            "ends_with" : {
+                                "1" : ["1"],
+                                "2" : ["2"]
+                            }
+
+                        }
+                        
+                    },
+                    "LANGUE" : {
+                        "ANGLAIS" :  {
+                            "tags_starts_with" : 
+                        },
+                        "ALLEMAND" : {},
+                        "ESPAGNOL" : {}
+
+
+                    }
                 },
                 "4" : {
                     "TD" : ["01", "02", "03"],

@@ -17,3 +17,8 @@ if first time then you need to initialize the database app using:
 create database app;
 show databases;
 
+## how to fetch
+> for day, simply put the day (ex : 20250123 for 2025/01/23)
+> for week, must be the sunday previous to the week you wanna fetch (for the 12 to 16 then fetch at 11)
+> for month, simply fetch at the first day of the month
+
