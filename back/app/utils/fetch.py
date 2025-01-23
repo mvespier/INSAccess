@@ -208,11 +208,27 @@ def return_unique_td(out):
     for i in sorted(unique):
         print(i)
 
+def return_unique_date(out):
+    unique = set()
+    for item in out :
+        unique.add(item[0][:-3])
+    for i in sorted(unique,reverse=True):
+        print(i)
+
+
 def return_all(out):
     for item in out :
-        for element in item[6]:
-            print(element)
+        print(item)
 
+def fetch_entire_year(year_of_start, department, depart_year):
+    total_list=[]
+    for i in {"08", "09", "10", "11", "12"}:
+        date = year_of_start + i + "01"
+        total_list = total_list + get_calendar_data(year_of_start, department, depart_year, date, "month")[1]
+    for i in {"01", "02", "03", "04", "05", "06", "07","08"}:
+        date = str(int(year_of_start)+1) + i + "01"
+        total_list = total_list + get_calendar_data(year_of_start, department, depart_year, date, "month")[1]
+    return total_list
 
 if __name__== "__main__" :
     if len(sys.argv)==6:
@@ -223,8 +239,11 @@ if __name__== "__main__" :
         else : 
             # print(f"Error code : {error_code}")
             # print("-"*150)
-            return_unique_td(out)
+            return_all(out)
 
         # print("-"*150)
-    else :
+    elif len(sys.argv)==4:
+        out = fetch_entire_year(sys.argv[1], sys.argv[2], sys.argv[3])
+        return_unique_td(out)
+    else:    
         print(f"ERROR : wrong number of arguments : must be 5 arguments, were given {len(sys.argv)-1}")
