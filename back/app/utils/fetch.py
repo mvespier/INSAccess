@@ -179,7 +179,7 @@ def description_parsing(description, depart_list):
     for i in range(len(td_group_in_desc)):
         if td_group_in_desc[i] in get_item_to_be_removed():
             list_of_indexes_filter.append(i)
-    pop_multiple_element(td_group_in_desc,list_of_indexes_filter)
+    _, td_group_in_desc = pop_multiple_element(td_group_in_desc,list_of_indexes_filter)
 
 
     return td_group_in_desc, name_list, depart_in_desc
@@ -200,18 +200,31 @@ def item_to_string(item):
     return item.text if item != None else get_default_string()
 
 
+def return_unique_td(out):
+    unique = set()
+    for item in out :
+        for element in item[6]:
+            unique.add(element)
+    for i in sorted(unique):
+        print(i)
+
+def return_all(out):
+    for item in out :
+        for element in item[6]:
+            print(element)
+
+
 if __name__== "__main__" :
     if len(sys.argv)==6:
-        url, out = get_calendar_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
-        print("-"*150)
+        error_code, out = get_calendar_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+        # print("-"*150)
         if (len(out) == 0) :
             print("Nothing found with those parameters")
         else : 
-            print(f"Successfully fetched the data from : \n {url}")
-            print("-"*150)
-            for item in out :
-                print(item) 
+            # print(f"Error code : {error_code}")
+            # print("-"*150)
+            return_unique_td(out)
 
-        print("-"*150)
+        # print("-"*150)
     else :
         print(f"ERROR : wrong number of arguments : must be 5 arguments, were given {len(sys.argv)-1}")
