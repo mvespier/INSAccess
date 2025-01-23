@@ -16,8 +16,8 @@ function SingleEvent({start_time, end_time, label, color, teacher, room}){
   let end_index = hours_events.indexOf(end_time)+1;
 
   const eventStyle = {
-    gridRowStart: start_index, 
-    gridRowEnd: end_index
+    position: relative,
+    
   };
 
   return (
