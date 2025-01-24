@@ -43,4 +43,8 @@ function getDateInfo(date){
   
 }
 
-export default { getDateInfo, presentableHour, createHours, hours_timeline };
+function getEventSize(start_index, end_index, nb_div){
+  return ((end_index-start_index)/(nb_div-1))*100
+}
+
+export default { getDateInfo, presentableHour, createHours, hours_timeline, getEventSize };
