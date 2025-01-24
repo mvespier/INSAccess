@@ -71,6 +71,7 @@
   display: flex;
   justify-content: center;
   align-items: center center;
+  margin: 1vh;
 }
 
 .date-num, .date-day {
