@@ -47,4 +47,8 @@ function getEventSize(start_index, end_index, nb_div){
   return ((end_index-start_index)/(nb_div-1))*100
 }
 
-export default { getDateInfo, presentableHour, createHours, hours_timeline, getEventSize };
+function getEventPos(start_index, nb_div){
+  return 100*start_index/(nb_div-1);
+}
+
+export default { getDateInfo, presentableHour, createHours, hours_timeline, getEventSize, getEventPos };

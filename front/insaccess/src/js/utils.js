@@ -15,10 +15,14 @@ function SingleEvent({start_time, end_time, label, color, teacher, room}){
   let start_index = hours_events.indexOf(start_time)+1;
   let end_index = hours_events.indexOf(end_time)+1;
   let eventHeight = dateUtils.getEventSize(start_index, end_index, hours_events.length);
+  let eventPosY = dateUtils.getEventPos(start_index, hours_events.length);
 
   const eventStyle = {
-    display: "flex",
-    height: `${eventHeight}%`
+    height: `${eventHeight}%`,
+    position: "absolute",
+    top: `${eventPosY}%`,
+    width: "93%"
+   
   };
 
   return (
