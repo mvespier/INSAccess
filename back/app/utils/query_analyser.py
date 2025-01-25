@@ -1,8 +1,27 @@
 from typing import List
 import json
+import itertools
 
 
-def get_tags_from_dict(dict, *args): 
+def get_tags_from_dict(dict, *keys): 
+    tags = set();
+    tags_beginning = []
+    for k in keys:
+        if "default_tags" in dict:
+            tags.add(dict["default_tags"])
+
+        if "tags_starts_with" in dict:
+            if len(tags_beginning) > 0 :
+                return -1, set();
+            tags_beginning = dict["tags_starts_with"]
+        
+        if "tags+" in dict:
+            itertools
+
+
+        if k in dict:
+
+
     return
 
 
