@@ -47,6 +47,14 @@
         "room":["Ma-H-R1-6"],
         "teacher":["RENOUX Mariana"],
         "date":"20250123" 
+    },
+    {
+        "label":"CPES",
+        "start_time":"0800",
+        "end_time": "1145",
+        "room":["S01"],
+        "teacher":"Jacques GALHARDO",
+        "date":"20250122"
     }
 
 ]

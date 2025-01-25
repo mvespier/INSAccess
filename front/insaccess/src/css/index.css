@@ -1,6 +1,7 @@
 body {
   font-family: system-ui, sans-serif;
   height: 100vh;
+  background-image: url("../images/background.jpg");
 }
 
 #root {

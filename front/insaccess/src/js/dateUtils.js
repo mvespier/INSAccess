@@ -2,7 +2,7 @@ const hours_timeline = ["8h00", "9h45", "11h30", "13h15", "15h00", "16h45", "18h
 
 function createHours(){
     let result = [];
-    result.push("0755");
+    //result.push("0755");
     let string = "";
     let currentHour = 8;
     let currentMinute = 0;
@@ -44,11 +44,11 @@ function getDateInfo(date){
 }
 
 function getEventSize(start_index, end_index, nb_div){
-  return ((end_index-start_index)/(nb_div-1))*100
+  return ((end_index-start_index)/(nb_div+1))*100
 }
 
 function getEventPos(start_index, nb_div){
-  return 100*start_index/(nb_div-1);
+  return 100*(start_index+1)/(nb_div+1);
 }
 
 export default { getDateInfo, presentableHour, createHours, hours_timeline, getEventSize, getEventPos };

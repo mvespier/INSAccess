@@ -1,16 +1,10 @@
 :root {
   --numDays: 5;
-  --numSubHours: 124;
   --numHours: 7;
-  --timeHeight: 5.25rem;
-  --subTimeHeight: 0.25rem;
   --dateHeight: 3rem;
-  --calBgColor: #fff1f8;
-  --eventBorderColor: #f2d3d8;
-  --eventColor1: #57caff;
-  --eventColor2: #ff4423;
-  --eventColor3: #16ff6f;
-  --eventColor4: #ffe54f;
+  --calBgColor: #efc2f8;
+  --eventBorderColor: #445374;
+  --eventColor: #57caff;
   --dateTextSize: 2vmax;
 }
 
@@ -24,7 +18,8 @@
 
 .timeline {
   display: grid;
-  grid-template-rows: [firstline] var(--dateHeight) repeat(var(--numHours-2), var(--timeHeight)) [line7] 4.5rem [line8] 3rem;
+  height: 100%;
+  grid-template-rows: calc(var(--dateHeight) + 2vh) repeat(calc(var(--numHours) - 1), 1fr) 1.5vh;
 }
 
 .days {
@@ -38,20 +33,20 @@
   display: block;
   height: 90%;
   border-radius: 5px;
-  background: var(--calBgColor);
+  background: linear-gradient(180deg, #b0dbff, #ffb7ef);
   position: relative;
 }
 
 .title {
   font-weight: 600;
   margin-bottom: 0.1rem;
-  font-size: 0.9rem;
+  font-size: max(2vh, 1rem);
 }
 
 .time, .teacher, .room {
-  font-weight: 500;
+  font-weight: 430;
   margin-bottom: 0.1rem;
-  font-size: 0.7rem;
+  font-size: max(1.7vh, 0.7rem);
   height: auto;
 }
 
@@ -62,10 +57,13 @@
   border-radius: 5px;
   padding: 0.1rem 0.5rem;
   margin: 0 0.5rem;
-  background: white;
 }
 
-.spacer,
+.spacer {
+  height: var(--dateHeight);
+  margin: 1vh;
+}
+
 .date {
   height: var(--dateHeight);
   display: flex;
@@ -76,22 +74,6 @@
 
 .date-num, .date-day {
   font-size: var(--dateTextSize);
-}
-
-.colBlue {
-  background: var(--eventColor1);
-}
-
-.colRed {
-  background: var(--eventColor2);
-}
-
-.colGreen {
-  background: var(--eventColor3);
-}
-
-.colYellow {
-  background: var(--eventColor4);
 }
 
 .date {

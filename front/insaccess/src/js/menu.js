@@ -8,27 +8,27 @@ Items
 --------------------*/
 const items = [
 {
-  name: "Freelance",
+  name: "Home",
   color: "#f44336",
   href: "#" },
 
 {
-  name: "Design",
+  name: "Associative events",
   color: "#e91e63",
   href: "#" },
 
 {
-  name: "Director",
+  name: "Agenda",
   color: "#9c27b0",
   href: "#" },
 
 {
-  name: "Experience",
+  name: "Settings",
   color: "#673ab7",
   href: "#" },
 
 {
-  name: "Interface",
+  name: "About",
   color: "#3f51b5",
   href: "#" }];
 
