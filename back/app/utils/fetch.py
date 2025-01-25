@@ -2,7 +2,7 @@
 Module Name: fetch.py
 
 Description:
-    The script for fetching and parsing the raw 
+    The script for fetching and parsing the raw
     data from the calendar of insa rouen.
 
 Author:
@@ -24,7 +24,7 @@ Usage:
     python3 fetch.py year_of_start department depart_year
 
 Dependencies:
-    
+
 
 Notes:
     This tool is specialized for the agenda.insa-rouen.fr
@@ -116,14 +116,14 @@ def xml_to_list(url : str) -> list:
     """take a url (of the agenda of insa (agenda.insa-rouen.fr)
     and parse it to useful components
 
-    
+
     Keyword arguments:
     url -- the url to fetch
     url -- depart
     Return: return_description
     """
 
-    response = requests.get(url)
+    response = requests.get(url, timeout=5)
 
     if response.status_code == 200: #request is successful
         response.encoding = 'utf-8'
@@ -131,8 +131,8 @@ def xml_to_list(url : str) -> list:
 
         try:
             root = ElementTree.fromstring(xml_data)
-        except ElementTree.ParseError as e:
-            print(f"XML parsing error: {e}")
+        except ElementTree.ParseError as err:
+            print(f"XML parsing error: {err}")
             return ERROR_FAILED_TO_PARSE, []
 
         root = ElementTree.fromstring(xml_data)
@@ -140,7 +140,7 @@ def xml_to_list(url : str) -> list:
         namespaces = {
             "ev": "http://purl.org/rss/1.0/modules/event/"
         }
-        output =[]
+        output = []
 
         for item in root.findall("./channel/item"):
             title = item_to_string(item.find("title"))
@@ -220,11 +220,11 @@ def description_parsing(description):
     pattern_for_parsing = r'(?<=<br/>).*'
     try :
         desc_string = re.findall(pattern_for_parsing, description )[0]
-    except IndexError as e:
-        print(f"List Index error: {e}")
+    except IndexError as err:
+        print(f"List Index error: {err}")
         return [],get_default_name() ,[]
 
-    desc_item_list = desc_string.split(r'<br/>')[1:-2] 
+    desc_item_list = desc_string.split(r'<br/>')[1:-2]
     # 1 to -2 because the last and first are empty and the -2 is just the date of submission
 
 
@@ -258,52 +258,63 @@ def description_parsing(description):
 
     return td_group_in_desc, name_list, depart_in_desc
 
-def get_name_indexes(l : list) -> list[int]:
+def get_name_indexes(list_of_items : list) -> list[int]:
     """returns a list of index where names are"""
     list_of_indexes=[]
-    for index, item in range(len(l)):
+    for index, item in enumerate(list_of_items):
         if len(item.split(' ')) >1 :
             list_of_indexes.append(index)
     return list_of_indexes
 
-def pop_multiple_element(l : list, list_of_indexes : list):
+def pop_multiple_element(list_of_items : list, list_of_indexes : list):
     """pop all the indexes of the list_of_indexes at the same time in l"""
-    deleted_element = [l[i] for i in list_of_indexes]
-    filtered_list = [l[i] for i in range(len(l)) if i not in list_of_indexes]
+    deleted_element = [list_of_items[i] for i in list_of_indexes]
+    filtered_list = [list_of_items[i] for i in range(len(list_of_items))\
+                     if i not in list_of_indexes]
     return deleted_element, filtered_list
 
 def item_to_string(item):
-    """"""
-    return item.text if item != None else get_default_string()
+    """transform the item to a string if possible"""
+    return item.text if item is not None else get_default_string()
 
 
-def return_unique_td(out):
+def print_unique_td(output):
+    """ prints all the unique group td in output
+    in a sorted manner"""
     unique = set()
-    for item in out :
+    for item in output :
         for element in item[6]:
             unique.add(element)
     for i in sorted(unique):
         print(i)
 
-def return_unique_date(out):
+
+def print_unique_date(output):
+    """ prints all the unique dates in output"""
     unique = set()
-    for item in out :
+    for item in output :
         unique.add(item[0][:-3])
     for i in sorted(unique,reverse=True):
         print(i)
 
 
-def return_all(out):
-    for item in out :
+def print_all(output):
+    """ print all the tuples from the output"""
+    for item in output :
         print(item)
 
 def fetch_entire_year(year_of_start, department, depart_year):
+    """ a crude but working method to fetch the entire year of
+    year_of_start, department, depart_year"""
     total_list=[]
-    for i in {"08", "09", "10", "11", "12"}:
+    sequence_1st_year = {"08", "09", "10", "11", "12"}
+    for i in sequence_1st_year:
         date = year_of_start + i + "01"
         total_list = total_list + get_calendar_data(year_of_start,\
                                                      department, depart_year, date, "month")[1]
-    for i in {"01", "02", "03", "04", "05", "06", "07","08"}:
+
+    sequence_2nd_year = {"01", "02", "03", "04", "05", "06", "07","08"}
+    for i in sequence_2nd_year:
         date = str(int(year_of_start)+1) + i + "01"
         total_list = total_list + get_calendar_data(year_of_start,\
                                                      department, depart_year, date, "month")[1]
@@ -311,18 +322,20 @@ def fetch_entire_year(year_of_start, department, depart_year):
 
 if __name__== "__main__" :
     if len(sys.argv)==6:
-        error_code, out = get_calendar_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+        error_code, out = get_calendar_data(sys.argv[1], sys.argv[2],\
+                                             sys.argv[3], sys.argv[4], sys.argv[5])
         # print("-"*150)
-        if (len(out) == 0) :
+        if len(out) == 0 :
             print("Nothing found with those parameters")
         else :
             # print(f"Error code : {error_code}")
             # print("-"*150)
-            return_all(out)
+            print_all(out)
 
         # print("-"*150)
     elif len(sys.argv)==4:
         out = fetch_entire_year(sys.argv[1], sys.argv[2], sys.argv[3])
-        return_unique_td(out)
+        print_unique_td(out)
     else:
-        print(f"ERROR : wrong number of arguments : must be 5 arguments, were given {len(sys.argv)-1}")
+        print(f"ERROR : wrong number of arguments : must be 5 arguments\
+            , were given {len(sys.argv)-1}")
