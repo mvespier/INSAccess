@@ -1,148 +1,17 @@
-:root {
-  --numDays: 5;
-  --numSubHours: 124;
-  --numHours: 7;
-  --timeHeight: 5.25rem;
-  --subTimeHeight: 0.25rem;
-  --dateHeight: 3rem;
-  --calBgColor: #fff1f8;
-  --eventBorderColor: #f2d3d8;
-  --eventColor1: #57caff;
-  --eventColor2: #ff4423;
-  --eventColor3: #16ff6f;
-  --eventColor4: #ffe54f;
-  --dateTextSize: 2vmax;
-}
-
-.calendar {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: auto 1fr;
-  margin: 0.2rem 1rem;
-}
-
-.timeline {
-  display: grid;
-  grid-template-rows: [firstline] var(--dateHeight) repeat(var(--numHours-2), var(--timeHeight)) [line7] 4.5rem [line8] 3rem;
-}
-
-.days {
-  display: grid;
-  grid-column: 2;
-  gap: 5px;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-}
-
-.events {
-  display: grid;
-  grid-template-rows: repeat(var(--numSubHours), var(--subTimeHeight));
-  border-radius: 5px;
-  background: var(--calBgColor);
-}
-
-.title {
-  font-weight: 600;
-  margin-bottom: 0.1rem;
-  font-size: 0.9rem;
-}
-
-.time, .teacher, .room {
-  font-weight: 500;
-  margin-bottom: 0.1rem;
-  font-size: 0.7rem;
-}
-
-.event {
-  border: 1px solid var(--eventBorderColor);
-  border-radius: 5px;
-  padding: 0.1rem 0.5rem;
-  margin: 0 0.5rem;
-  background: white;
-}
-
-.spacer,
-.date {
-  height: var(--dateHeight);
-  display: flex;
-  justify-content: center;
-  align-items: center center;
-}
-
-.date-num, .date-day {
-  font-size: var(--dateTextSize);
-}
-
 body {
   font-family: system-ui, sans-serif;
+  height: 100vh;
 }
 
-.colBlue {
-  background: var(--eventColor1);
+#root {
+  display: block;
+  height: 100%;
 }
 
-.colRed {
-  background: var(--eventColor2);
-}
-
-.colGreen {
-  background: var(--eventColor3);
-}
-
-.colYellow {
-  background: var(--eventColor4);
-}
-
-.date {
+.App {
   display: flex;
-  gap: 1em;
-}
-
-.date-num {
-  font-weight: 600;
-  display: flex;
-}
-
-.date-day {
-  display: flex;
-  font-weight: 100;
-}
-
-.menu {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  z-index: 1;
-  padding: 10px;
-  max-width: 800px;
-  margin: 0 auto;
-  border-bottom: 1px solid #eee;
-}
-@media (max-width: 650px) {
-  .menu {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-.menu .item {
-  padding: 18px 28px;
-  cursor: pointer;
-  transition: color 0.3s ease-out;
-  text-decoration: none;
-  color: #111;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  font-size: 12px;
-  margin: 5px 0;
-}
-.menu .item.active {
-  color: #fff;
-}
-.menu .indicator {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  border-radius: 30px;
+  height: 100%;
+  flex-direction: column;
 }
 
 /*# sourceMappingURL=index.css.map */

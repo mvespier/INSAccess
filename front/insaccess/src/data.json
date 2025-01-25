@@ -27,17 +27,9 @@
     {
         "label":"UMLP",
         "start_time":"1500",
-        "end_time":"1630",
+        "end_time":"1815",
         "room":["Ma-H-R2-12"],
         "teacher":["ZANNI-MERK Cecilia"],
-        "date":"20250120" 
-    },
-    {
-        "label":"PROGAV",
-        "start_time":"1645",
-        "end_time":"1815",
-        "room":["Ma-H-R1-1"],
-        "teacher":["MALANDAIN Nicolas"],
         "date":"20250120" 
     },
     {

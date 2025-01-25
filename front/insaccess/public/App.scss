@@ -24,7 +24,7 @@
 
 .timeline {
   display: grid;
-  grid-template-rows: [firstline] var(--dateHeight) repeat(var(--numHours-2), var(--timeHeight)) [line7] 4.5rem [line8] 3rem;
+  grid-template-rows: [firstline] var(--dateHeight) repeat(var(--numHours - 2), var(--timeHeight)) [line7] 4.5rem [line8] 3rem;
 }
 
 .days {
@@ -42,7 +42,7 @@
   position: relative;
 }
 
-.title {
+.title{
   font-weight: 600;
   margin-bottom: 0.1rem;
   font-size: 0.9rem;
@@ -109,6 +109,7 @@
   font-weight: 100;
 }
 
+
 .menu {
   display: flex;
   justify-content: space-between;
@@ -118,33 +119,33 @@
   max-width: 800px;
   margin: 0 auto;
   border-bottom: 1px solid #eee;
-}
-@media (max-width: 650px) {
-  .menu {
+  
+  @media (max-width: 650px) {
     flex-direction: column;
     align-items: center;
   }
+  
+  .item {
+    padding: 18px 28px;
+    cursor: pointer;
+    transition: color .3s ease-out;
+    text-decoration: none;
+    color: #111;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin: 5px 0;
+    
+    &.active {
+      color: #fff;
+    }
+  }
+  
+  .indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    border-radius: 30px;
+  }
 }
-.menu .item {
-  padding: 18px 28px;
-  cursor: pointer;
-  transition: color 0.3s ease-out;
-  text-decoration: none;
-  color: #111;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  font-size: 12px;
-  margin: 5px 0;
-}
-.menu .item.active {
-  color: #fff;
-}
-.menu .indicator {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  border-radius: 30px;
-}
-
-/*# sourceMappingURL=App.css.map */

@@ -1,0 +1,15 @@
+body {
+    font-family: system-ui, sans-serif;
+    height: 100vh;
+}
+
+#root {
+    display: block;
+    height: 100%;
+}
+
+.App {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
