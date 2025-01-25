@@ -3,26 +3,35 @@ import json
 import itertools
 
 
-def get_tags_from_dict(dict, *keys): 
-    tags = set();
+def get_tags_from_dict(dict_given, *keys):
+    temp_dict = dict_given
+    tags = set()
     tags_beginning = []
     for k in keys:
-        if "default_tags" in dict:
-            tags.add(dict["default_tags"])
+        if "default_tags" in temp_dict:
+            for item in temp_dict["default_tags"]:
+                tags.add(item)
 
-        if "tags_starts_with" in dict:
+        if "tags_starts_with" in temp_dict:
             if len(tags_beginning) > 0 :
                 return -1, set();
-            tags_beginning = dict["tags_starts_with"]
+            tags_beginning = temp_dict["tags_starts_with"]
         
-        if "tags+" in dict:
-            itertools
+        if "tags+" in temp_dict:
+            temp = []
+            for item in itertools.product(tags_beginning,temp_dict["tags+"]):
+                temp.append(item[0] + item[1])
+            tags_beginning = temp.copy()
+            
 
-
-        if k in dict:
-
-
-    return
+        if k in temp_dict:
+            if type(temp_dict[k]) is dict:
+                temp_dict = temp_dict[k]
+            else :
+                for item in itertools.product(tags_beginning,temp_dict[k]):
+                    tags.add(item[0] +item[1])
+                return 0, tags
+    return 0, set()
 
 
 def get_query_tags(data_file_name : str, department :str, department_year :int, lang : list[str], ECAO :str) -> list[str] :
@@ -37,12 +46,12 @@ def get_query_tags(data_file_name : str, department :str, department_year :int, 
 
     tags = set()
 
-    department_data = data[depart_category]["names"][department]
-    tags.add(get_tags_from_dict())
+    for item in get_tags_from_dict(data, "ITI", "3", "TP", "1", "1")[1]:
 
-    print(data[depart_category]["names"][department][str(department_year)].keys())
+        tags.add(item)
+    print(tags)
 
-    
+
     
 
 
