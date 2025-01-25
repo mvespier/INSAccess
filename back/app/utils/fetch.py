@@ -32,6 +32,7 @@ Notes:
     else where.
 
 """
+
 from xml.etree import ElementTree
 import sys
 import re
@@ -57,18 +58,20 @@ def get_default_name() -> str:
 def get_item_to_be_removed() -> list:
     """ return the constant list that should be removed
         from the list of groups
-        (they are weird tags that the secretary sometime put)"""
+        (they are weird tags that the secretary sometimes put)"""
     return ['examens']
 
+def get_depart_list() -> list:
+    """ return the department list"""
+    return ["CGC", "EP", "GCU", "GM", "GPGR", "ITI",\
+            "MECA", "PERF-E", "PERF-II", "PERF-ISP", "PERF-NI"]
 
-""" XML ENCODING ISSUE CLEANING """
-
-def replace_entities(content, replacements):
-    for entity, replacement in replacements.items():
-        content = content.replace(entity, replacement)
-    return content
 
 def get_clean_xml(xml_data :str ) -> str :
+    """take a xml tree and recode it in UTF8
+    replacing potential corrupted character
+    """
+
     entity_replacements = {
     '&eacute;': 'é',
     '&Eacute;': 'É',
@@ -82,10 +85,18 @@ def get_clean_xml(xml_data :str ) -> str :
     '&': '&amp;'
     }
 
-    return replace_entities(xml_data, entity_replacements)
+    content = replace_entities(xml_data, entity_replacements)
+    content = html.unescape(content)
+    content = remove_invalid_chars(content)
+
+    return content
 
 
 def remove_invalid_chars(content):
+    """delete any invalid xml character
+        part of the xml cleaning function
+    """
+
     # Valid XML characters (see XML spec)
     valid_xml_characters = (
         r"[\u0009\u000A\u000D\u0020-\uD7FF\uE000-\uFFFD\u10000-\u10FFFF]"
@@ -94,23 +105,29 @@ def remove_invalid_chars(content):
 
 
 def replace_entities(content, replacements):
+    """replace the keys in the replacements dict by there values"""
     for entity, replacement in replacements.items():
         content = content.replace(entity, replacement)
 
-    content = html.unescape(content)
-    content = remove_invalid_chars(content)
-
     return content
 
-""" MAIN FUNCTIONS """
-def xml_to_list(url : str, depart_list, depart_year) -> list:
-    global ERROR_FAILED_TO_PARSE
+
+def xml_to_list(url : str) -> list:
+    """take a url (of the agenda of insa (agenda.insa-rouen.fr)
+    and parse it to useful components
+
+    
+    Keyword arguments:
+    url -- the url to fetch
+    url -- depart
+    Return: return_description
+    """
+
     response = requests.get(url)
 
     if response.status_code == 200: #request is successful
         response.encoding = 'utf-8'
         xml_data = get_clean_xml(response.text)
-        #print(xml_data)
 
         try:
             root = ElementTree.fromstring(xml_data)
@@ -135,15 +152,15 @@ def xml_to_list(url : str, depart_list, depart_year) -> list:
             title = title_parsing(title)
 
 
-            group_td, teacher_list, group_depart =  description_parsing(description, depart_list)
+            group_td, teacher_list, group_depart =  description_parsing(description)
 
             output.append((date, start_hour, end_hour, title, locations,\
                             teacher_list, group_td, group_depart))
 
         return output
-    else:
-        print(f"Failed to fetch XML data. HTTP Status Code: {response.status_code}")
-        return []
+
+    print(f"Failed to fetch XML data. HTTP Status Code: {response.status_code}")
+    return []
 
 
 def get_calendar_data(current_year :str, department : str ,\
@@ -169,10 +186,8 @@ def get_calendar_data(current_year :str, department : str ,\
 
     :return: return a list of tuples (the days fetched)
     """
-    global ERROR_WRONG_ARG
 
-    depart_list = ["CGC", "EP", "GCU", "GM", "GPGR", "ITI",\
-                    "MECA", "PERF-E", "PERF-II", "PERF-ISP", "PERF-NI"]
+    depart_list = get_depart_list()
     list_of_period = ["day", "week", "month"]
 
     if ( (department in depart_list) and (3 <= int(depart_year) <= 5 )\
@@ -180,22 +195,23 @@ def get_calendar_data(current_year :str, department : str ,\
 
         url = "http://agendas.insa-rouen.fr/rss/rss2.0.php?cal=" + current_year\
             + "-" + department + depart_year + "&cpath=&rssview=" + period + "&getdate=" + date
-        out = xml_to_list(url, depart_list, depart_year)
 
-        return SUCESS_CODE, out
+        return SUCESS_CODE, xml_to_list(url)
 
-    else :
-        print(f"ERROR : wrong arguments given : department = {depart_list},\
-               3 <= year <= 5, period = {list_of_period}" )
-        return ERROR_WRONG_ARG, []
+    print(f"ERROR : wrong arguments given : department = {depart_list},\
+            3 <= year <= 5, period = {list_of_period}" )
+    return ERROR_WRONG_ARG, []
+
 
 def title_parsing(title):
+    """ parse the title of the fetched xml"""
+
     class_name = title.split(': ')[1]
     class_name = class_name.replace('-', ' ')
     return class_name
 
 
-def description_parsing(description, depart_list):
+def description_parsing(description):
     """I am fully aware that this part of the code isnt great because it is fitted
     for very specific type of data but couldnt do better
     because of the chaos in the XML of Insa"""
@@ -208,7 +224,8 @@ def description_parsing(description, depart_list):
         print(f"List Index error: {e}")
         return [],get_default_name() ,[]
 
-    desc_item_list = desc_string.split(r'<br/>')[1:-2] # 1 to -2 because the last and first are empty and the -2 is just the date of submission
+    desc_item_list = desc_string.split(r'<br/>')[1:-2] 
+    # 1 to -2 because the last and first are empty and the -2 is just the date of submission
 
 
     #get and remove the name if there is one
@@ -218,7 +235,7 @@ def description_parsing(description, depart_list):
 
     # separate the department and tdgroup from the description into 2 list
     depart_years =['3', '4', '5']
-    department_set = set(map(''.join, itertools.product(depart_list,depart_years)))
+    department_set = set(map(''.join, itertools.product(get_depart_list(),depart_years)))
     department_set.add('STPI1')
     department_set.add('STPI2')
 
@@ -232,27 +249,31 @@ def description_parsing(description, depart_list):
 
     #remove weird specific string that can appear in the td group thanks to INSA
     list_of_indexes_filter=[]
-    for i in range(len(td_group_in_desc)):
-        if td_group_in_desc[i] in get_item_to_be_removed():
-            list_of_indexes_filter.append(i)
+    for index, item in enumerate(td_group_in_desc):
+        if item in get_item_to_be_removed():
+            list_of_indexes_filter.append(index)
+
     _, td_group_in_desc = pop_multiple_element(td_group_in_desc,list_of_indexes_filter)
 
 
     return td_group_in_desc, name_list, depart_in_desc
 
-def get_name_indexes(list : list):
+def get_name_indexes(l : list) -> list[int]:
+    """returns a list of index where names are"""
     list_of_indexes=[]
-    for i in range(len(list)):
-        if len(list[i].split(' ')) >1 :
-            list_of_indexes.append(i)
+    for index, item in range(len(l)):
+        if len(item.split(' ')) >1 :
+            list_of_indexes.append(index)
     return list_of_indexes
 
-def pop_multiple_element(list, list_of_indexes):
-    deleted_element = [list[i] for i in list_of_indexes]
-    filtered_list = [list[i] for i in range(len(list)) if i not in list_of_indexes]
+def pop_multiple_element(l : list, list_of_indexes : list):
+    """pop all the indexes of the list_of_indexes at the same time in l"""
+    deleted_element = [l[i] for i in list_of_indexes]
+    filtered_list = [l[i] for i in range(len(l)) if i not in list_of_indexes]
     return deleted_element, filtered_list
 
 def item_to_string(item):
+    """"""
     return item.text if item != None else get_default_string()
 
 
