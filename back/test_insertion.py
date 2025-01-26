@@ -29,12 +29,11 @@ Notes:
 
 """
 from werkzeug.security import generate_password_hash
-
 from app import db, create_app
-from app.utils.fetch import get_calendar_data
+from app.utils.fetch import fetch_entire_year
 from app.models import User
 
-from back.app.utils.db_insertion import insert_list_record
+from app.utils.db_insertion import insert_list_record
 
 
 with create_app().app_context():
@@ -50,8 +49,8 @@ with create_app().app_context():
                                     password=generate_password_hash("password-rco")))
     db.session.commit()
 
-    error_code, list_of_records = get_calendar_data('2024', 'ITI', '3', '20250120', 'day')
-
+    list_of_records = fetch_entire_year("2024", "ITI", "3")
+    error_code = 0
     if error_code == 0:
         insert_list_record(db.session, list_of_records)
         print("success")

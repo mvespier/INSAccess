@@ -28,6 +28,7 @@ Notes:
     else where.
 
 """
+import datetime
 from sqlalchemy.exc import IntegrityError
 from app.models import InsaClass, Teacher, GroupTD, Room, Department\
                         , ClassLinkDepart, ClassLinkRoom, ClassLinkTD, ClassLinkTeacher
@@ -100,17 +101,26 @@ def insert_record_in_db(session, record):
 
 def insert_class_in_db(session, date, start_hour, end_hour, desc):
     """ function for inserting record in class table"""
+    converted_date = list(map(lambda x: int(x), date.split('-')))
+    converted_start_hour = list(map(lambda x: int(x), start_hour.split(':')))
+    converted_end_hour = list(map(lambda x: int(x), end_hour.split(':')))
+
+
     exists = session.query(InsaClass).filter_by(
-        date=date,
-        start_hour=start_hour,
-        end_hour=end_hour,
+        date=datetime.date(converted_date[0], converted_date[1], converted_date[2]),
+        start_hour=datetime.time(converted_start_hour[0],converted_start_hour[1],\
+                                 converted_start_hour[2]),
+        end_hour=datetime.time(converted_end_hour[0],converted_end_hour[1],\
+                               converted_end_hour[2]),
         desc=desc
     ).first()
 
     new_class = InsaClass(
-        date=date,
-        start_hour=start_hour,
-        end_hour=end_hour,
+        date=datetime.date(converted_date[0], converted_date[1], converted_date[2]),
+        start_hour=datetime.time(converted_start_hour[0],converted_start_hour[1],\
+                                 converted_start_hour[2]),
+        end_hour=datetime.time(converted_end_hour[0],converted_end_hour[1],\
+                               converted_end_hour[2]),
         desc=desc
     )
     if insert_generic_in_db(session, exists, new_class):

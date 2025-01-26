@@ -31,6 +31,7 @@ Notes:
 
 from flask_login import UserMixin
 from sqlalchemy import ForeignKey,ForeignKeyConstraint
+from sqlalchemy import Date, Time
 
 from . import db
 
@@ -52,9 +53,9 @@ class User(UserMixin, db.Model):
 class InsaClass(db.Model):
     """INSA Class definition,to store class from insa"""
     __tablename__ = 'insa_class'
-    date = db.Column(db.String(10))
-    start_hour = db.Column(db.String(8), primary_key = True)
-    end_hour = db.Column(db.String(8), primary_key = True)
+    date = db.Column(Date, nullable = False)
+    start_hour = db.Column(Time, primary_key = True)
+    end_hour = db.Column(Time, primary_key = True)
     desc = db.Column(db.String(255), primary_key = True)
 
     link_td = db.relationship("ClassLinkTD", back_populates = "insa_class")
@@ -99,8 +100,8 @@ class ClassLinkTD(db.Model):
     """ 1 to Many link between classINSA and TD tables"""
     __tablename__ = 'class_link_td'
 
-    class_start_hour = db.Column(db.String(8), primary_key = True)
-    class_end_hour = db.Column(db.String(8), primary_key = True)
+    class_start_hour = db.Column(Time, primary_key = True)
+    class_end_hour = db.Column(Time, primary_key = True)
     class_desc = db.Column(db.String(255), primary_key = True)
     insa_class = db.relationship("InsaClass", back_populates="link_td")
 
@@ -116,8 +117,8 @@ class ClassLinkRoom(db.Model):
     """ 1 to Many link between classINSA and Room tables"""
     __tablename__ = 'class_link_room'
 
-    class_start_hour = db.Column(db.String(8), primary_key = True)
-    class_end_hour = db.Column(db.String(8), primary_key = True)
+    class_start_hour = db.Column(Time, primary_key = True)
+    class_end_hour = db.Column(Time, primary_key = True)
     class_desc = db.Column(db.String(255), primary_key = True)
     insa_class = db.relationship("InsaClass", back_populates="link_room")
 
@@ -133,8 +134,8 @@ class ClassLinkTeacher(db.Model):
     """ 1 to Many link between classINSA and Teacher tables"""
     __tablename__ = 'class_link_teacher'
 
-    class_start_hour = db.Column(db.String(8), primary_key = True)
-    class_end_hour = db.Column(db.String(8), primary_key = True)
+    class_start_hour = db.Column(Time, primary_key = True)
+    class_end_hour = db.Column(Time, primary_key = True)
     class_desc = db.Column(db.String(255), primary_key = True)
     insa_class = db.relationship("InsaClass", back_populates="link_teacher")
 
@@ -150,8 +151,8 @@ class ClassLinkDepart(db.Model):
     """ 1 to Many link between classINSA and Department tables"""
     __tablename__ = 'class_link_depart'
 
-    class_start_hour = db.Column(db.String(8), primary_key = True)
-    class_end_hour = db.Column(db.String(8), primary_key = True)
+    class_start_hour = db.Column(Time, primary_key = True)
+    class_end_hour = db.Column(Time, primary_key = True)
     class_desc = db.Column(db.String(255), primary_key = True)
     insa_class = db.relationship("InsaClass", back_populates="link_depart")
 

@@ -123,7 +123,7 @@ def xml_to_list(url : str) -> list:
     Return: return_description
     """
 
-    response = requests.get(url, timeout=5)
+    response = requests.get(url, timeout=60)
 
     if response.status_code == 200: #request is successful
         response.encoding = 'utf-8'

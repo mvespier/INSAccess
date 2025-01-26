@@ -35,12 +35,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from itsdangerous import URLSafeSerializer
 
-from .models import User
-
-from .blueprints.auth import auth as auth_blueprint
-from .blueprints.main import main as main_blueprint
-
 db= SQLAlchemy()
+
 
 def create_app(test_config=None):
     """The factory for the app,
@@ -69,7 +65,7 @@ def create_app(test_config=None):
 
 
     #initialize the login manager from Flask
-
+    from .models import User
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'# set the login view to the one defined in auth.py
@@ -94,6 +90,9 @@ def create_app(test_config=None):
 
 
     #from .blueprints.parameters import parameters as parameters_blueprint
+
+    from .blueprints.auth import auth as auth_blueprint
+    from .blueprints.main import main as main_blueprint
 
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(main_blueprint)
