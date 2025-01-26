@@ -1,11 +1,16 @@
 npm (node js)
 install through npm : 
-	eslint: "^9.19.0"
-	ajv: "^8.17.1",
-    bootstrap: "^5.3.3",
-    gsap: "^3.12.7",
-    react: "^19.0.0",
-    react-dom: "^19.0.0",
-    react-scripts: "5.0.1",
-    sass: "^1.83.4",
-    web-vitals: "^2.1.4"
+	eslint
+	ajv
+    bootstrap
+    gsap
+    react
+    react-dom
+    react-scripts
+    sass
+    web-vitals
+    animate
+    @gsap/react
+    @testing-library/jest-dom"
+    @testing-library/react
+    @testing-library/user-event

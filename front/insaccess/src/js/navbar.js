@@ -1,5 +1,6 @@
 import React from 'react'
 import { gsap } from 'gsap'
+import PropTypes from 'prop-types';
 
 const { useRef, useState, useEffect, createRef } = React
 
@@ -51,7 +52,6 @@ const NavBar = ({ items }) => {
 
   const animate = () => {
     const menuOffset = $root.current.getBoundingClientRect();
-    /* eslint-disable-next-line react/prop-types */
     const activeItem = $items.current[active].current;
     const { width, height, top, left } = activeItem.getBoundingClientRect();
 
@@ -60,7 +60,6 @@ const NavBar = ({ items }) => {
       y: top - menuOffset.y,
       width: width,
       height: height,
-      /* eslint-disable-next-line react/prop-types */
       backgroundColor: items[active].color,
       ease: 'elastic.out(.7, .7)',
       duration: .8 };
@@ -90,7 +89,6 @@ const NavBar = ({ items }) => {
       ref: $root,
       className: "menu" },
 
-    /* eslint-disable-next-line react/prop-types */
     items.map((item, index) => /*#__PURE__*/
     React.createElement("a", {
       key: item.name,
@@ -116,4 +114,6 @@ const NavBar = ({ items }) => {
 
 };
 
-export default {NavBar, items};
+NavBar.propTypes = PropTypes.string.isRequired;
+
+export default { NavBar, items };

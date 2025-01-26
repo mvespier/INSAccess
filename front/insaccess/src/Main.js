@@ -9,7 +9,7 @@ import Associations from './pages/associations.js';
 const Main = () => {
   return (
     <Routes> 
-      <Route exact path='/' element={<Home />}></Route >
+      <Route exact path='' element={<Home />}></Route >
       <Route exact path='/signup' element={<Signup />}></Route>
       <Route exact path='/calendar' element={<Calendar />}></Route>
       <Route exact path='/about' element={<About />}></Route>
