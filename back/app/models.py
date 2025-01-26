@@ -1,9 +1,38 @@
+"""
+Module Name: models.py
+
+Description:
+    The models for the mariadb database
+
+Author:
+    Raphael Senellart
+
+Date Created:
+    January 22, 2025
+
+Version:
+    1.0.0
+
+License:
+    No License
+
+Usage:
+    should be called by init_db
+
+Dependencies:
+
+
+Notes:
+    This tool is specialized for the agenda.insa-rouen.fr
+    website, but some methods are generic and can be implemented
+    else where.
+
+"""
+
 from flask_login import UserMixin
-from sqlalchemy.sql import func
-from . import db
-import enum
-import sqlalchemy as sa
 from sqlalchemy import ForeignKey,ForeignKeyConstraint
+
+from . import db
 
 
 class User(UserMixin, db.Model):
@@ -19,9 +48,9 @@ class User(UserMixin, db.Model):
     # incremental user id - used for authentication
     seqid = db.Column(db.Integer, default=0)
 
-    
+
 class InsaClass(db.Model):
-    """INSA Class definition,to store class from insa""" 
+    """INSA Class definition,to store class from insa"""
     __tablename__ = 'insa_class'
     date = db.Column(db.String(10))
     start_hour = db.Column(db.String(8), primary_key = True)
@@ -33,7 +62,7 @@ class InsaClass(db.Model):
     link_room = db.relationship("ClassLinkRoom", back_populates = "insa_class")
     link_depart = db.relationship("ClassLinkDepart", back_populates = "insa_class")
 
-    
+
 class GroupTD(db.Model):
     """ GroupTD definition """
     __tablename__ = 'td_group'
@@ -55,7 +84,7 @@ class Student(db.Model):
     __tablename__ = 'student'
     user_id = db.Column(ForeignKey("user.id"), primary_key = True)
     department = db.Column(ForeignKey("department.name"))
-    
+
 
 class Room(db.Model):
     """ Room definition"""
@@ -66,6 +95,7 @@ class Room(db.Model):
 """ LINK TABLES """
 
 class ClassLinkTD(db.Model):
+    """ 1 to Many link between classINSA and TD tables"""
     __tablename__ = 'class_link_td'
 
     class_start_hour = db.Column(db.String(8), primary_key = True)
@@ -82,6 +112,7 @@ class ClassLinkTD(db.Model):
     td = db.relationship("GroupTD")
 
 class ClassLinkRoom(db.Model):
+    """ 1 to Many link between classINSA and Room tables"""
     __tablename__ = 'class_link_room'
 
     class_start_hour = db.Column(db.String(8), primary_key = True)
@@ -98,6 +129,7 @@ class ClassLinkRoom(db.Model):
     room = db.relationship("Room")
 
 class ClassLinkTeacher(db.Model):
+    """ 1 to Many link between classINSA and Teacher tables"""
     __tablename__ = 'class_link_teacher'
 
     class_start_hour = db.Column(db.String(8), primary_key = True)
@@ -114,6 +146,7 @@ class ClassLinkTeacher(db.Model):
     teacher = db.relationship("Teacher")
 
 class ClassLinkDepart(db.Model):
+    """ 1 to Many link between classINSA and Department tables"""
     __tablename__ = 'class_link_depart'
 
     class_start_hour = db.Column(db.String(8), primary_key = True)
@@ -128,4 +161,3 @@ class ClassLinkDepart(db.Model):
 
     depart_id = db.Column(ForeignKey('department.name'), nullable = False)
     depart = db.relationship("Department")
-

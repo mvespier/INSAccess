@@ -1,15 +1,46 @@
-from app import db, create_app
+"""
+Module Name: update_db.py
+
+Description:
+    The updater for the database
+
+Author:
+    Raphael Senellart
+
+Date Created:
+    January 22, 2025
+
+Version:
+    1.0.0
+
+License:
+    No License
+
+Usage:
+    should be called by a main module every once in a while to refresh the database
+
+Dependencies:
+
+
+Notes:
+    This tool is specialized for the agenda.insa-rouen.fr
+    website, but some methods are generic and can be implemented
+    else where.
+
+"""
+from sqlalchemy.exc import IntegrityError
 from app.utils import fetch
 from app.models import *
-from sqlalchemy.exc import IntegrityError
+
 
 
 def insert_list_record(session, list_of_records):
-    """ 
+    """
     ###insert_list_record :
     Insert the list of records (in this case fetched from insa.agenda)
     following the pattern : \n
-    [(date, start_hour, end_hour, description, room_list, teacher_list, tdgroup_list, department_list), (...), ...]
+    [(date, start_hour, end_hour, description, room_list, teacher_list,
+      tdgroup_list, department_list), (...), ...]
 
     It is done by checking the existence of the record in the database and inserting it if necessary
 
@@ -23,10 +54,11 @@ def insert_list_record(session, list_of_records):
 
 def insert_record_in_db(session, record):
     """
-    ###insert_record_in_db : 
+    ###insert_record_in_db :
     Insert a single record in the given session
     following the pattern : \n
-    (date, start_hour, end_hour, description, room_list, teacher_list, tdgroup_list, department_list)
+    (date, start_hour, end_hour, description, room_list,
+      teacher_list, tdgroup_list, department_list)
 
     It is done by checking the existence of the record in the database and inserting it if necessary
     :param session: The current app session where the given record will be inserted
@@ -35,7 +67,7 @@ def insert_record_in_db(session, record):
     """
     date, start_hour, end_hour, desc = record[:4]
     room_list, teacher_list, td_list, depart_list = record[4:]
-    
+
     insa_class = insert_class_in_db(session, date, start_hour, end_hour, desc)
 
     # SHOULD PROBABLY ONLY BE DONE ONCE IN A WHILE, NOT AT EVERY FETCH
@@ -44,20 +76,20 @@ def insert_record_in_db(session, record):
 
     for name in room_list:
         insert_room_in_db(session, name)
-    
+
     for name in depart_list:
         insert_depart_in_db(session, name)
 
     for name in td_list:
-        insert_groupTD_in_db(session, name)
+        insert_grouptd_in_db(session, name)
 
     # Insert ClassLink records to link InsaClass with associated entities
     for name in teacher_list:
         insert_classlink_teacher_in_db(session, insa_class, name)
-    
+
     for name in room_list:
         insert_classlink_room_in_db(session, insa_class, name)
-    
+
     for name in depart_list:
         insert_classlink_depart_in_db(session, insa_class, name)
 
@@ -67,6 +99,7 @@ def insert_record_in_db(session, record):
 
 
 def insert_class_in_db(session, date, start_hour, end_hour, desc):
+    """ function for inserting record in class table"""
     exists = session.query(InsaClass).filter_by(
         date=date,
         start_hour=start_hour,
@@ -82,49 +115,54 @@ def insert_class_in_db(session, date, start_hour, end_hour, desc):
     )
     if insert_generic_in_db(session, exists, new_class):
         return new_class
-    return 
+    return InsaClass()
 
 def insert_room_in_db(session, name):
+    """ function for inserting record in room table"""
     exists = session.query(Room).filter_by(
         name=name,
     ).first()
-    
+
     new_class = Room(
         name=name,
     )
     insert_generic_in_db(session, exists, new_class)
 
 def insert_depart_in_db(session, name):
+    """ function for inserting record in department table"""
     exists = session.query(Department).filter_by(
         name=name,
     ).first()
-    
+
     new_class = Department(
         name=name,
     )
     insert_generic_in_db(session, exists, new_class)
 
 def insert_teacher_in_db(session, name):
+    """ function for inserting record in teacher table"""
     exists = session.query(Teacher).filter_by(
         name=name,
     ).first()
-    
+
     new_class = Teacher(
         name=name,
     )
     insert_generic_in_db(session, exists, new_class)
 
-def insert_groupTD_in_db(session, name):
+def insert_grouptd_in_db(session, name):
+    """ function for inserting record in groupTD table"""
     exists = session.query(GroupTD).filter_by(
         name=name,
     ).first()
-    
+
     new_class = GroupTD(
         name=name,
     )
     insert_generic_in_db(session, exists, new_class)
 
 def insert_classlink_depart_in_db(session, insa_class, name):
+    """ function for inserting link in link table between department and class tables"""
 
     linked_entity = session.query(Department).filter_by(name=name).first()
     if linked_entity:
@@ -132,19 +170,20 @@ def insert_classlink_depart_in_db(session, insa_class, name):
             class_start_hour=insa_class.start_hour,
             class_end_hour=insa_class.end_hour,
             class_desc=insa_class.desc,
-            depart_id=name 
+            depart_id=name
         ).first()
 
         class_link = ClassLinkDepart(
             insa_class=insa_class,
             depart=linked_entity
         )
-        
+
         insert_generic_in_db(session, exists, class_link)
     else :
         print(f"Couldnt create link because {name} if not found in Department")
 
 def insert_classlink_td_in_db(session, insa_class, name):
+    """ function for inserting link in link table between td and class tables"""
 
     linked_entity = session.query(GroupTD).filter_by(name=name).first()
     if linked_entity:
@@ -159,12 +198,13 @@ def insert_classlink_td_in_db(session, insa_class, name):
             insa_class=insa_class,
             td=linked_entity
         )
-        
+
         insert_generic_in_db(session, exists, class_link)
     else :
         print(f"Couldnt create link because {name} if not found in GroupTD")
 
 def insert_classlink_room_in_db(session, insa_class, name):
+    """ function for inserting link in link table between room and class tables"""
 
     linked_entity = session.query(Room).filter_by(name=name).first()
     if linked_entity:
@@ -172,19 +212,20 @@ def insert_classlink_room_in_db(session, insa_class, name):
             class_start_hour=insa_class.start_hour,
             class_end_hour=insa_class.end_hour,
             class_desc=insa_class.desc,
-            room_id=name  
+            room_id=name
         ).first()
 
         class_link = ClassLinkRoom(
             insa_class=insa_class,
             room=linked_entity
         )
-        
+
         insert_generic_in_db(session, exists, class_link)
     else :
         print(f"Couldnt create link because {name} if not found in Room")
 
 def insert_classlink_teacher_in_db(session, insa_class, name):
+    """ function for inserting link in link table between teacher and class tables"""
 
     linked_entity = session.query(Teacher).filter_by(name=name).first()
     if linked_entity:
@@ -192,14 +233,14 @@ def insert_classlink_teacher_in_db(session, insa_class, name):
             class_start_hour=insa_class.start_hour,
             class_end_hour=insa_class.end_hour,
             class_desc=insa_class.desc,
-            teacher_id=name  
+            teacher_id=name
         ).first()
 
         class_link = ClassLinkTeacher(
             insa_class=insa_class,
             teacher=linked_entity
         )
-        
+
         insert_generic_in_db(session, exists, class_link)
     else :
         print(f"Couldnt create link because {name} if not found in Teacher")
@@ -209,7 +250,7 @@ def insert_generic_in_db(session, exists, new_class):
     """
     ###insert_generic_in_db:
     Method use by the others inserting methods in update_db\n
-    Tries to insert in the database and if it create an Integrity error 
+    Tries to insert in the database and if it create an Integrity error
     rollsback the database to the given instance
 
     :param session: The current app session where the given record will be inserted
@@ -228,5 +269,5 @@ def insert_generic_in_db(session, exists, new_class):
             return False
     else:
         print("Record already exists. No insertion performed.")
-    return True
 
+    return True
