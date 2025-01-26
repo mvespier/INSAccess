@@ -196,11 +196,11 @@ def get_calendar_data(current_year :str, department : str ,\
         url = "http://agendas.insa-rouen.fr/rss/rss2.0.php?cal=" + current_year\
             + "-" + department + depart_year + "&cpath=&rssview=" + period + "&getdate=" + date
 
-        return SUCESS_CODE, xml_to_list(url)
+        return xml_to_list(url)
 
     print(f"ERROR : wrong arguments given : department = {depart_list},\
             3 <= year <= 5, period = {list_of_period}" )
-    return ERROR_WRONG_ARG, []
+    return []
 
 
 def title_parsing(title):
@@ -311,18 +311,18 @@ def fetch_entire_year(year_of_start, department, depart_year):
     for i in sequence_1st_year:
         date = year_of_start + i + "01"
         total_list = total_list + get_calendar_data(year_of_start,\
-                                                     department, depart_year, date, "month")[1]
+                                                     department, depart_year, date, "month")
 
     sequence_2nd_year = {"01", "02", "03", "04", "05", "06", "07","08"}
     for i in sequence_2nd_year:
         date = str(int(year_of_start)+1) + i + "01"
         total_list = total_list + get_calendar_data(year_of_start,\
-                                                     department, depart_year, date, "month")[1]
+                                                     department, depart_year, date, "month")
     return total_list
 
 if __name__== "__main__" :
     if len(sys.argv)==6:
-        error_code, out = get_calendar_data(sys.argv[1], sys.argv[2],\
+        out = get_calendar_data(sys.argv[1], sys.argv[2],\
                                              sys.argv[3], sys.argv[4], sys.argv[5])
         # print("-"*150)
         if len(out) == 0 :

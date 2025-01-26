@@ -39,7 +39,7 @@ from . import db
 class User(UserMixin, db.Model):
     """User definition, inherit from UserMixin for authentication"""
     __tablename__ = 'user'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     # user information
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255),nullable=False)
@@ -53,10 +53,12 @@ class User(UserMixin, db.Model):
 class InsaClass(db.Model):
     """INSA Class definition,to store class from insa"""
     __tablename__ = 'insa_class'
+    id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+
     date = db.Column(Date, nullable = False)
-    start_hour = db.Column(Time, primary_key = True)
-    end_hour = db.Column(Time, primary_key = True)
-    desc = db.Column(db.String(255), primary_key = True)
+    start_hour = db.Column(Time)
+    end_hour = db.Column(Time)
+    desc = db.Column(db.String(255))
 
     link_td = db.relationship("ClassLinkTD", back_populates = "insa_class")
     link_teacher = db.relationship("ClassLinkTeacher", back_populates = "insa_class")
@@ -100,66 +102,38 @@ class ClassLinkTD(db.Model):
     """ 1 to Many link between classINSA and TD tables"""
     __tablename__ = 'class_link_td'
 
-    class_start_hour = db.Column(Time, primary_key = True)
-    class_end_hour = db.Column(Time, primary_key = True)
-    class_desc = db.Column(db.String(255), primary_key = True)
+    class_id = db.Column(db.Integer, ForeignKey('insa_class.id'), primary_key = True)
     insa_class = db.relationship("InsaClass", back_populates="link_td")
 
-    __table_args__ = (
-        ForeignKeyConstraint(['class_start_hour', 'class_end_hour', 'class_desc'],
-         ['insa_class.start_hour', 'insa_class.end_hour','insa_class.desc']),
-    )
-
-    td_id = db.Column(ForeignKey('td_group.name'), nullable = False)
+    td_id = db.Column(ForeignKey('td_group.name'), primary_key = True)
     td = db.relationship("GroupTD")
 
 class ClassLinkRoom(db.Model):
     """ 1 to Many link between classINSA and Room tables"""
     __tablename__ = 'class_link_room'
 
-    class_start_hour = db.Column(Time, primary_key = True)
-    class_end_hour = db.Column(Time, primary_key = True)
-    class_desc = db.Column(db.String(255), primary_key = True)
+    class_id = db.Column(db.Integer, ForeignKey('insa_class.id'), primary_key = True)
     insa_class = db.relationship("InsaClass", back_populates="link_room")
 
-    __table_args__ = (
-        ForeignKeyConstraint(['class_start_hour', 'class_end_hour', 'class_desc'],
-         ['insa_class.start_hour', 'insa_class.end_hour','insa_class.desc']),
-    )
-
-    room_id = db.Column(ForeignKey('room.name'), nullable = False)
+    room_id = db.Column(ForeignKey('room.name'), primary_key = True)
     room = db.relationship("Room")
 
 class ClassLinkTeacher(db.Model):
     """ 1 to Many link between classINSA and Teacher tables"""
     __tablename__ = 'class_link_teacher'
 
-    class_start_hour = db.Column(Time, primary_key = True)
-    class_end_hour = db.Column(Time, primary_key = True)
-    class_desc = db.Column(db.String(255), primary_key = True)
+    class_id = db.Column(db.Integer, ForeignKey('insa_class.id'), primary_key = True)
     insa_class = db.relationship("InsaClass", back_populates="link_teacher")
 
-    __table_args__ = (
-        ForeignKeyConstraint(['class_start_hour', 'class_end_hour', 'class_desc'],
-         ['insa_class.start_hour', 'insa_class.end_hour','insa_class.desc']),
-    )
-
-    teacher_id = db.Column(ForeignKey('teacher.name'), nullable = False)
+    teacher_id = db.Column(ForeignKey('teacher.name'), primary_key = True)
     teacher = db.relationship("Teacher")
 
 class ClassLinkDepart(db.Model):
     """ 1 to Many link between classINSA and Department tables"""
     __tablename__ = 'class_link_depart'
 
-    class_start_hour = db.Column(Time, primary_key = True)
-    class_end_hour = db.Column(Time, primary_key = True)
-    class_desc = db.Column(db.String(255), primary_key = True)
+    class_id = db.Column(db.Integer, ForeignKey('insa_class.id'), primary_key = True)
     insa_class = db.relationship("InsaClass", back_populates="link_depart")
 
-    __table_args__ = (
-        ForeignKeyConstraint(['class_start_hour', 'class_end_hour', 'class_desc'],
-         ['insa_class.start_hour', 'insa_class.end_hour','insa_class.desc']),
-    )
-
-    depart_id = db.Column(ForeignKey('department.name'), nullable = False)
+    depart_id = db.Column(ForeignKey('department.name'), primary_key = True)
     depart = db.relationship("Department")
