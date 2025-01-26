@@ -1,7 +1,7 @@
 import data from '../data.json'
-import React from 'react'
-import dateUtils from './dateUtils.js'
+import dateUtils from '../js/dateUtils.js'
 
+/* eslint-disable-next-line react/prop-types */
 function SingleEvent({start_time, end_time, label, teacher, room}){
   const hours_events = dateUtils.createHours();
   let start_index = hours_events.indexOf(start_time);
@@ -41,8 +41,8 @@ function EventsOfDay(date){
   const events_list = [];
   
   let i = 0;
-  const events_of_day = getEventsOfDay(date.date)
-  const infos = dateUtils.getDateInfo(date.date)
+  const events_of_day = getEventsOfDay(date.date, data)
+  const infos = dateUtils.getDateInfo(date.date, data)
 
   for (let element in events_of_day){
     const object = events_of_day[element]
@@ -95,4 +95,4 @@ function Calendar(){
   );
 }
 
-export default { Calendar };
+export default Calendar;

@@ -9,28 +9,29 @@ Items
 const items = [
 {
   name: "Home",
-  color: "#f44336",
-  href: "#" },
+  color: "#FED9EA",
+  href: "/" },
 
 {
   name: "Associative events",
-  color: "#e91e63",
-  href: "#" },
+  color: "#CFD6EF",
+  href: "/associations" },
 
 {
   name: "Agenda",
-  color: "#9c27b0",
-  href: "#" },
+  color: "#9FD4F4",
+  href: "/calendar" },
 
 {
-  name: "Settings",
-  color: "#673ab7",
-  href: "#" },
+  name: "Signup",
+  color: "#70D1F9",
+  href: "/signup" },
 
 {
   name: "About",
-  color: "#3f51b5",
-  href: "#" }];
+  color: "#40cefe",
+  href: "/about" }
+];
 
 
 
@@ -38,15 +39,19 @@ const items = [
 /*--------------------
 Menu
 --------------------*/
-const Menu = ({ items }) => {
+
+/* eslint-disable-next-line react/prop-types */
+const NavBar = ({ items }) => {
   const $root = useRef();
   const $indicator1 = useRef();
   const $indicator2 = useRef();
+  /* eslint-disable-next-line react/prop-types */
   const $items = useRef(items.map(createRef));
   const [active, setActive] = useState(0);
 
   const animate = () => {
     const menuOffset = $root.current.getBoundingClientRect();
+    /* eslint-disable-next-line react/prop-types */
     const activeItem = $items.current[active].current;
     const { width, height, top, left } = activeItem.getBoundingClientRect();
 
@@ -55,6 +60,7 @@ const Menu = ({ items }) => {
       y: top - menuOffset.y,
       width: width,
       height: height,
+      /* eslint-disable-next-line react/prop-types */
       backgroundColor: items[active].color,
       ease: 'elastic.out(.7, .7)',
       duration: .8 };
@@ -84,6 +90,7 @@ const Menu = ({ items }) => {
       ref: $root,
       className: "menu" },
 
+    /* eslint-disable-next-line react/prop-types */
     items.map((item, index) => /*#__PURE__*/
     React.createElement("a", {
       key: item.name,
@@ -109,4 +116,4 @@ const Menu = ({ items }) => {
 
 };
 
-export default { Menu, items };
+export default {NavBar, items};
