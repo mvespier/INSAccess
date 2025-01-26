@@ -34,7 +34,7 @@ from app import db, create_app
 from app.utils.fetch import get_calendar_data
 from app.models import User
 
-from update_db import insert_list_record
+from back.app.utils.db_insertion import insert_list_record
 
 
 with create_app().app_context():
@@ -58,4 +58,3 @@ with create_app().app_context():
     else :
         print(f"error {error_code} when fetching data")
 
-    

@@ -1,8 +1,8 @@
 """
-Module Name: update_db.py
+Module Name: db_insertion.py
 
 Description:
-    The updater for the database
+    The insert methods for the database
 
 Author:
     Raphael Senellart
@@ -29,8 +29,8 @@ Notes:
 
 """
 from sqlalchemy.exc import IntegrityError
-from app.utils import fetch
-from app.models import *
+from app.models import InsaClass, Teacher, GroupTD, Room, Department\
+                        , ClassLinkDepart, ClassLinkRoom, ClassLinkTD, ClassLinkTeacher
 
 
 

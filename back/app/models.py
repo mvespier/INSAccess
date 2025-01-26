@@ -92,7 +92,8 @@ class Room(db.Model):
     name = db.Column(db.String(100), primary_key = True)
 
 
-""" LINK TABLES """
+
+
 
 class ClassLinkTD(db.Model):
     """ 1 to Many link between classINSA and TD tables"""
