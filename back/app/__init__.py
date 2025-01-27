@@ -37,8 +37,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from itsdangerous import URLSafeSerializer
 
-from .utils import *
 db= SQLAlchemy()
+
+from .utils import *
+from .models import *
+
 
 def create_app(test_config=None):
     """The factory for the app,
@@ -95,9 +98,12 @@ def create_app(test_config=None):
 
     from .blueprints.auth import auth as auth_blueprint
     from .blueprints.main import main as main_blueprint
+    from .blueprints.api import api as api_blueprint
 
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(api_blueprint)
+
     #app.register_blueprint(parameters_blueprint)
 
     return app

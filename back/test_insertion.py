@@ -49,10 +49,10 @@ with create_app().app_context():
     #                                 password=generate_password_hash("password-rco")))
     db.session.commit()
 
-    list_of_records = fetch_entire_year("2024", "ITI", "3")
+    list_of_records = fetch_entire_year("2024", "CGC", "3")
     if 0 == 0:
         insert_list_record(db.session, list_of_records)
         print("success")
-    else :
+    else : 
         print(f"error {1} when fetching data")
 

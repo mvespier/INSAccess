@@ -30,7 +30,7 @@ Notes:
 """
 import datetime
 from sqlalchemy.exc import IntegrityError
-from app.models import InsaClass, Teacher, GroupTD, Room, Department\
+from ..models import InsaClass, Teacher, GroupTD, Room, Department\
                         , ClassLinkDepart, ClassLinkRoom, ClassLinkTD, ClassLinkTeacher
 
 
@@ -50,6 +50,7 @@ def insert_list_record(session, list_of_records):
 
     """
     for record in list_of_records:
+        print(record[0])
         insert_record_in_db(session, record)
 
 

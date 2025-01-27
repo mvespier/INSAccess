@@ -30,7 +30,7 @@ Notes:
 """
 
 from flask_login import UserMixin
-from sqlalchemy import ForeignKey,ForeignKeyConstraint
+from sqlalchemy import ForeignKey, ForeignKeyConstraint
 from sqlalchemy import Date, Time
 
 from . import db
@@ -59,6 +59,7 @@ class InsaClass(db.Model):
     start_hour = db.Column(Time)
     end_hour = db.Column(Time)
     desc = db.Column(db.String(255))
+    
 
     link_td = db.relationship("ClassLinkTD", back_populates = "insa_class")
     link_teacher = db.relationship("ClassLinkTeacher", back_populates = "insa_class")
