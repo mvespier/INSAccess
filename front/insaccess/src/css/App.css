@@ -1,6 +1,6 @@
 :root {
   --numDays: 5;
-  --numHours: 7;
+  --numHours: 8;
   --dateHeight: 3rem;
   --calBgColor: #efc2f8;
   --eventBorderColor: #445374;
@@ -17,12 +17,14 @@
 }
 
 .timeline {
+  user-select: none;
   display: grid;
   height: 100%;
-  grid-template-rows: calc(var(--dateHeight) + 2vh) repeat(calc(var(--numHours) - 1), 1fr) 1.5vh;
+  grid-template-rows: calc(var(--dateHeight) + 2vh) repeat(calc(var(--numHours) - 1), 1fr);
 }
 
 .days {
+  user-select: none;
   display: grid;
   grid-column: 2;
   gap: 5px;
@@ -40,13 +42,14 @@
 .title {
   font-weight: 600;
   margin-bottom: 0.1rem;
-  font-size: max(2vh, 1rem);
+  font-size: min(1rem, 2vh);
+  justify-self: left;
 }
 
 .time, .teacher, .room {
   font-weight: 430;
   margin-bottom: 0.1rem;
-  font-size: max(1.7vh, 0.7rem);
+  font-size: min(0.7rem, 1.7vh);
   height: auto;
 }
 

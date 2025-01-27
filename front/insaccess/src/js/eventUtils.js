@@ -1,5 +1,6 @@
 import dateUtils from './dateUtils.js'
 import PropTypes from 'prop-types';
+import {NavLink} from 'react-router-dom'
 
 const SingleEvent = (props) => {
   const hours_events = dateUtils.createHours();
@@ -11,14 +12,17 @@ const SingleEvent = (props) => {
   const eventStyle = {
     height: `${eventHeight}%`,
     top: `${eventPosY}%`,
+    userSelect: "none"
   };
 
   return (
-    <div className="event" style={eventStyle}>
-      <p className="title">{props.label}</p>
-      <p className="room">{props.room}</p>
-      <p className="teacher">{props.teacher}</p>
-      </div>
+    <NavLink to={props.link}>
+      <button type="button" className="event" style={eventStyle}>
+        <p className="title">{props.label}</p>
+        <p className="room">{props.room}</p>
+        <p className="teacher">{props.teacher}</p>
+      </button>
+    </NavLink>
   );
 }   
 
@@ -40,7 +44,8 @@ SingleEvent.propTypes = {
   end_time: PropTypes.string.isRequired, 
   label: PropTypes.string.isRequired, 
   teacher: PropTypes.string.isRequired, 
-  room: PropTypes.string.isRequired
+  room: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired
 }
 
 export default { TimeBar, SingleEvent };

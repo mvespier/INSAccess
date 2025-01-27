@@ -1,13 +1,14 @@
 import PropTypes from "prop-types";
 
-const hours_timeline = ["8h00", "9h45", "11h30", "13h15", "15h00", "16h45", "18h15"];
+const hours_timeline = ["8h00", "9h45", "11h30", "13h15", "15h00", "16h45", "18h30", "20h15"];
 
 const createHours = () => {
   let result = [];
   let string = "";
+  let last_hour = "2015"
   let currentHour = 8;
   let currentMinute = 0;
-  for (let i = 0; i <= 10; i++){
+  for (let i = 0; i <= 12; i++){
     for (let j = 0; j < 12; j++){
       string = "";
       if (currentHour < 10){
@@ -20,7 +21,7 @@ const createHours = () => {
       string += `${currentMinute}`;
       result.push(string);
       currentMinute += 5;
-      if (string === "1815"){
+      if (string === last_hour){
         return result;
       }
     }

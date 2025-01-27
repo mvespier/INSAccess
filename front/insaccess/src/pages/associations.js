@@ -1,6 +1,7 @@
 import data from '../data_asso.json'
 import utils from '../js/eventUtils.js'
 import dateUtils from '../js/dateUtils.js'
+import useWindowDimensions from '../js/randomUtils.js'
 
 function getEventsOfDay(date){
   const events = []
@@ -22,11 +23,10 @@ function EventsOfDay(date){
   for (let element in events_of_day){
     const object = events_of_day[element]
     events_list.push(
-      <utils.SingleEvent key={i} start_time={object.start_time} end_time={object.end_time} label={object.label} teacher={object.association} room={object.room} />
+      <utils.SingleEvent key={i} start_time={object.start_time} end_time={object.end_time} label={object.label} teacher={object.teacher} room={object.room} link={object.link} />
     );
     i += 1;
   } 
-
 
   return (
     <div className="day">
@@ -44,7 +44,9 @@ function EventsOfDay(date){
 const Associations = (props) => {
   let current_day = props.start;
   let list_days = []
-  let nb_days = 5;
+  let dimensions = useWindowDimensions()
+  let minWidth = 850;
+  let nb_days =  ((minWidth < dimensions.width) ? 5 : 1);
   for (let i = 0; i < nb_days; i++){
     list_days.push(<EventsOfDay key={i} date={ current_day }/>);
     current_day = dateUtils.nextDay(current_day);
