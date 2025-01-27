@@ -118,7 +118,7 @@ def sign_up_post():
 
     try:
         valid = validate_email(email)   
-    except EmailNotValidError as e:
+    except EmailNotValidError as err:
         flash('email is wrong, please try again')
         return redirect(url_for('auth.sign_up'))
     if not valid or not email.endswith('@insa-rouen.fr'):

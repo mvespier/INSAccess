@@ -59,6 +59,7 @@ def get_tags_from_dict(dict_given, *keys):
     tags = set()
     tags_beginning = []
     for k in keys:
+
         if "default_tags" in temp_dict:
             for item in temp_dict["default_tags"]:
                 tags.add(item)
@@ -87,7 +88,7 @@ def get_tags_from_dict(dict_given, *keys):
 
 
 def get_query_tags(data_file_name : str, department :str,\
-                    department_year :int, lang : list[str], ecao :str) -> list[str] :
+                    department_year :int, *specialization) -> list[str] :
     """return the entire tags needed for fetching the database
     according to given arguments
 
@@ -100,25 +101,21 @@ def get_query_tags(data_file_name : str, department :str,\
         data = json.load(file)
 
     tags = set()
-
-
     temp_tags = set()
-    argument_list = ["ITI", "3", "LANGUE","ANGLAIS", "1"]
-    try :
-        temp_tags =  get_tags_from_dict(data, *argument_list)
-    except ValueError as err:
-        print(f"Error in get_tags_from_dict : {err}")
-    for item in temp_tags:
+    base_args = [department, department_year]
 
-        tags.add(item)
+    for finals_args in specialization:
+        try :
+            full_args = base_args+finals_args
+            temp_tags =  get_tags_from_dict(data, *full_args)
+        except ValueError as err:
+            print(f"Error in get_tags_from_dict : {err}")
+        tags.update(temp_tags)
+
     print(tags)
-
-
-
-
-
-    return []
+    return tags
 
 
 if __name__ == "__main__" :
-    get_query_tags("../../data/department.json", "ITI", 3, [""], "")
+    get_query_tags("../../data/department.json", "ITI", "3", ["LANGUE", "ANGLAIS","1"],["LANGUE", "ALLEMAND", "2"],["TD", "2"])
+

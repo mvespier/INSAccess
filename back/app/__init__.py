@@ -28,6 +28,8 @@ Notes:
     else where.
 
 """
+
+
 import json
 from flask import Flask
 from flask_login import LoginManager
@@ -35,8 +37,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from itsdangerous import URLSafeSerializer
 
+from .utils import *
 db= SQLAlchemy()
-
 
 def create_app(test_config=None):
     """The factory for the app,
