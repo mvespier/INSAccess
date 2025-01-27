@@ -54,10 +54,12 @@ const Calendar = (props) => {
   }
   return (
     <div className="calendar">
+      <button type="button" className="arrow-left"></button>
       <utils.TimeBar />
       <div className="days">
         {list_days}
       </div>
+      <button type="button" className="arrow-right turned"></button>
   </div>
       
   );

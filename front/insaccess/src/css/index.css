@@ -15,4 +15,8 @@ body {
   flex-direction: column;
 }
 
+.turned {
+  transform: rotate(180deg);
+}
+
 /*# sourceMappingURL=index.css.map */
