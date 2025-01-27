@@ -11,9 +11,9 @@ const Main = () => {
     <Routes> 
       <Route exact path='' element={<Home />}></Route >
       <Route exact path='/signup' element={<Signup />}></Route>
-      <Route exact path='/calendar' element={<Calendar />}></Route>
+      <Route exact path='/calendar' element={<Calendar start="20250120"/>}></Route>
       <Route exact path='/about' element={<About />}></Route>
-      <Route exact path='/associations' element={<Associations />}></Route>
+      <Route exact path='/associations' element={<Associations start="20250120"/>}></Route>
     </Routes>
   );
 }

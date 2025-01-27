@@ -1,6 +1,7 @@
 import data from '../data.json'
 import utils from '../js/eventUtils.js'
 import dateUtils from '../js/dateUtils.js'
+import useWindowDimensions from '../js/randomUtils.js'
 
 function getEventsOfDay(date){
   const events = []
@@ -41,16 +42,20 @@ function EventsOfDay(date){
   );
 }
 
-const Calendar = () => {
+const Calendar = (props) => {
+  let current_day = props.start;
+  let list_days = []
+  let dimensions = useWindowDimensions()
+  let nb_days =  ((850 < dimensions.width) ? 5 : 1);
+  for (let i = 0; i < nb_days; i++){
+    list_days.push(<EventsOfDay key={i} date={ current_day }/>);
+    current_day = dateUtils.nextDay(current_day);
+  }
   return (
     <div className="calendar">
       <utils.TimeBar />
       <div className="days">
-        <EventsOfDay date="20250120"/>
-        <EventsOfDay date="20250121"/>
-        <EventsOfDay date="20250122"/>
-        <EventsOfDay date="20250123"/>
-        <EventsOfDay date="20250124"/>
+        {list_days}
       </div>
   </div>
       

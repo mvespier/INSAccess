@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const hours_timeline = ["8h00", "9h45", "11h30", "13h15", "15h00", "16h45", "18h15"];
 
 const createHours = () => {
@@ -27,6 +29,13 @@ const createHours = () => {
   }
   return result;
 }
+
+const nextDay = (day) => {
+  let next = parseInt(day)+1
+  return next.toString()
+}
+
+nextDay.propTypes = PropTypes.string.isRequired;
   
 const presentableHour = (hour) => {
   return hour[0]+hour[1]+":"+hour[2]+hour[3]
@@ -50,4 +59,4 @@ const getEventPos = (start_index, nb_div) => {
   return 100*(start_index+1)/(nb_div+1);
 }
 
-export default { getDateInfo, presentableHour, createHours, hours_timeline, getEventSize, getEventPos };
+export default { getDateInfo, presentableHour, createHours, hours_timeline, getEventSize, getEventPos, nextDay };

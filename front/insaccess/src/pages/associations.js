@@ -22,7 +22,7 @@ function EventsOfDay(date){
   for (let element in events_of_day){
     const object = events_of_day[element]
     events_list.push(
-      <utils.SingleEvent key={i} start_time={object.start_time} end_time={object.end_time} label={object.label} teacher={object.teacher} room={object.room} />
+      <utils.SingleEvent key={i} start_time={object.start_time} end_time={object.end_time} label={object.label} teacher={object.association} room={object.room} />
     );
     i += 1;
   } 
@@ -41,16 +41,19 @@ function EventsOfDay(date){
   );
 }
 
-const Associations = () => {
+const Associations = (props) => {
+  let current_day = props.start;
+  let list_days = []
+  let nb_days = 5;
+  for (let i = 0; i < nb_days; i++){
+    list_days.push(<EventsOfDay key={i} date={ current_day }/>);
+    current_day = dateUtils.nextDay(current_day);
+  }
   return (
     <div className="calendar">
       <utils.TimeBar />
       <div className="days">
-        <EventsOfDay date="20250120"/>
-        <EventsOfDay date="20250121"/>
-        <EventsOfDay date="20250122"/>
-        <EventsOfDay date="20250123"/>
-        <EventsOfDay date="20250124"/>
+        {list_days}
       </div>
   </div>
       
