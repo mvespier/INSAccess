@@ -13,3 +13,4 @@ mysqlclient
 Jinja2
 email-validator
 pylint
+requests

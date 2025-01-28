@@ -29,7 +29,7 @@ Notes:
 
 """
 import datetime
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError 
 from ..models import InsaClass, Teacher, GroupTD, Room, Department\
                         , ClassLinkDepart, ClassLinkRoom, ClassLinkTD, ClassLinkTeacher
 

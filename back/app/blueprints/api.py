@@ -33,15 +33,17 @@ Notes:
 from flask import current_app, Blueprint, render_template,\
                   redirect, url_for, request, flash, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
-
+from app.models import User
 
 api = Blueprint('api', __name__)
 
 
-@api.route('/get_week')
+@api.route('/api/get_week')
 @login_required
 def get_week():
     """return the json for the week"""
-    user_id = current_user.email
+    email = current_user.email
+    user = User.query.filter_by(email=email).first()
 
-    return f"hello {user_id}"
+    return jsonify({"toto" : "miam"})
+    

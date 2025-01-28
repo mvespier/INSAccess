@@ -30,7 +30,7 @@ Notes:
 """
 
 from flask_login import UserMixin
-from sqlalchemy import ForeignKey, ForeignKeyConstraint
+from sqlalchemy import ForeignKey
 from sqlalchemy import Date, Time
 
 from . import db
@@ -39,15 +39,16 @@ from . import db
 class User(UserMixin, db.Model):
     """User definition, inherit from UserMixin for authentication"""
     __tablename__ = 'user'
-    id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    #id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     # user information
-    email = db.Column(db.String(100), unique=True, nullable=False)
+    email = db.Column(db.String(100), primary_key = True)
     password = db.Column(db.String(255),nullable=False)
     name = db.Column(db.String(100))
     # admin field
     admin = db.Column(db.Boolean, default=False)
     # incremental user id - used for authentication
     seqid = db.Column(db.Integer, default=0)
+    link_td = db.relationship("UserLinkTD", back_populates = "link_group_td")
 
 
 class InsaClass(db.Model):
@@ -59,12 +60,13 @@ class InsaClass(db.Model):
     start_hour = db.Column(Time)
     end_hour = db.Column(Time)
     desc = db.Column(db.String(255))
-    
 
     link_td = db.relationship("ClassLinkTD", back_populates = "insa_class")
     link_teacher = db.relationship("ClassLinkTeacher", back_populates = "insa_class")
     link_room = db.relationship("ClassLinkRoom", back_populates = "insa_class")
     link_depart = db.relationship("ClassLinkDepart", back_populates = "insa_class")
+
+
 
 
 class GroupTD(db.Model):
@@ -86,7 +88,7 @@ class Teacher(db.Model):
 class Student(db.Model):
     """ Student definition"""
     __tablename__ = 'student'
-    user_id = db.Column(ForeignKey("user.id"), primary_key = True)
+    user_email = db.Column(ForeignKey("user.email"), primary_key = True)
     department = db.Column(ForeignKey("department.name"))
 
 
@@ -94,9 +96,6 @@ class Room(db.Model):
     """ Room definition"""
     __tablename__ = 'room'
     name = db.Column(db.String(100), primary_key = True)
-
-
-
 
 
 class ClassLinkTD(db.Model):
@@ -138,3 +137,13 @@ class ClassLinkDepart(db.Model):
 
     depart_id = db.Column(ForeignKey('department.name'), primary_key = True)
     depart = db.relationship("Department")
+
+class UserLinkTD(db.Model):
+    """ 1 to Many link between classINSA and Department tables"""
+    __tablename__ = 'user_link_td'
+
+    user_email = db.Column(db.String(100), ForeignKey('user.email'), primary_key = True)
+    link_group_td = db.relationship("User", back_populates="link_td")
+
+    name_td = db.Column(db.String(100), ForeignKey('td_group.name'), primary_key = True)
+    depart = db.relationship("GroupTD")
