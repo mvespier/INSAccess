@@ -39,9 +39,9 @@ from . import db
 class User(UserMixin, db.Model):
     """User definition, inherit from UserMixin for authentication"""
     __tablename__ = 'user'
-    #id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     # user information
-    email = db.Column(db.String(100), primary_key = True)
+    email = db.Column(db.String(100), unique = True, nullable= False)
     password = db.Column(db.String(255),nullable=False)
     name = db.Column(db.String(100))
     # admin field
@@ -142,7 +142,7 @@ class UserLinkTD(db.Model):
     """ 1 to Many link between classINSA and Department tables"""
     __tablename__ = 'user_link_td'
 
-    user_email = db.Column(db.String(100), ForeignKey('user.email'), primary_key = True)
+    user_id = db.Column(db.Integer, ForeignKey('user.id'), primary_key = True)
     link_group_td = db.relationship("User", back_populates="link_td")
 
     name_td = db.Column(db.String(100), ForeignKey('td_group.name'), primary_key = True)

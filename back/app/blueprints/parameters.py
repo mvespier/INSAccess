@@ -30,10 +30,31 @@ Notes:
     else where.
 
 """
-from flask import current_app, Blueprint, render_template,\
-                  redirect, url_for, request, flash, jsonify
-from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User
+from flask import Blueprint, render_template, request, jsonify
+from flask_login import login_required, current_user
+from ..models import db, GroupTD, User, UserLinkTD
 
-parameters = Blueprint('parameters', __name__)
+param = Blueprint('param', __name__, url_prefix='/param')
+
+@param.route('/', methods=['GET', 'POST'])
+@login_required
+def manage_td():
+    if request.method == 'POST':
+        # Parse the submitted TD names
+        selected_tds = request.json.get('selected_tds', [])
+        
+        # Clear existing links for the user
+        UserLinkTD.query.filter_by(user_id=current_user.id).delete()
+        
+        # Add the new selected TDs
+        for td_name in selected_tds:
+            link = UserLinkTD(user_id=current_user.id, name_td=td_name)
+            db.session.add(link)
+        db.session.commit()
+        return jsonify({'status': 'success', 'message': 'Selections updated successfully.'})
+
+    # On GET request, fetch user's TDs and all available TDs
+    user_tds = [link.name_td for link in current_user.link_td]
+    all_tds = [td.name for td in GroupTD.query.all()]
+    return render_template('td_selection.html', user_tds=user_tds, all_tds=all_tds)
 

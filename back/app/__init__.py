@@ -99,10 +99,12 @@ def create_app(test_config=None):
     from .blueprints.auth import auth as auth_blueprint
     from .blueprints.main import main as main_blueprint
     from .blueprints.api import api as api_blueprint
+    from .blueprints.parameters import param as param_blueprint
 
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(main_blueprint)
     app.register_blueprint(api_blueprint)
+    app.register_blueprint(param_blueprint)
 
     #app.register_blueprint(parameters_blueprint)
 

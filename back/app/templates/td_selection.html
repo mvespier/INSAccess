@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TD Selection</title>
+    <script src="https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/babel-standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+        const { useState } = React;
+
+        function TDSelection({ allTDs, userTDs }) {
+            const [selectedTDs, setSelectedTDs] = useState(new Set(userTDs));
+
+            const toggleTD = (tdName) => {
+                const updatedTDs = new Set(selectedTDs);
+                if (updatedTDs.has(tdName)) {
+                    updatedTDs.delete(tdName);
+                } else {
+                    updatedTDs.add(tdName);
+                }
+                setSelectedTDs(updatedTDs);
+            };
+
+            const saveSelection = async () => {
+                const response = await fetch('/param/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ selected_tds: Array.from(selectedTDs) }),
+                });
+                const data = await response.json();
+                alert(data.message);
+            };
+
+            return (
+                <div>
+                    <h1>Select Your TDs</h1>
+                    <ul>
+                        {allTDs.map(td => (
+                            <li key={td}>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedTDs.has(td)}
+                                        onChange={() => toggleTD(td)}
+                                    />
+                                    {td}
+                                </label>
+                            </li>
+                        ))}
+                    </ul>
+                    <button onClick={saveSelection}>Save</button>
+                </div>
+            );
+        }
+
+        const allTDs = {{ all_tds|tojson }};
+        const userTDs = {{ user_tds|tojson }};
+
+        ReactDOM.render(<TDSelection allTDs={allTDs} userTDs={userTDs} />, document.getElementById('app'));
+    </script>
+</body>
+</html>

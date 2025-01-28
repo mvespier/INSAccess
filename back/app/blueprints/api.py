@@ -33,7 +33,7 @@ Notes:
 from flask import current_app, Blueprint, render_template,\
                   redirect, url_for, request, flash, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User
+from ..models import User
 
 api = Blueprint('api', __name__)
 
@@ -46,4 +46,3 @@ def get_week():
     user = User.query.filter_by(email=email).first()
 
     return jsonify({"toto" : "miam"})
-    
