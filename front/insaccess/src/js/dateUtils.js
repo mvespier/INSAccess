@@ -1,15 +1,18 @@
 import constantes from './constantes.js'
 
 const Day = class Day{
+
+  date = new Date();
   
-  constructor(date){
-    this.date = date || Date.now();
-    this.day = this.date.getDay();
-    this.month = this.date.getMonth();
-    this.year = this.date.getYear();
+  constructor(date_object){
+    console.log(date_object)
+    this.date = date_object;
+    this.day = date_object.getDay();
+    this.month = date_object.getMonth();
+    this.year = date_object.getYear();
   }
 
-  set setDay(date){
+  setDay(date){
     this.date = date;
   }
 
@@ -38,23 +41,27 @@ const Day = class Day{
     return hour[0]+hour[1]+":"+hour[2]+hour[3]
   }
 
-  get getDay(){
+  getDay(){
     return this.day;
   }
 
-  get getMonth(){
+  getMonth(){
     return this.month;
   }
 
-  get getYear(){
+  getYear(){
     return this.year;
   }
 
-  get getDate(){
+  getDate(){
     return this.date.getDate();
   }
 
-  set setDate(day){
+  getDateObject(){
+    return new Date(this.date);
+  }
+
+  setDate(day){
     this.date.setDate(day.getDate());
   }
   
@@ -103,4 +110,4 @@ const Day = class Day{
 
 
 
-export default { Day };
+export default Day;

@@ -45,23 +45,24 @@ function EventsOfDay(date){
 }
 
 const Associations = (props) => {
-  let [current_day, setDay] = useState(new Day(props.start));
+  let day = new Day(props.start);
+  let [current_day, setDay] = useState(day);
   let list_days = []
   let dimensions = useWindowDimensions()
   let minWidth = constantes.minWidth;
   let nb_days =  ((minWidth < dimensions.width) ? 5 : 1);
   for (let i = 0; i < nb_days; i++){
-    list_days.push(<EventsOfDay key={i} date={ current_day }/>);
-    current_day = current_day.nextDay();
+    list_days.push(<EventsOfDay key={i} date={ current_day.getDateObject() }/>);
+    current_day = Day.nextDay(current_day);
   }
   return (
     <div className="calendar">
-      <button type="button" className="arrow-left" onClick={() => {setDay(current_day.prevDay())}}></button>
+      <button type="button" className="arrow-left" onClick={() => {setDay(Day.prevDay(current_day))}}></button>
       <utils.TimeBar />
       <div className="days">
         {list_days}
       </div>
-      <button type="button" className="arrow-right turned" onClick={() => {setDay(current_day.nextDay())}}></button>
+      <button type="button" className="arrow-right turned" onClick={() => {setDay(nb_days.nextDay(current_day))}}></button>
   </div>
       
   );
