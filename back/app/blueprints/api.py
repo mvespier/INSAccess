@@ -33,7 +33,10 @@ Notes:
 from flask import current_app, Blueprint, render_template,\
                   redirect, url_for, request, flash, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
-from ..models import User
+from ..models import InsaClass, User, UserLinkTD, ClassLinkTD,GroupTD, db
+from sqlalchemy.orm import joinedload
+from time import strftime
+
 
 api = Blueprint('api', __name__)
 
@@ -42,7 +45,29 @@ api = Blueprint('api', __name__)
 @login_required
 def get_week():
     """return the json for the week"""
-    email = current_user.email
-    user = User.query.filter_by(email=email).first()
+    tags = UserLinkTD.query.filter_by(user_id = current_user.id).all()
+    tags_list = [tag.name_td for tag in tags]
 
-    return jsonify({"toto" : "miam"})
+    classes_insa = ClassLinkTD.query.filter(ClassLinkTD.td_id.in_(tags_list)).all()
+    classes_list= [a_class.class_id for a_class in classes_insa]
+
+    output =[]
+    for i in classes_list:
+        insa_class = db.session.query(InsaClass).options(
+            joinedload(InsaClass.link_td),
+            joinedload(InsaClass.link_teacher),
+            joinedload(InsaClass.link_room),
+            joinedload(InsaClass.link_depart),
+        ).filter(InsaClass.id == i).first()
+
+        dict = {
+            "date" : insa_class.date.strftime("%Y-%m-%d"),
+            "start" : insa_class.start_hour.strftime('%H:%M:%S'),
+            "end" : insa_class.end_hour.strftime('%H:%M:%S'),
+            "desc" : insa_class.desc,
+            "td" : [td.td.name for td in insa_class.link_td]
+        }
+
+        output.append(dict)
+
+    return jsonify(output)
