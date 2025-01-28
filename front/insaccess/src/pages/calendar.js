@@ -1,7 +1,9 @@
 import data from '../data.json'
 import utils from '../js/eventUtils.js'
-import dateUtils from '../js/dateUtils.js'
+import Day from '../js/dateUtils.js'
 import useWindowDimensions from '../js/randomUtils.js'
+import { useState } from 'react'
+import constantes from '../js/constantes.js'
 
 function getEventsOfDay(date){
   const events = []
@@ -17,17 +19,17 @@ function EventsOfDay(date){
   const events_list = [];
   
   let i = 0;
-  const events_of_day = getEventsOfDay(date.date)
-  const infos = dateUtils.getDateInfo(date.date)
+  const events_of_day = getEventsOfDay(date.date, data);
+  let day = new Day(date);
+  const infos = day.getDateInfo();
 
   for (let element in events_of_day){
     const object = events_of_day[element]
     events_list.push(
-      <utils.SingleEvent key={i} start_time={object.start_time} end_time={object.end_time} label={object.label} teacher={object.teacher} room={object.room} link={object.link}/>
+      <utils.SingleEvent key={i} start_time={object.start_time} end_time={object.end_time} label={object.label} teacher={object.teacher} room={object.room} link={object.link} />
     );
     i += 1;
   } 
-
 
   return (
     <div className="day">
@@ -43,21 +45,23 @@ function EventsOfDay(date){
 }
 
 const Calendar = (props) => {
-  let current_day = props.start;
+  let [current_day, setDay] = useState(new Day(props.start));
   let list_days = []
   let dimensions = useWindowDimensions()
-  let minWidth = 850;
+  let minWidth = constantes.minWidth;
   let nb_days =  ((minWidth < dimensions.width) ? 5 : 1);
   for (let i = 0; i < nb_days; i++){
     list_days.push(<EventsOfDay key={i} date={ current_day }/>);
-    current_day = dateUtils.nextDay(current_day);
+    current_day = current_day.nextDay();
   }
   return (
     <div className="calendar">
+      <button type="button" className="arrow-left" onClick={() => {setDay(current_day.prevDay())}}></button>
       <utils.TimeBar />
       <div className="days">
         {list_days}
       </div>
+      <button type="button" className="arrow-right turned" onClick={() => {setDay(current_day.nextDay())}}></button>
   </div>
       
   );

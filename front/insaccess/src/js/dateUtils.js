@@ -1,63 +1,106 @@
-import PropTypes from "prop-types";
+import constantes from './constantes.js'
 
-const hours_timeline = ["8h00", "9h45", "11h30", "13h15", "15h00", "16h45", "18h30", "20h15"];
-
-const createHours = () => {
-  let result = [];
-  let string = "";
-  let last_hour = "2015"
-  let currentHour = 8;
-  let currentMinute = 0;
-  for (let i = 0; i <= 12; i++){
-    for (let j = 0; j < 12; j++){
-      string = "";
-      if (currentHour < 10){
-        string += "0";
-      }
-      string += `${currentHour}`;
-      if (currentMinute < 10){
-        string += "0";
-      }
-      string += `${currentMinute}`;
-      result.push(string);
-      currentMinute += 5;
-      if (string === last_hour){
-        return result;
-      }
-    }
-    currentHour += 1;
-    currentMinute = 0;
+const Day = class Day{
+  
+  constructor(date){
+    this.date = date || Date.now();
+    this.day = this.date.getDay();
+    this.month = this.date.getMonth();
+    this.year = this.date.getYear();
   }
-  return result;
-}
 
-const nextDay = (day) => {
-  let next = parseInt(day)+1
-  return next.toString()
-}
+  set setDay(date){
+    this.date = date;
+  }
 
-nextDay.propTypes = PropTypes.string.isRequired;
+  static nextDay(day){
+    let newDay = day.copy();
+    newDay.date.setDate(newDay.getDate()+1);
+    return newDay;
+  }
   
-const presentableHour = (hour) => {
-  return hour[0]+hour[1]+":"+hour[2]+hour[3]
-}
+  static prevDay(day){
+    let newDay = day.copy();
+    newDay.date.setDate(newDay.getDate()+1);
+    return newDay;
+  }
 
-const getDateInfo = (date) => {
-    const dayList = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
-    const year = parseInt(date.slice(0, 4))
-    const month = parseInt(date.slice(4, 6))
-    const day = parseInt(date.slice(6, 8))
-    const date_object = new Date(year, month-1, day)
-    return [dayList[date_object.getDay()-1], date_object.getDate()]
+  copy(){
+    let res = new Day(this.date);
+    return res;
+  }
+
+  startOfWeek(){
+    //let current_day = this.getDate();
+  }
+    
+  static presentableHour(hour){
+    return hour[0]+hour[1]+":"+hour[2]+hour[3]
+  }
+
+  get getDay(){
+    return this.day;
+  }
+
+  get getMonth(){
+    return this.month;
+  }
+
+  get getYear(){
+    return this.year;
+  }
+
+  get getDate(){
+    return this.date.getDate();
+  }
+
+  set setDate(day){
+    this.date.setDate(day.getDate());
+  }
   
-}
+  getDateInfo(){
+      return [constantes.dayList[this.getDay()], this.getDate()];
+  }
 
-const getEventSize = (start_index, end_index, nb_div) => {
-  return ((end_index-start_index)/(nb_div+1))*100
-}
+  toString(){
+    return ""+this.getYear()+this.getMonth()+this.getDate()
+  }
 
-const getEventPos = (start_index, nb_div) => {
-  return 100*(start_index+1)/(nb_div+1);
-}
+  static createHours(){
+    let result = [];
+    let string = "";
+    let last_hour = "2015"
+    let currentHour = 8;
+    let currentMinute = 0;
+    for (let i = 0; i <= 12; i++){
+      for (let j = 0; j < 12; j++){
+        string = "";
+        if (currentHour < 10){
+          string += "0";
+        }
+        string += `${currentHour}`;
+        if (currentMinute < 10){
+          string += "0";
+        }
+        string += `${currentMinute}`;
+        result.push(string);
+        currentMinute += 5;
+        if (string === last_hour){
+          return result;
+        }
+      }
+      currentHour += 1;
+      currentMinute = 0;
+    }
+    return result;
+  }
+  
+  // nextDay.propTypes = PropTypes.string.isRequired;
+  // prevDay.propTypes = PropTypes.string.isRequired;
+} 
 
-export default { getDateInfo, presentableHour, createHours, hours_timeline, getEventSize, getEventPos, nextDay };
+
+
+
+
+export default { Day };
