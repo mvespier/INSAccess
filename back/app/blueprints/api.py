@@ -35,15 +35,17 @@ from flask import current_app, Blueprint, render_template,\
 from flask_login import current_user, login_user, logout_user, login_required
 from ..models import InsaClass, User, UserLinkTD, ClassLinkTD,GroupTD, db
 from sqlalchemy.orm import joinedload
-from time import strftime
+from time import strftime,strptime
+from datetime import datetime
+
 
 
 api = Blueprint('api', __name__)
 
 
-@api.route('/api/get_week')
+@api.route('/api/get_day/<string:day>')
 @login_required
-def get_week():
+def get_day(day):
     """return the json for the week"""
     tags = UserLinkTD.query.filter_by(user_id = current_user.id).all()
     tags_list = [tag.name_td for tag in tags]
@@ -58,14 +60,16 @@ def get_week():
             joinedload(InsaClass.link_teacher),
             joinedload(InsaClass.link_room),
             joinedload(InsaClass.link_depart),
-        ).filter(InsaClass.id == i).first()
-
+        ).filter(InsaClass.id == i ).first()
+        #InsaClass.date == datetime.strptime(day.strip('"'), "%Y-%m-%d").date()
         dict = {
             "date" : insa_class.date.strftime("%Y-%m-%d"),
             "start" : insa_class.start_hour.strftime('%H:%M:%S'),
             "end" : insa_class.end_hour.strftime('%H:%M:%S'),
             "desc" : insa_class.desc,
-            "td" : [td.td.name for td in insa_class.link_td]
+            "td" : [td.td.name for td in insa_class.link_td],
+            "teacher" : [teacher.teacher.name for teacher in insa_class.link_teacher],
+            "td1" : [td.td.name for td in insa_class.link_td],
         }
 
         output.append(dict)
