@@ -21,3 +21,7 @@ def redirect_test():
 @main.route('/<test>/redirect')
 def var_test(test):
     return 'TOTO'
+
+@main.route('/calendar')
+def calendar():
+    return render_template('test.html')
