@@ -24,4 +24,4 @@ def var_test(test):
 
 @main.route('/calendar')
 def calendar():
-    return render_template('test.html')
+    return render_template('calendar_example.html')

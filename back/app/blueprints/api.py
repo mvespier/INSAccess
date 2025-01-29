@@ -42,8 +42,6 @@ from ..utils.fetch import fetch_entire_year
 from ..models import InsaClass, UserLinkTD, ClassLinkTD, db
 
 
-
-
 api = Blueprint('api', __name__,url_prefix='/api/')
 
 @api.route('get_day/<string:day>')
