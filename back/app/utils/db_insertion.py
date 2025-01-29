@@ -29,10 +29,11 @@ Notes:
 
 """
 import datetime
+from tqdm import tqdm
+
 from sqlalchemy.exc import IntegrityError 
 from ..models import InsaClass, Teacher, GroupTD, Room, Department\
                         , ClassLinkDepart, ClassLinkRoom, ClassLinkTD, ClassLinkTeacher
-
 
 
 def insert_list_record(session, list_of_records):
@@ -49,8 +50,7 @@ def insert_list_record(session, list_of_records):
     :param list_of_records: The list of record to be inserted
 
     """
-    for record in list_of_records:
-        print(record[0])
+    for record in tqdm(list_of_records):
         insert_record_in_db(session, record)
 
 
@@ -265,12 +265,12 @@ def insert_generic_in_db(session, exists, new_class):
         try:
             session.add(new_class)
             session.commit()
-            print("Inserted successfully.")
+            #print("Inserted successfully.")
         except IntegrityError:
             session.rollback()
-            print("Failed to insert due to integrity constraints.")
+            #print("Failed to insert due to integrity constraints.")
             return False
-    else:
-        print("Record already exists. No insertion performed.")
+
+        #print("Record already exists. No insertion performed.")
 
     return True
