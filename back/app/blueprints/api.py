@@ -30,16 +30,17 @@ Notes:
     else where.
 
 """
-from flask import current_app, Blueprint,\
-                  redirect, url_for, request, flash, jsonify
-from flask_login import current_user, login_user, logout_user, login_required
+
+import datetime
+
+from sqlalchemy.orm import joinedload
+from flask import Blueprint, jsonify, render_template
+from flask_login import current_user, login_required
 
 from ..utils.db_insertion import insert_list_record
 from ..utils.fetch import fetch_entire_year
-from ..models import InsaClass, User, UserLinkTD, ClassLinkTD,GroupTD, db
-from sqlalchemy.orm import joinedload
-from time import strftime,strptime
-import datetime
+from ..models import InsaClass, UserLinkTD, ClassLinkTD, db
+
 
 
 
@@ -54,14 +55,9 @@ def get_day(day):
     classes_subquery = get_class_of_user()
 
     insa_classes = (
-        db.session.query(InsaClass)
-        .options(
-            joinedload(InsaClass.link_td),
-            joinedload(InsaClass.link_teacher),
-            joinedload(InsaClass.link_room),
-            joinedload(InsaClass.link_depart),
+    get_joined_class_subquery().filter(
+        InsaClass.id.in_(classes_subquery), InsaClass.date == day_date
         )
-        .filter(InsaClass.id.in_(classes_subquery.select()), InsaClass.date == day_date)
         .all()
     )
 
@@ -79,17 +75,10 @@ def get_week(day):
     classes_subquery = get_class_of_user()
 
     insa_classes = (
-        db.session.query(InsaClass)
-        .options(
-            joinedload(InsaClass.link_td),
-            joinedload(InsaClass.link_teacher),
-            joinedload(InsaClass.link_room),
-            joinedload(InsaClass.link_depart),
+        get_joined_class_subquery().filter(
+            InsaClass.id.in_(classes_subquery),
+            InsaClass.date.between(start_of_week, end_of_week)  # Filter for the entire week
         )
-        .filter(
-        InsaClass.id.in_(classes_subquery.select()),
-        InsaClass.date.between(start_of_week, end_of_week)  # Filter for the entire week
-    )
         .all()
     )
 
@@ -102,23 +91,17 @@ def get_month(day):
     day_date = datetime.datetime.strptime(day, "%Y-%m-%d")
 
     start_of_month = day_date.replace(day=1)  # First day of the month
-    end_of_month = (start_of_month + datetime.timedelta(days=32)).replace(day=1) - datetime.timedelta(days=1)  # Last day of the month
+    end_of_month = (start_of_month + datetime.timedelta(days=32)).replace(day=1)\
+                                - datetime.timedelta(days=1)  # Last day of the month
 
 
     classes_subquery = get_class_of_user()
 
     insa_classes = (
-        db.session.query(InsaClass)
-        .options(
-            joinedload(InsaClass.link_td),
-            joinedload(InsaClass.link_teacher),
-            joinedload(InsaClass.link_room),
-            joinedload(InsaClass.link_depart),
+        get_joined_class_subquery().filter(
+            InsaClass.id.in_(classes_subquery),
+            InsaClass.date.between(start_of_month, end_of_month)  # Filter for the entire week
         )
-        .filter(
-        InsaClass.id.in_(classes_subquery.select()),
-        InsaClass.date.between(start_of_month, end_of_month)  # Filter for the entire week
-    )
         .all()
     )
 
@@ -132,23 +115,17 @@ def get_year(day):
     day_date = datetime.datetime.strptime(day, "%Y-%m-%d")
 
     start_of_year = day_date.replace(month=1,day=1)  # First day of the year
-    end_of_year = (start_of_year + datetime.timedelta(days=400)).replace(day=1,month=1) - datetime.timedelta(days=1)  # Last day of the year
+    end_of_year = (start_of_year + datetime.timedelta(days=400)).replace(day=1,month=1)\
+                                - datetime.timedelta(days=1)  # Last day of the year
 
 
     classes_subquery = get_class_of_user()
 
     insa_classes = (
-        db.session.query(InsaClass)
-        .options(
-            joinedload(InsaClass.link_td),
-            joinedload(InsaClass.link_teacher),
-            joinedload(InsaClass.link_room),
-            joinedload(InsaClass.link_depart),
+        get_joined_class_subquery().filter(
+            InsaClass.id.in_(classes_subquery),
+            InsaClass.date.between(start_of_year, end_of_year)  # Filter for the entire year
         )
-        .filter(
-        InsaClass.id.in_(classes_subquery).select(),
-        InsaClass.date.between(start_of_year, end_of_year)  # Filter for the entire week
-    )
         .all()
     )
 
@@ -158,12 +135,24 @@ def get_year(day):
 @api.route('/fetch')
 @login_required
 def fetch():
-    list_of_records = fetch_entire_year("2024", "ITI", "3")
-    insert_list_record(db.session, list_of_records)
-    return "yippee"
+    """ TEMPORARY FUNCTION SHOULD BE USED CAREFULLY PROBABLY"""
+    if current_user.admin :
+        list_of_records = fetch_entire_year("2024", "ITI", "3")
+        insert_list_record(db.session, list_of_records)
+        return "successfully fetched"
+
+    return render_template('404_Not_Found.html')
 
 
 
+def get_joined_class_subquery():
+    """ return the joined table subquery """
+    return db.session.query(InsaClass).options(
+            joinedload(InsaClass.link_td),
+            joinedload(InsaClass.link_teacher),
+            joinedload(InsaClass.link_room),
+            joinedload(InsaClass.link_depart),
+        )
 
 
 def get_class_of_user():
