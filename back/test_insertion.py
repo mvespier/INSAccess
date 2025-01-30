@@ -40,16 +40,18 @@ with create_app().app_context():
 
     db.create_all()
 
-    # with open("data/users.txt", encoding="utf8") as f:
-    #     for line in f:
-    #         if not line.startswith("#") or line.startswith('\n'):
-    #             (email, name) = line.strip().split("\t")
-    #             db.session.add(User(email=email,
-    #                                 name=name,
-    #                                 password=generate_password_hash("password-rco")))
+    with open("data/users.txt", encoding="utf8") as f:
+        for line in f:
+            if not line.startswith("#") or line.startswith('\n'):
+                (email, name) = line.strip().split("|")
+                user = User.query.filter_by(email=email).first()
+                if not user:
+                    db.session.add(User(email=email,
+                                        name=name,
+                                        password=generate_password_hash("toto123")))
     db.session.commit()
 
-    list_of_records = fetch_entire_year("2024", "CGC", "3")
-    insert_list_record(db.session, list_of_records)
+    # list_of_records = fetch_entire_year("2024", "CGC", "3")
+    # insert_list_record(db.session, list_of_records)
 
 

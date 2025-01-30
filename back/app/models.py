@@ -39,15 +39,16 @@ from . import db
 class User(UserMixin, db.Model):
     """User definition, inherit from UserMixin for authentication"""
     __tablename__ = 'user'
-    id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     # user information
-    email = db.Column(db.String(100), unique = True, nullable= False)
-    password = db.Column(db.String(255),nullable=False)
+    email = db.Column(db.String(100), unique = True, nullable = False)
+    password = db.Column(db.String(255),nullable = False)
     name = db.Column(db.String(100))
     # admin field
-    admin = db.Column(db.Boolean, default=False)
+    admin = db.Column(db.Boolean, default = False)
     # incremental user id - used for authentication
-    seqid = db.Column(db.Integer, default=0)
+    seqid = db.Column(db.Integer, default = 0)
+    
     link_td = db.relationship("UserLinkTD", back_populates = "link_group_td")
 
 
@@ -61,13 +62,29 @@ class InsaClass(db.Model):
     end_hour = db.Column(Time)
     desc = db.Column(db.String(255))
 
+    is_custom = db.Column(db.Boolean, default = False)
+    associated_link = db.Column(db.String(510))
+
+
     link_td = db.relationship("ClassLinkTD", back_populates = "insa_class")
     link_teacher = db.relationship("ClassLinkTeacher", back_populates = "insa_class")
     link_room = db.relationship("ClassLinkRoom", back_populates = "insa_class")
     link_depart = db.relationship("ClassLinkDepart", back_populates = "insa_class")
 
 
+class EventCreator(db.Model):
+    """ Student definition"""
+    __tablename__ = 'event_creator'
+    user_email = db.Column(ForeignKey("user.email"), primary_key = True)
+    association_id = db.Column(ForeignKey("association.id"), nullable = False)
 
+class Association(db.Model):
+    """ the association profile for the club and association of INSA Rouen """
+    __tablename__ = 'association'
+    id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    name = db.Column(db.String(255), primary_key = True)
+    unique_color = db.Column(db.String(255))
+    type = db.Column(db.String(100))
 
 class GroupTD(db.Model):
     """ GroupTD definition """
@@ -84,13 +101,6 @@ class Teacher(db.Model):
     """ Teacher definition"""
     __tablename__ = 'teacher'
     name = db.Column(db.String(255), primary_key = True)
-
-class Student(db.Model):
-    """ Student definition"""
-    __tablename__ = 'student'
-    user_email = db.Column(ForeignKey("user.email"), primary_key = True)
-    department = db.Column(ForeignKey("department.name"))
-
 
 class Room(db.Model):
     """ Room definition"""
