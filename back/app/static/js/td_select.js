@@ -43,7 +43,9 @@ function TDSelection({ allTDs, userTDs }) {
                     </label>
                 </li>
             ))}
-            <button onClick={saveSelection}>Save</button>
+            <div class= "validate">
+            <button class='button_validate' onClick={saveSelection}>Sauvegarder</button>
+            </div>
         </div>
     );
 }

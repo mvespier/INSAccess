@@ -42,7 +42,7 @@ def manage_td():
     user_tds = [link.name_td for link in current_user.link_td]
     all_tds = [td.name for td in GroupTD.query.all()]
 
-    return render_template('td_selection.html', user_tds=user_tds, all_tds=all_tds)
+    return render_template('param.html', user_tds=user_tds, all_tds=all_tds)
 
 @param.route('/', methods=['POST'])
 @login_required

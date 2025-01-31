@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %} Parametre {% endblock %}
+{% block link %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/param.css' )}}">
+{% endblock %}
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/babel-standalone/babel.min.js"></script>
+<script>
+    function showPage(pageId) {
+        document.querySelectorAll('.content').forEach(page => {
+            page.classList.remove('active');
+        });
+        document.getElementById(pageId).classList.add('active');
+    }
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+    <h1>Parametre</h1>
+    <nav>
+        <button onclick="showPage('simple')">Simple</button>
+        <button onclick="showPage('liste_td')">Liste TD</button>
+        <button onclick="showPage('contact')">Contact</button>
+    </nav>
+    <div id="simple" class="content active">
+        <h2>Simple</h2>
+        <p>La page de base des parametres</p>
+    </div>
+    <div id="liste_td" class="content">
+        <h3>Liste des groupes</h3>
+        <div id="app"></div>
+        <script>
+            const allTDs = {{ all_tds|tojson }};
+            const userTDs = {{ user_tds|tojson }};
+        </script>
+        <script type="text/babel" src="/static/js/td_select.js"></script>
+    </div>
+    <div id="contact" class="content">
+        <h2>Contactez nous</h2>
+        <p>Endroit pour signaler bug / proposer des trucs</p>
+    </div>
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.content').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+    </script>
+
+{% endblock %}
