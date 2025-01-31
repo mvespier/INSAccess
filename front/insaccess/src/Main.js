@@ -13,9 +13,9 @@ const Main = () => {
     <Routes> 
       <Route exact path='' element={<Home />}></Route >
       <Route exact path='/signup' element={<Signup />}></Route>
-      <Route exact path='/calendar' element={<Calendar start={first_day.startOfWeek()}/>}></Route>
+      <Route exact path='/calendar' element={<Calendar start={first_day.startOfWeek().getDate()}/>}></Route>
       <Route exact path='/about' element={<About />}></Route>
-      <Route exact path='/associations' element={<Associations start={first_day.startOfWeek()}/>}></Route>
+      <Route exact path='/associations' element={<Associations start={first_day.startOfWeek().getDate()}/>}></Route>
     </Routes>
   );
 }

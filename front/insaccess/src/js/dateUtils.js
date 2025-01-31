@@ -5,7 +5,14 @@ const Day = class Day{
   date = "2025-01-01"
   
   constructor(date){
-    this.date = date;
+    if (date instanceof Date){
+      let day = date.getDate()
+      let month = date.getMonth()+1
+      let year = date.getYear()
+      this.date = year+"-"+month+"-"+day
+    } else {
+      this.date = date;
+    }
     this.update();
   }
 
@@ -68,11 +75,11 @@ const Day = class Day{
   }
 
   startOfWeek(){
-    let date = new Date(this.date);
-    while (date.getDay() > 1){
-      date.setDate(date.getDate()-1);
+    let day = this.copy();
+    while (day.getDayOfWeek() != constantes.dayList[1]){
+      day = day.prev(1);
     }
-    return date;
+    return day;
   }
     
   static presentableHour(hour){
@@ -106,7 +113,7 @@ const Day = class Day{
   }
   
   getDateInfo(){
-      return [constantes.dayList[this.getDay()], this.getDate()];
+      return [this.getDayOfWeek(), this.getDay()];
   }
 
   toString(){
@@ -141,9 +148,6 @@ const Day = class Day{
     }
     return result;
   }
-  
-  // nextDay.propTypes = PropTypes.string.isRequired;
-  // prevDay.propTypes = PropTypes.string.isRequired;
 } 
 
 
