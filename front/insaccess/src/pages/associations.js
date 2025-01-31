@@ -5,7 +5,7 @@ import constantes from '../js/constantes.js'
 import useWindowDimensions from '../js/randomUtils.js'
 import { useState } from 'react'
 
-function getEventsOfDay(date){
+const getEventsOfDay = (date, data) => {
   const events = []
   data.forEach(ev => {
     if (ev.date === date) {
@@ -15,12 +15,12 @@ function getEventsOfDay(date){
     return events;
 }
 
-function EventsOfDay(date){
+const EventsOfDay = (props) => {
   const events_list = [];
   
   let i = 0;
-  const events_of_day = getEventsOfDay(date.date, data);
-  let day = new Day(date);
+  const events_of_day = getEventsOfDay(props.date, data);
+  let day = new Day(props.date);
   const infos = day.getDateInfo();
 
   for (let element in events_of_day){
@@ -46,23 +46,26 @@ function EventsOfDay(date){
 
 const Associations = (props) => {
   let day = new Day(props.start);
-  let [current_day, setDay] = useState(day);
+  let [first_day, setDay] = useState(day);
   let list_days = []
   let dimensions = useWindowDimensions()
   let minWidth = constantes.minWidth;
   let nb_days =  ((minWidth < dimensions.width) ? 5 : 1);
+  let current_day = day.copy();
+
   for (let i = 0; i < nb_days; i++){
-    list_days.push(<EventsOfDay key={i} date={ current_day.getDateObject() }/>);
-    current_day = Day.nextDay(current_day);
+    list_days.push(<EventsOfDay key={i} date={ current_day.getDate() }/>);
+    current_day = current_day.next(1);
   }
+
   return (
     <div className="calendar">
-      <button type="button" className="arrow-left" onClick={() => {setDay(Day.prevDay(current_day))}}></button>
+      <button type="button" className="arrow-left" onClick={() => {setDay(first_day.prev(7))}}></button>
       <utils.TimeBar />
       <div className="days">
         {list_days}
       </div>
-      <button type="button" className="arrow-right turned" onClick={() => {setDay(nb_days.nextDay(current_day))}}></button>
+      <button type="button" className="arrow-right turned" onClick={() => {setDay(first_day.next(7))}}></button>
   </div>
       
   );
