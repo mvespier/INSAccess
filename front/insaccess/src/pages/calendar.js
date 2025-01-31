@@ -19,7 +19,7 @@ function EventsOfDay(date){
   const events_list = [];
   
   let i = 0;
-  const events_of_day = getEventsOfDay(date.date, data);
+  const events_of_day = getEventsOfDay(date, data);
   let day = new Day(date);
   const infos = day.getDateInfo();
 
@@ -45,23 +45,27 @@ function EventsOfDay(date){
 }
 
 const Calendar = (props) => {
-  let [current_day, setDay] = useState(new Day(props.start));
+  let day = new Day(props.start);
+  let [first_day, setDay] = useState(day);
   let list_days = []
   let dimensions = useWindowDimensions()
   let minWidth = constantes.minWidth;
   let nb_days =  ((minWidth < dimensions.width) ? 5 : 1);
+  let current_day = new Day(props.start);
+
   for (let i = 0; i < nb_days; i++){
-    list_days.push(<EventsOfDay key={i} date={ current_day }/>);
-    current_day = current_day.nextDay();
+    list_days.push(<EventsOfDay key={i} date={ current_day.getDateObject() }/>);
+    current_day = current_day.next(1);
   }
+
   return (
     <div className="calendar">
-      <button type="button" className="arrow-left" onClick={() => {setDay(current_day.prevDay())}}></button>
+      <button type="button" className="arrow-left" onClick={() => {setDay(first_day.prev(7))}}></button>
       <utils.TimeBar />
       <div className="days">
         {list_days}
       </div>
-      <button type="button" className="arrow-right turned" onClick={() => {setDay(current_day.nextDay())}}></button>
+      <button type="button" className="arrow-right turned" onClick={() => {setDay(first_day.next(7))}}></button>
   </div>
       
   );

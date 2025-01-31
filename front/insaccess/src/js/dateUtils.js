@@ -2,29 +2,63 @@ import constantes from './constantes.js'
 
 const Day = class Day{
 
-  date = new Date();
+  date = "2025-01-01"
   
-  constructor(date_object){
-    console.log(date_object)
-    this.date = date_object;
-    this.day = date_object.getDay();
-    this.month = date_object.getMonth();
-    this.year = date_object.getYear();
+  constructor(date){
+    this.date = date;
+    this.update();
   }
 
   setDay(date){
     this.date = date;
+    this.update();
   }
 
-  static nextDay(day){
-    let newDay = day.copy();
-    newDay.date.setDate(newDay.getDate()+1);
+  update(){
+    this.day = parseInt(this.date.slice(8, 10));
+    this.month = parseInt(this.date.slice(5, 7));
+    this.year = parseInt(this.date.slice(0, 4))
+  }
+
+  static constructDay(day, month, year){
+    let nDay = (day < 10) ? "0" + day : "" + day;
+    let nMonth = (month < 10) ? "0" + month : "" + month;
+    let newDay = new Day(year+"-"+nMonth+"-"+nDay)
+    return newDay;
+  }
+
+  next(nb_jours){
+    let day = this.day+nb_jours
+    let month = this.month;
+    let year = this.year;
+    let nbDays = constantes.nbDaysPerMonth[this.month-1]
+    if (day > nbDays){
+      day -= nbDays
+      month += 1
+      if (month > 12){
+        month = 1
+        year += 1
+      }
+    }
+    let newDay = Day.constructDay(day, month, year)
     return newDay;
   }
   
-  static prevDay(day){
-    let newDay = day.copy();
-    newDay.date.setDate(newDay.getDate()+1);
+  prev(nb_jours){
+    // nb_jours entre 1 et 31
+    let day = this.day-nb_jours
+    let month = this.month;
+    let year = this.year;
+    let nbDays = constantes.nbDaysPerMonth[((this.month-2)%12)+1]
+    if (day < 1){
+      day += nbDays
+      month -= 1
+      if (month < 1){
+        month = 12
+        year -= 1
+      }
+    }
+    let newDay = Day.constructDay(day, month, year)
     return newDay;
   }
 
@@ -34,11 +68,20 @@ const Day = class Day{
   }
 
   startOfWeek(){
-    //let current_day = this.getDate();
+    let date = new Date(this.date);
+    while (date.getDay() > 1){
+      date.setDate(date.getDate()-1);
+    }
+    return date;
   }
     
   static presentableHour(hour){
     return hour[0]+hour[1]+":"+hour[2]+hour[3]
+  }
+
+  getDayOfWeek(){
+    let date = new Date(this.date)
+    return constantes.dayList[date.getDay()]
   }
 
   getDay(){
@@ -54,15 +97,12 @@ const Day = class Day{
   }
 
   getDate(){
-    return this.date.getDate();
+    return this.date;
   }
 
-  getDateObject(){
-    return new Date(this.date);
-  }
-
-  setDate(day){
-    this.date.setDate(day.getDate());
+  setDate(date){
+    this.date = date;
+    this.update()
   }
   
   getDateInfo(){
@@ -70,7 +110,7 @@ const Day = class Day{
   }
 
   toString(){
-    return ""+this.getYear()+this.getMonth()+this.getDate()
+    return this.date;
   }
 
   static createHours(){
