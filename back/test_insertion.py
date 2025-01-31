@@ -51,7 +51,7 @@ with create_app().app_context():
                                         password=generate_password_hash("toto123")))
     db.session.commit()
 
-    # list_of_records = fetch_entire_year("2024", "CGC", "3")
-    # insert_list_record(db.session, list_of_records)
+    list_of_records = fetch_entire_year("2024", "ITI", "3")
+    insert_list_record(db.session, list_of_records)
 
 

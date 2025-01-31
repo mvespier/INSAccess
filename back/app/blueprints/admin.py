@@ -31,7 +31,7 @@ Notes:
 
 """
 from sqlalchemy.orm import joinedload
-from flask import Blueprint, jsonify, render_template
+from flask import Blueprint, jsonify, render_template, request
 from flask_login import current_user, login_required
 
 
@@ -56,7 +56,7 @@ def create_association():
     if current_user.admin :
         request_dict = request.form
         name = request_dict.get('name')
-        return "successfully fetched"
-    
+        return "success"
+
     return render_template('404_Not_Found.html')
 
