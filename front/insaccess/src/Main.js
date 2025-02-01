@@ -9,6 +9,7 @@ import Day from './js/dateUtils.js'
 
 const Main = () => {
   let first_day = new Day("2025-01-31");
+  
   return (
     <Routes> 
       <Route exact path='' element={<Home />}></Route >

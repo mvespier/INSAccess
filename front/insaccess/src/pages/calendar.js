@@ -2,8 +2,8 @@ import data from '../data.json'
 import utils from '../js/eventUtils.js'
 import Day from '../js/dateUtils.js'
 import useWindowDimensions from '../js/randomUtils.js'
-import { useState } from 'react'
 import constantes from '../js/constantes.js'
+import { useState } from 'react'
 
 const getEventsOfDay = (date, data) => {
   const events = []
@@ -46,12 +46,13 @@ const EventsOfDay = (props) => {
 
 const Calendar = (props) => {
   let day = new Day(props.start);
-  let [first_day, setDay] = useState(day);
+  const [first_day, setDay] = useState(day);
+  
   let list_days = []
   let dimensions = useWindowDimensions()
   let minWidth = constantes.minWidth;
   let nb_days =  ((minWidth < dimensions.width) ? 5 : 1);
-  let current_day = day.copy();
+  let current_day = first_day.copy();
 
   for (let i = 0; i < nb_days; i++){
     list_days.push(<EventsOfDay key={i} date={ current_day.getDate() }/>);
@@ -60,12 +61,12 @@ const Calendar = (props) => {
 
   return (
     <div className="calendar">
-      <button type="button" className="arrow-left" onClick={() => {setDay(first_day.prev(7))}}></button>
+      <button type="button" className="arrow-left" onClick={() => {setDay(first_day => first_day.prev(7))}}></button>
       <utils.TimeBar />
       <div className="days">
         {list_days}
       </div>
-      <button type="button" className="arrow-right turned" onClick={() => {setDay(first_day.next(7))}}></button>
+      <button type="button" className="arrow-right turned" onClick={() => {setDay(first_day => first_day.next(7))}}></button>
   </div>
       
   );
