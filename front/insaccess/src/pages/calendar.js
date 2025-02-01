@@ -2,7 +2,7 @@ import data from '../data.json'
 import utils from '../js/eventUtils.js'
 import Day from '../js/dateUtils.js'
 import useWindowDimensions from '../js/randomUtils.js'
-import constantes from '../js/constantes.js'
+import constantes from '../js/constants.js'
 import { useState } from 'react'
 
 const getEventsOfDay = (date, data) => {
@@ -59,14 +59,16 @@ const Calendar = (props) => {
     current_day = current_day.next(1);
   }
 
+  let skipDays = (nb_days == 1) ? 1 : 7;
+
   return (
     <div className="calendar">
-      <button type="button" className="arrow-left" onClick={() => {setDay(first_day => first_day.prev(7))}}></button>
+      <button type="button" className="arrow-left" onClick={() => {setDay(first_day => first_day.prev(skipDays))}}></button>
       <utils.TimeBar />
       <div className="days">
         {list_days}
       </div>
-      <button type="button" className="arrow-right turned" onClick={() => {setDay(first_day => first_day.next(7))}}></button>
+      <button type="button" className="arrow-right turned" onClick={() => {setDay(first_day => first_day.next(skipDays))}}></button>
   </div>
       
   );

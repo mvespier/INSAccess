@@ -19,14 +19,14 @@ const items = [
   href: "/associations" },
 
 {
-  name: "Agenda",
+  name: "Tests",
   color: "#9FD4F4",
-  href: "/calendar" },
+  href: "/tests" },
 
 {
-  name: "Signup",
+  name: "Settings",
   color: "#70D1F9",
-  href: "/signup" },
+  href: "/settings" },
 
 {
   name: "About",
@@ -41,12 +41,10 @@ const items = [
 Menu
 --------------------*/
 
-/* eslint-disable-next-line react/prop-types */
 const NavBar = ({ items }) => {
   const $root = useRef();
   const $indicator1 = useRef();
   const $indicator2 = useRef();
-  /* eslint-disable-next-line react/prop-types */
   const $items = useRef(items.map(createRef));
   const [active, setActive] = useState(0);
 

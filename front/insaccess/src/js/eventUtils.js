@@ -1,6 +1,6 @@
 import Day from './dateUtils.js'
 import PropTypes from 'prop-types';
-import constantes from './constantes.js'
+import constantes from './constants.js'
 import {NavLink} from 'react-router-dom'
 
 const getEventSize = (start_index, end_index, nb_div) => {

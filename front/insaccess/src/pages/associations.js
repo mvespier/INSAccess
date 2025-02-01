@@ -1,7 +1,7 @@
 import data from '../data_asso.json'
 import utils from '../js/eventUtils.js'
 import Day from '../js/dateUtils.js'
-import constantes from '../js/constantes.js'
+import constantes from '../js/constants.js'
 import useWindowDimensions from '../js/randomUtils.js'
 import { useState } from 'react'
 

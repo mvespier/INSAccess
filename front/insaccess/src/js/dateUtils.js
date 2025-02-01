@@ -1,15 +1,19 @@
-import constantes from './constantes.js'
+import constantes from './constants.js'
 
 const Day = class Day{
 
-  date = "2025-01-01"
+  date = "2025-01-01";
+  day = 1;
+  month = 1;
+  year = 1970;
+
   
   constructor(date){
     if (date instanceof Date){
-      let day = date.getDate()
-      let month = date.getMonth()+1
-      let year = date.getYear()
-      this.date = year+"-"+month+"-"+day
+      this.day = date.getDate()
+      this.month = date.getMonth()+1
+      this.year = date.getYear()
+      this.date = this.year+"-"+this.month+"-"+this.day
     } else {
       this.date = date;
     }
