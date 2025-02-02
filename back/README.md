@@ -6,7 +6,9 @@ A web app created for the INSA of Rouen Normandie.
 - [Development](#dev)
 	- [Code Structure](#struct)
 	- [Utils](#util)
+	- [Static Files and Librairies](#static)
 - [Models](#models)
+- [Production](#prod)
 
 # Installation <div id='installation'/>
 - create the database (we used mariadb, but others should work fine)
@@ -40,7 +42,7 @@ sudo mariadb
 
 The factory for the Flask application is defined in `app/__init.py__` and is called dynamically `flask` when the `run.py`  or `test_insertion.py` module is called.
 
-## Utils
+## Utils<div id='util'/>
 - a short summary on how to use the different modules in `utils`
 	- for `fetch.py` simply `import` `get_data_calendar_data` or `fetch_entire_year` or use in cmd by following this command : `python3 fetch.py <current_year> <department> <department_year> <date> <period_of_time>` with :
 		- **current_year** the year the scholar year started at (2024 for the year 2024-2025) 
@@ -49,7 +51,13 @@ The factory for the Flask application is defined in `app/__init.py__` and is cal
 		- **date ** the date you want to fetch (ex : 10 march 2024 <=> 20240310)
 		- **the period of time ** the period you want to fetch (day, week, month)
 	> for day, simply put the day (ex : 20250123 for 2025/01/23), for week, must be the sunday previous to the week you wanna fetch (for the 12 to 16 then fetch at 11), for month, simply fetch at the first day of the month
+	- for `db_insertion.py` simply `import` `insert_list_records` or `insert_record_in_db`
+	- `query_analyser` is still a work in progress
 	
+## Static Files and Librairies<div id='static'/>
+`app/static` directory contains all the css, javascript librairies and static images. The global hmtl structure relies on bootstrap 5 and some javascript librairies used :
+- `jquery` https://jquery.com/
+- `flatpickr` https://flatpickr.js.org
 
 
 
@@ -60,3 +68,5 @@ The factory for the Flask application is defined in `app/__init.py__` and is cal
 	- `Teacher`,`Room`,`Department`,`GroupTD` for storing the names of the teacher, rooms, department and td groups.
 	-`...Link...` for storing the various one to many table links.
 
+# Production<div id='prod'/>
+Not yet done :)
