@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin {% endblock %}
+{% block link %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/param.css' )}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/utils.css' )}}">
+{% endblock %}
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/babel-standalone/babel.min.js"></script>
+
+<script>
+    function showPage(pageId) {
+        document.querySelectorAll('.content').forEach(page => {
+            page.classList.remove('active');
+        });
+        document.getElementById(pageId).classList.add('active');
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+
+    <h1>Modif Admin</h1>
+
+    <nav>
+        <button class="button-50" onclick="showPage('simple')">Simple</button>
+        <button class="button-50" onclick="showPage('liste_td')">Liste TD</button>
+        <button class="button-50" onclick="showPage('contact')">Contact</button>
+    </nav>
+
+    <div id="simple" class="content active">
+        <h2>Simple</h2>
+        <p>La page de base des parametres</p>
+    </div>
+
+    <div id="liste_td" class="content">
+        <h3>Liste des groupes</h3>
+        <div id="app"></div>
+    </div>
+
+    <div id="contact" class="content">
+        <h2>Contactez nous</h2>
+        <p>Endroit pour signaler bug / proposer des trucs</p>
+    </div>
+
+
+
+
+
+{% endblock %}
+
+
