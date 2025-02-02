@@ -1,37 +1,39 @@
 # InsAccess
----
-A web app created for the INSA of Rouen Normandie
+A web app created for the INSA of Rouen Normandie.
+
+# Table of content
+- [Installation](#installation)
+- [Development](#dev)
+- [Models](#models)
+
+# Installation <div id='installation'/>
+- create the database (we used mariadb, but others should work fine)
+- create a `config.json` file for the flask app by using the  `config-template.json`
+- create a python `venv` and install requirement (`pip install -r requirements.txt`)
+- launch the `test_insertion.py` file for initializing the app (this file is only temporary)
+
+# Development <div id='dev'/>
+-  launch the flask server
+```
+flask run --debug
+```
+-  if you're using mariadb you can access the tables by doing the following
+```
+sudo mariadb
+>>> USE app;
+```
+## Code Structure
+- `app/blueprints` contain the different modules that define the available routes organized by `blueprint` (https://flask.palletsprojects.com/en/stable/blueprints/)
+	- `main.py` define the main routes.
+	- `api.py` define the route for the application apis, used between the front and the back to retrieve or post values to the server.
+	- `auth.py` code for handling authentication - code is fully generic and should not really be modified. Function requiring authentication should take the decorator `@login_required`
+	- `admin.py` define the managing route for the admin of the website (used mainly to add association or to handle error)
+	- `parameters.py` define the settings route.
+	
+
+# Models <div id='models'/>
 
 
-
-
-# My Table of content
-- [Section 1](#id-section1)
-- [Section 2](#id-section2)
-
-<div id='id-section1'/>
-## Section 1
-<div id='id-section2'/>
-## Section 2
-
-
-
-systemctl start mariadb
-systemctl status mariadb
-systemctl stop mariadb
- 
-> to get to the mariadb terminal and use it :
-> - sudo mariadb
-> - USE app
-# if not installed do this
-sudo apt update
-sudo apt install mariadb-server
-sudo mysql_secure_installation
-look into config.json for database connection
-default pwd for user is toto
-if first time then you need to initialize the database app using:
-create database app;
-show databases;
 
 ## how to fetch
 > for day, simply put the day (ex : 20250123 for 2025/01/23)
