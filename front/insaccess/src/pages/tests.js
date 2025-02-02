@@ -1,13 +1,15 @@
-import Day from '../js/dateUtils.js'
+import { useMediaQuery } from 'react-responsive'
 
 function Home(){
-    let day = new Day("2025-01-31")
+    const isMobile = useMediaQuery({ maxWidth: 850 });
+
     return (
         <div>
             <div>Page test</div>
-            <div>{day.next(7).date}</div>
-            <div>{day.prev(7).date}</div>
-            <div>{day.startOfWeek().date}</div>
+            <div>
+                {!isMobile && <p>You are on a desktop or laptop device.</p>}
+                {isMobile && <p>You are on a mobile device.</p>}
+            </div>
         </div>
     )
 }

@@ -7,6 +7,7 @@ install through npm :
     react
     react-dom
     react-scripts
+    react-responsive
     sass
     web-vitals
     animate
