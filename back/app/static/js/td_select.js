@@ -2,6 +2,7 @@ const { useState } = React;
 
 function TDSelection({ allTDs, userTDs }) {
     const [selectedTDs, setSelectedTDs] = useState(new Set(userTDs));
+    const [statusMessage, setStatusMessage] = useState(" ");
 
     // Function to toggle selection of a TD
     const toggleTD = (tdName) => {
@@ -23,9 +24,9 @@ function TDSelection({ allTDs, userTDs }) {
                 body: JSON.stringify({ selected_tds: Array.from(selectedTDs) }),
             });
             const data = await response.json();
-            alert(data.message);
+            setStatusMessage(data.message);
         } catch (error) {
-            alert("An error occurred while saving your selection.");
+            setStatusMessage("An error occurred while saving your selection.");
         }
     };
 
@@ -45,6 +46,7 @@ function TDSelection({ allTDs, userTDs }) {
             ))}
             <div class= "validate">
             <button class='button_validate' onClick={saveSelection}>Sauvegarder</button>
+            <p1>{statusMessage}</p1>
             </div>
         </div>
     );

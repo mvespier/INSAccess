@@ -318,6 +318,7 @@ def fetch_entire_year(year_of_start, department, depart_year):
         date = str(int(year_of_start)+1) + i + "01"
         total_list = total_list + get_calendar_data(year_of_start,\
                                                      department, depart_year, date, "month")
+
     return total_list
 
 if __name__== "__main__" :

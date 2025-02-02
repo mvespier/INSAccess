@@ -35,7 +35,6 @@ from sqlalchemy import Date, Time
 
 from . import db
 
-
 class User(UserMixin, db.Model):
     """User definition, inherit from UserMixin for authentication"""
     __tablename__ = 'user'
@@ -83,8 +82,24 @@ class Association(db.Model):
     __tablename__ = 'association'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     name = db.Column(db.String(255), primary_key = True)
-    unique_color = db.Column(db.String(255))
-    type = db.Column(db.String(100))
+    unique_color = db.Column(ForeignKey('enum_color.name'), nullable = False)
+    type = db.Column(ForeignKey('enum_type.name'), nullable = False)
+    sector = db.Column(ForeignKey('enum_sector'), nullable = False)
+
+class EnumType(db.Model):
+    """ the possible value for the type in association"""
+    __tablename__ = 'enum_type'
+    name = db.Column(db.String(255), primary_key= True)
+
+class EnumSector(db.Model):
+    """ the possible value for the sector (sport, music ...) in association"""
+    __tablename__ = 'enum_sector'
+    name = db.Column(db.String(255), primary_key= True)
+
+class EnumColor(db.Model):
+    """ the possible value for the color of the association"""
+    __tablename__ = 'enum_color'
+    name = db.Column(db.String(255), primary_key= True)
 
 class GroupTD(db.Model):
     """ GroupTD definition """

@@ -37,17 +37,29 @@ from flask_login import current_user, login_required
 
 admin = Blueprint('admin', __name__,url_prefix='/admin/')
 
+def admin_required(func):
+    
+    def func_404():
+        return render_template('404_Not_Found.html')
 
+    def wrapper():
+        if current_user.admin : 
+            return func()
+        else :
+            return func_404()
+        
+
+    return wrapper
 
 @admin.route('/association/', methods = ['GET'])
+@admin_required
 @login_required
 def association_register():
     """ render the association creator"""
-    if current_user.admin : 
-        return render_template('association.html')
-    return render_template('404_Not_Found.html')
+    return render_template('association.html')
 
 
+ 
 
 @admin.route('/association/', methods = ['POST'])
 @login_required
