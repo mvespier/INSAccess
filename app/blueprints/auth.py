@@ -43,10 +43,11 @@ from ..models import User
 from .. import db, mail, serializer
 
 auth = Blueprint('auth', __name__)
-
+""""""
 
 
 """////////////////////////////////////////////////////////////////////////"""
+
 @auth.route('/login')
 def login():
     """route for login"""

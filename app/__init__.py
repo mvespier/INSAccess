@@ -92,9 +92,6 @@ def create_app(test_config=None):
     db.init_app(app)
 
 
-
-    #from .blueprints.parameters import parameters as parameters_blueprint
-
     from .blueprints.auth import auth as auth_blueprint
     from .blueprints.main import main as main_blueprint
     from .blueprints.api import api as api_blueprint
@@ -107,6 +104,5 @@ def create_app(test_config=None):
     app.register_blueprint(param_blueprint)
     app.register_blueprint(admin_blueprint)
 
-    #app.register_blueprint(parameters_blueprint)
 
     return app
