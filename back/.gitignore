@@ -1,5 +1,5 @@
 insaccvenv/
-
+.obsidian/
 config.json
 
 *.pyc
