@@ -1,7 +1,7 @@
 # InsAccess
 A web app created for the INSA of Rouen Normandie.
 The goal is to implement a simple class agenda similar to INSAgenda (https://github.com/INSAgenda) with a focus more driven
-on adding custom event for the association and club at INSA and other utilities for the students. This project aim is NOT to replace INSAgenda,
+on adding custom event for the association and club at INSA and other utilities for the students. This project's aim is NOT to replace INSAgenda,
 but is more of an alternative for those who wants, it is made first and foremost as an excuse to make a fun project and for discovering web app coding.
 
 # Table of content
