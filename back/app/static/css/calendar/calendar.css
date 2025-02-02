@@ -31,8 +31,8 @@ input {
     margin: 0;
     background: transparent;
     position: relative;
-    po
 }
+
 input:focus{
     outline: none;
 }

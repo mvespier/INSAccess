@@ -1,5 +1,5 @@
 import time
-from flask import current_app, Blueprint, render_template, redirect, url_for, request, flash, jsonify
+from flask import current_app, Blueprint, render_template, redirect, send_from_directory, url_for, request, flash, jsonify
 from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..models import User
@@ -25,3 +25,7 @@ def var_test(test):
 @main.route('/calendar')
 def calendar():
     return render_template('calendar_example.html')
+
+@main.route('/robots.txt')
+def robots():
+    return send_from_directory('static', 'robots.txt')

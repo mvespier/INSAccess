@@ -3,6 +3,8 @@
 {% block title %} Parametre {% endblock %}
 {% block link %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/param.css' )}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/utils.css' )}}">
+
 {% endblock %}
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js"></script>
@@ -23,9 +25,9 @@
     <h1>Parametre</h1>
 
     <nav>
-        <button onclick="showPage('simple')">Simple</button>
-        <button onclick="showPage('liste_td')">Liste TD</button>
-        <button onclick="showPage('contact')">Contact</button>
+        <button class="button-50" onclick="showPage('simple')">Simple</button>
+        <button class="button-50" onclick="showPage('liste_td')">Liste TD</button>
+        <button class="button-50" onclick="showPage('contact')">Contact</button>
     </nav>
 
     <div id="simple" class="content active">

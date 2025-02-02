@@ -8,10 +8,10 @@
 	"ALLOWED_EXTENSIONS": ["jpg", "jpeg", "png"],
 	"UPLOAD_FOLDER": "PATHTO/repairkawapp/uploads",
 	"URL_SERIALIZER_SECRET": "url-sanitizer-secret-for-tokens",
-    "MAIL_SERVER": "MAIL_SERVER",
-    "MAIL_PORT": 465,
-    "MAIL_USERNAME": "USER",
-    "MAIL_PASSWORD": "PASSWORD",
-    "MAIL_USE_TLS": false,
-    "MAIL_USE_SSL": true
+	"MAIL_SERVER": "MAIL_SERVER",
+	"MAIL_PORT": 465,
+	"MAIL_USERNAME": "USER",
+	"MAIL_PASSWORD": "PASSWORD",
+	"MAIL_USE_TLS": false,
+	"MAIL_USE_SSL": true
 }
