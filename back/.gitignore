@@ -1,7 +1,7 @@
 insaccvenv/
 .obsidian/
 config.json
-
+old/
 *.pyc
 __pycache__/
 
