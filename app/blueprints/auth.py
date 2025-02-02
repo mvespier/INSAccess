@@ -30,10 +30,10 @@ Notes:
     else where.
 
 """
-import time
 from flask import current_app, Blueprint, render_template,\
                   redirect, url_for, request, flash, jsonify
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required,\
+                    current_user
 from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
@@ -43,6 +43,8 @@ from ..models import User
 from .. import db, mail, serializer
 
 auth = Blueprint('auth', __name__)
+
+
 
 """////////////////////////////////////////////////////////////////////////"""
 @auth.route('/login')

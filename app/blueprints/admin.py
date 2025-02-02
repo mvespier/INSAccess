@@ -34,18 +34,21 @@ from sqlalchemy.orm import joinedload
 from flask import Blueprint, jsonify, render_template, request
 from flask_login import current_user, login_required
 
+from ..utils.decorator import admin_required
+
 
 admin = Blueprint('admin', __name__,url_prefix='/admin/')
 
-@admin.before_request
-def admin_required():
-    if current_user.admin : 
-        return 
-    else :
-        return render_template('404_Not_Found.html')
+# @admin.before_request
+# def admin_required():
+#     if current_user.admin : 
+#         return 
+#     else :
+#         return render_template('404_Not_Found.html')
 
 
 @admin.route('/', methods = ['GET'])
+@admin_required
 @login_required
 def association_register():
     """ render the association creator"""
@@ -53,6 +56,7 @@ def association_register():
 
 
 @admin.route('/', methods = ['POST'])
+@admin_required
 @login_required
 def create_association():
     """ Create an association in the website"""
