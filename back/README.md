@@ -46,12 +46,11 @@ The factory for the Flask application is defined in `app/__init.py__` and is cal
 		- **current_year** the year the scholar year started at (2024 for the year 2024-2025) 
 		- **department** the department ("ITI", "GM", "PERF-II"...)
 		- **department_year** the year in the department (i.e 1, 2, 3, 4, 5)
-		- ** date ** the date you want to fetch (ex : 10 march 2024 <=> 20240310)
-		- ** the period of time ** the period you want to fetch (day, week, month)
-	- test
-> for day, simply put the day (ex : 20250123 for 2025/01/23)
-> for week, must be the sunday previous to the week you wanna fetch (for the 12 to 16 then fetch at 11)
-> for month, simply fetch at the first day of the month
+		- **date ** the date you want to fetch (ex : 10 march 2024 <=> 20240310)
+		- **the period of time ** the period you want to fetch (day, week, month)
+	> for day, simply put the day (ex : 20250123 for 2025/01/23), for week, must be the sunday previous to the week you wanna fetch (for the 12 to 16 then fetch at 11), for month, simply fetch at the first day of the month
+	
+
 
 
 # Models <div id='models'/>
