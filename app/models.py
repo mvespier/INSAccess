@@ -45,9 +45,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100))
     # admin field
     admin = db.Column(db.Boolean, default = False)
-    # incremental user id - used for authentication
-    seqid = db.Column(db.Integer, default = 0)
-    
+
     link_td = db.relationship("UserLinkTD", back_populates = "link_group_td")
 
 

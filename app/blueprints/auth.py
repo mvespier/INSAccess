@@ -38,6 +38,10 @@ from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
 
+from ..utils.token import confirm_token, generate_token, send_email
+
+from ..utils.decorator import logout_required
+
 
 from ..models import User
 from .. import db, mail, serializer
@@ -130,16 +134,48 @@ def sign_up_post():
         flash("les mdp ne sont pas egaux")
         return render_template('sign_up.html', name=name, email=email)
 
-    #VALIDATION PAR EMAIL
-    
-    db.session.add(User(email=email,
-                                    name=name,
-                                    password=generate_password_hash(new_password)))
-    db.session.commit()
-    flash("Success!")
+    token = generate_token({'email' : email,
+                            'name' : name,
+                            'password' : new_password
+                            })
+    confirm_url = url_for("auth.confirm_sign_up", token=token, _external=True)
+    html = render_template("email_confirmation.html", confirm_url=confirm_url)
+    subject = "Validation du compte INSAccess"
+    send_email(email, subject, html)
+
+    flash("Finalisez votre creation de compte en regardant votre boite mail!")
     return redirect(url_for('auth.login'))
 
+@auth.route('/confirm_sign_up/<token>', methods =['GET'])
+@logout_required
+def confirm_sign_up(token):
 
+    values = confirm_token(token)
+    email = values.get('email')
+    name = values.get('name')
+    password = values.get('password')
+    
+    try:
+        valid = validate_email(email)
+    except EmailNotValidError as err:
+        return redirect(url_for('auth.sign_up'))
+    if not valid or not email.endswith('@insa-rouen.fr'):
+        return redirect(url_for('auth.sign_up'))
+
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        return redirect(url_for('auth.sign_up'))
+    
+
+    db.session.add(User(email=email,
+                        name=name,
+                        password=generate_password_hash(password)))
+    db.session.commit()
+    
+    flash("Success!")
+    return redirect(url_for('auth.login'))
+    
 
 """////////////////////////////////////////////////////////////////////////"""
 
