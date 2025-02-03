@@ -47,6 +47,14 @@ const EventsOfDay = (props) => {
 const Calendar = (props) => {
   let day = new Day(props.start);
   const [first_day, setDay] = useState(day);
+
+  function handleDay(direction, value){
+    if (direction === "prev"){
+      setDay(first_day => first_day.prev(value))
+    } else if (direction === "next"){
+      setDay(first_day => first_day.next(value))
+    }
+  }
   
   let list_days = []
   let dimensions = useWindowDimensions()
@@ -59,16 +67,16 @@ const Calendar = (props) => {
     current_day = current_day.next(1);
   }
 
-  let skipDays = (nb_days == 1) ? 1 : 7;
+  //let skipDays = (nb_days == 1) ? 1 : 7;
 
   return (
     <div className="calendar">
-      <button type="button" className="arrow-left" onClick={() => {setDay(first_day => first_day.prev(skipDays))}}></button>
+      <button type="button" className="arrow-left" onClick={() => {handleDay("prev", 7)}}></button>
       <utils.TimeBar />
       <div className="days">
         {list_days}
       </div>
-      <button type="button" className="arrow-right turned" onClick={() => {setDay(first_day => first_day.next(skipDays))}}></button>
+      <button type="button" className="arrow-right turned" onClick={() => {handleDay("next", 7)}}></button>
   </div>
       
   );

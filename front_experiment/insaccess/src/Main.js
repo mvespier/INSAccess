@@ -10,7 +10,7 @@ import minWidth from './js/constants.js'
 import useWindowDimensions from './js/randomUtils.js'
 
 const Main = () => {
-  let first_day = new Day("2025-01-31");
+  let first_day = new Day("2025-02-03");
   let dimensions = useWindowDimensions();
   
   return (
