@@ -12,8 +12,8 @@ const Main = () => {
   let first_day = new Day("2025-02-03");
   let dimensions = useWindowDimensions();
 
-  const data = './data.json'
-  const data_asso = './data_asso.json'
+  const data = 'http://localhost:3000/api/get_week/2025-02-03'
+  const data_asso = 'http://localhost:3000/api/get_week/2025-02-03'
 
   let day = (minWidth < dimensions.width) ? first_day.getDate() : first_day.startOfWeek().getDate()
   
