@@ -172,6 +172,7 @@ def get_json_output(insa_classes):
             "td": [td.td.name for td in insa_class.link_td],
             "teacher": [teacher.teacher.name for teacher in insa_class.link_teacher],
             "room": [room.room.name for room in insa_class.link_room],
+            "link": insa_class.associated_link
         }
         for insa_class in insa_classes
     ])
