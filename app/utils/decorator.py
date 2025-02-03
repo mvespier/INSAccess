@@ -36,7 +36,7 @@ def logout_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if current_user.is_authenticated:
-            flash("Vous etes deja connecté.")
+            redirect(url_for('auth.login'))
             return redirect(url_for("main.default_page"))
         return func(*args, **kwargs)
 

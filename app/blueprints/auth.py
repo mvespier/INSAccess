@@ -151,6 +151,9 @@ def sign_up_post():
 def confirm_sign_up(token):
 
     values = confirm_token(token)
+    if not values:
+        return redirect(url_for('auth.sign_up'))
+    
     email = values.get('email')
     name = values.get('name')
     password = values.get('password')
@@ -186,3 +189,52 @@ def logout():
     logout_user()
     return redirect(url_for('auth.login'))
 
+"""////////////////////////////////////////////////////////////////////////"""
+
+
+@auth.route('/forgot_password',methods =['GET'])
+@logout_required
+def forgot_password():
+    return render_template('forgot_password.html')
+
+@auth.route('/forgot_password',methods =['POST'])
+@logout_required
+def forgot_password_post():
+    request_dict = request.form
+    email = request_dict.get('email')
+    user = User.query.filter_by(email=email).first()
+    
+    if user:
+        token = generate_token({'email' : email})
+        reset_url = url_for("auth.reset_password", token=token, _external=True)
+        html = render_template("email_password.html", reset_url=reset_url)
+        subject = "Reset password du compte INSAccess"
+        send_email(email, subject, html)
+    flash("regardez votre boite mail!")
+    return redirect(url_for('auth.login'))
+
+@auth.route('/reset_password/<token>', methods =['GET'])
+def reset_password(token):
+    return render_template('reset_password.html',token=token)
+        
+@auth.route('/reset_password/<token>', methods =['POST'])
+def reset_password_post(token):
+    values = confirm_token(token)
+    if not values:
+        return redirect(url_for('auth.sign_up'))
+    email = values.get('email')
+    
+    request_dict = request.form
+    new_password = request_dict.get('new_password')
+    confirmed_password = request_dict.get('confirmed_password')
+    
+    
+    user = User.query.filter_by(email=email).first()
+    if new_password != confirmed_password:
+        flash("les mdp ne sont pas egaux")
+        return redirect(url_for("auth.reset_password", token=token))
+    if user:
+        user.password = generate_password_hash(new_password)
+        db.session.commit()
+        flash("mdp changé!")
+        return redirect(url_for('auth.login'))
