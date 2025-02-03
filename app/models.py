@@ -36,7 +36,7 @@ from sqlalchemy import Date, Time
 from . import db
 
 class User(UserMixin, db.Model):
-    """User definition, inherit from UserMixin for authentication"""
+    """User definition, inherit from UserMixin for authentication """
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     # user information
@@ -45,9 +45,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100))
     # admin field
     admin = db.Column(db.Boolean, default = False)
-    # incremental user id - used for authentication
-    seqid = db.Column(db.Integer, default = 0)
-    
+
     link_td = db.relationship("UserLinkTD", back_populates = "link_group_td")
 
 
@@ -87,17 +85,17 @@ class Association(db.Model):
     sector = db.Column(ForeignKey('enum_sector'), nullable = False)
 
 class EnumType(db.Model):
-    """ the possible value for the type in association"""
+    """ the possible value for the type in association """
     __tablename__ = 'enum_type'
     name = db.Column(db.String(255), primary_key= True)
 
 class EnumSector(db.Model):
-    """ the possible value for the sector (sport, music ...) in association"""
+    """ the possible value for the sector (sport, music ...) in association """
     __tablename__ = 'enum_sector'
     name = db.Column(db.String(255), primary_key= True)
 
 class EnumColor(db.Model):
-    """ the possible value for the color of the association"""
+    """ the possible value for the color of the association """
     __tablename__ = 'enum_color'
     name = db.Column(db.String(255), primary_key= True)
 

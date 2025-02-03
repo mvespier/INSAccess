@@ -39,14 +39,6 @@ from ..utils.decorator import admin_required
 
 admin = Blueprint('admin', __name__,url_prefix='/admin/')
 
-# @admin.before_request
-# def admin_required():
-#     if current_user.admin : 
-#         return 
-#     else :
-#         return render_template('404_Not_Found.html')
-
-
 @admin.route('/', methods = ['GET'])
 @admin_required
 @login_required

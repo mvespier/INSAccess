@@ -528,8 +528,8 @@ iframe {
 
 .wrong-password {
   font-family: Poppins-Regular, sans-serif;
-  font-size: 15px;
-  color: #666666;
+  font-size: 17 px;
+  color: #3371ac;
   text-decoration: none;
   transition: color 0.3s ease;
   

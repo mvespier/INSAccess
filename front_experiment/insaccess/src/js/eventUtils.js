@@ -1,7 +1,9 @@
 import Day from './dateUtils.js'
 import PropTypes from 'prop-types';
 import constantes from './constants.js'
+import { useWindowDimensions } from './randomUtils.js'
 import {NavLink} from 'react-router-dom'
+import { useState } from 'react'
 
 const getEventSize = (start_index, end_index, nb_div) => {
   return ((end_index-start_index)/(nb_div+1))*100
@@ -57,4 +59,98 @@ SingleEvent.propTypes = {
   link: PropTypes.string.isRequired
 }
 
-export default { TimeBar, SingleEvent };
+function getEventsOfDay(date, data){
+  const events = []
+  data.forEach(ev => {
+    if (ev.date === date) {
+      events.push(ev)
+    }
+  })
+    return events;
+}
+
+const EventsOfDay = ({date, data}) => {
+  const events_list = [];
+  
+  let i = 0;
+  const events_of_day = getEventsOfDay(date, data);
+  let day = new Day(date);
+  const infos = day.getDateInfo();
+
+  for (let element in events_of_day){
+    const object = events_of_day[element]
+    events_list.push(
+      <SingleEvent key={i} start_time={object.start_time} end_time={object.end_time} label={object.label} teacher={object.teacher} room={object.room} link={object.link} />
+    );
+    i += 1;
+  } 
+
+  return (
+    <div className="day">
+      <div className="date">
+        <p className="date-day">{infos[0]}</p>
+        <p className="date-num">{infos[1]}</p> 
+      </div>
+      <div className="events">
+        {events_list}
+      </div>
+    </div>
+  );
+}
+
+function fetchData(data_path){
+  const data = [
+    {
+      label:"CAPT",
+      start_time:"0800",
+      end_time:"0930",
+      room:["Ma-H-R1-1"],
+      teacher:["VAUGEOIS Antoine"],
+      date:"2025-01-31",
+      link:"#"
+    }
+  ]
+  return data
+}
+
+const AllEvents = (props) => {
+  let day = new Day(props.start);
+  const [first_day, setDay] = useState(day);
+
+  function handleDay(direction, value){
+    if (direction === "prev"){
+      setDay(first_day => first_day.prev(value))
+    } else if (direction === "next"){
+      setDay(first_day => first_day.next(value))
+    }
+  }
+  
+  let list_days = []
+  let dimensions = useWindowDimensions()
+  let minWidth = constantes.minWidth;
+  let nb_days =  ((minWidth < dimensions.width) ? 5 : 1);
+  let current_day = first_day.copy();
+
+  const data = fetchData(props.data_path)
+
+  for (let i = 0; i < nb_days; i++){
+    list_days.push(<EventsOfDay key={i} date={current_day.getDate()} data={data}/>);
+    current_day = current_day.next(1);
+  }
+
+  let skipDays = (nb_days == 1) ? 1 : 7;
+
+  return (
+    <div className="calendar">
+      <button type="button" className="arrow-left" onClick={() => {handleDay("prev", skipDays)}}></button>
+      <TimeBar />
+      <div className="days">
+        {list_days}
+      </div>
+      <button type="button" className="arrow-right turned" onClick={() => {handleDay("next", skipDays)}}></button>
+  </div>
+      
+  );
+}
+
+export default AllEvents;

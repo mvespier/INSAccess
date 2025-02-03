@@ -38,6 +38,10 @@ from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
 
+from ..utils.token import confirm_token, generate_token, send_email
+
+from ..utils.decorator import logout_required
+
 
 from ..models import User
 from .. import db, mail, serializer
@@ -130,16 +134,51 @@ def sign_up_post():
         flash("les mdp ne sont pas egaux")
         return render_template('sign_up.html', name=name, email=email)
 
-    #VALIDATION PAR EMAIL
-    
-    db.session.add(User(email=email,
-                                    name=name,
-                                    password=generate_password_hash(new_password)))
-    db.session.commit()
-    flash("Success!")
+    token = generate_token({'email' : email,
+                            'name' : name,
+                            'password' : new_password
+                            })
+    confirm_url = url_for("auth.confirm_sign_up", token=token, _external=True)
+    html = render_template("email_confirmation.html", confirm_url=confirm_url)
+    subject = "Validation du compte INSAccess"
+    send_email(email, subject, html)
+
+    flash("Finalisez votre creation de compte en regardant votre boite mail!")
     return redirect(url_for('auth.login'))
 
+@auth.route('/confirm_sign_up/<token>', methods =['GET'])
+@logout_required
+def confirm_sign_up(token):
 
+    values = confirm_token(token)
+    if not values:
+        return redirect(url_for('auth.sign_up'))
+    
+    email = values.get('email')
+    name = values.get('name')
+    password = values.get('password')
+    
+    try:
+        valid = validate_email(email)
+    except EmailNotValidError as err:
+        return redirect(url_for('auth.sign_up'))
+    if not valid or not email.endswith('@insa-rouen.fr'):
+        return redirect(url_for('auth.sign_up'))
+
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        return redirect(url_for('auth.sign_up'))
+    
+
+    db.session.add(User(email=email,
+                        name=name,
+                        password=generate_password_hash(password)))
+    db.session.commit()
+    
+    flash("Success!")
+    return redirect(url_for('auth.login'))
+    
 
 """////////////////////////////////////////////////////////////////////////"""
 
@@ -150,3 +189,52 @@ def logout():
     logout_user()
     return redirect(url_for('auth.login'))
 
+"""////////////////////////////////////////////////////////////////////////"""
+
+
+@auth.route('/forgot_password',methods =['GET'])
+@logout_required
+def forgot_password():
+    return render_template('forgot_password.html')
+
+@auth.route('/forgot_password',methods =['POST'])
+@logout_required
+def forgot_password_post():
+    request_dict = request.form
+    email = request_dict.get('email')
+    user = User.query.filter_by(email=email).first()
+    
+    if user:
+        token = generate_token({'email' : email})
+        reset_url = url_for("auth.reset_password", token=token, _external=True)
+        html = render_template("email_password.html", reset_url=reset_url)
+        subject = "Reset password du compte INSAccess"
+        send_email(email, subject, html)
+    flash("regardez votre boite mail!")
+    return redirect(url_for('auth.login'))
+
+@auth.route('/reset_password/<token>', methods =['GET'])
+def reset_password(token):
+    return render_template('reset_password.html',token=token)
+        
+@auth.route('/reset_password/<token>', methods =['POST'])
+def reset_password_post(token):
+    values = confirm_token(token)
+    if not values:
+        return redirect(url_for('auth.sign_up'))
+    email = values.get('email')
+    
+    request_dict = request.form
+    new_password = request_dict.get('new_password')
+    confirmed_password = request_dict.get('confirmed_password')
+    
+    
+    user = User.query.filter_by(email=email).first()
+    if new_password != confirmed_password:
+        flash("les mdp ne sont pas egaux")
+        return redirect(url_for("auth.reset_password", token=token))
+    if user:
+        user.password = generate_password_hash(new_password)
+        db.session.commit()
+        flash("mdp changé!")
+        return redirect(url_for('auth.login'))
