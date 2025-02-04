@@ -99,10 +99,14 @@ const EventsOfDay = ({date, data}) => {
 }
 
 const fetchData = async (data_path) => {
+  const initConfig = {
+    method:'GET',
+    headers:{'Content-Type':'application/json'}
+  }
   try {
-    const response = await fetch(data_path, {method:'GET'});
+    const response = await fetch(data_path, initConfig);
     if (!response.ok) {
-      throw new Error("Erreur lors du fetch");
+      throw new Error("Erreur lors du fetch, allez voir les deux bg pour qu'ils règlent le problème");
     }
     const json = await response.json();
     return { data: json, error: null };
@@ -111,7 +115,7 @@ const fetchData = async (data_path) => {
   }
 };
 
-const LoadData = ({data_path}) => {
+function LoadData(data_path){
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -130,15 +134,18 @@ const LoadData = ({data_path}) => {
   return {data, error, loading}
 }
 
-const AllEvents = (props) => {
+const AllEvents = ({start, data_path}) => {
   let dimensions = useWindowDimensions();
-  let day = new Day(props.start);
+  let day = new Day(start);
   const [first_day, setDay] = useState(day);
 
-  let {data, error, loading} = LoadData(props.data_path);
+  let {data, error, loading} = LoadData(data_path);
 
   if (loading) return <p>Chargement...</p>;
-  if (error) return <p>Erreur : {error}</p>;
+  if (error) {
+    console.log("Error : "+error);
+    return <p>Erreur lors du fetch, allez voir les deux bg pour qu&#39;ils règlent le problème</p>;
+  }
 
   function handleDay(direction, value){
     if (direction === "prev"){
