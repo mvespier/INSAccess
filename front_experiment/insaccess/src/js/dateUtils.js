@@ -58,11 +58,8 @@ const Day = class Day{
   prev(nb_jours){
     // nb_jours entre 1 et 31
     let day = this.day-nb_jours
-    console.log(day)
     let month = this.month;
-    console.log(month)
     let year = this.year;
-    console.log(year)
     let nbDays = constantes.nbDaysPerMonth[(this.month+10)%12]
     if (day < 1){
       day += nbDays
