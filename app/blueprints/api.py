@@ -177,5 +177,3 @@ def get_json_output(insa_classes):
         for insa_class in insa_classes
     ])
 
-
-

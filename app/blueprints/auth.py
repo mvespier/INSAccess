@@ -30,11 +30,9 @@ Notes:
     else where.
 
 """
-from flask import current_app, Blueprint, render_template,\
-                  redirect, url_for, request, flash, jsonify
-from flask_login import login_user, logout_user, login_required,\
-                    current_user
-from flask_mail import Message
+from flask import Blueprint, render_template,\
+                  redirect, url_for, request, flash
+from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
 
@@ -44,7 +42,7 @@ from ..utils.decorator import logout_required
 
 
 from ..models import User
-from .. import db, mail, serializer
+from .. import db
 
 auth = Blueprint('auth', __name__)
 """"""
@@ -118,20 +116,21 @@ def sign_up_post():
     try:
         valid = validate_email(email)
     except EmailNotValidError as err:
-        flash(f'email is wrong, please try again {err}')
+        flash(f'l\'email n\'est pas valide, veuillez reessayer : {err}')
         return redirect(url_for('auth.sign_up'))
+    
     if not valid or not email.endswith('@insa-rouen.fr'):
-        flash('email is wrong, please try again (use insa\'s email)')
+        flash('l\'email n\'est pas valide, veuillez reessayer : use insa\'s email')
         return redirect(url_for('auth.sign_up'))
 
     user = User.query.filter_by(email=email).first()
 
     if user:
-        flash('cet email est deja utilisé')
+        flash('cet email est déja utilisé')
         return render_template('sign_up.html', name=name, email=email)
 
     if new_password != confirmed_password:
-        flash("les mdp ne sont pas egaux")
+        flash("les mots de passe ne sont pas égaux")
         return render_template('sign_up.html', name=name, email=email)
 
     token = generate_token({'email' : email,
@@ -162,6 +161,7 @@ def confirm_sign_up(token):
         valid = validate_email(email)
     except EmailNotValidError as err:
         return redirect(url_for('auth.sign_up'))
+    
     if not valid or not email.endswith('@insa-rouen.fr'):
         return redirect(url_for('auth.sign_up'))
 
@@ -195,11 +195,13 @@ def logout():
 @auth.route('/forgot_password',methods =['GET'])
 @logout_required
 def forgot_password():
+    """ renders the template of the forgot_password page"""
     return render_template('forgot_password.html')
 
 @auth.route('/forgot_password',methods =['POST'])
 @logout_required
 def forgot_password_post():
+    """ post method for forgot password"""
     request_dict = request.form
     email = request_dict.get('email')
     user = User.query.filter_by(email=email).first()
@@ -208,17 +210,20 @@ def forgot_password_post():
         token = generate_token({'email' : email})
         reset_url = url_for("auth.reset_password", token=token, _external=True)
         html = render_template("email_password.html", reset_url=reset_url)
-        subject = "Reset password du compte INSAccess"
+        subject = "Rénitialisation du mot de passe du compte INSAccess"
         send_email(email, subject, html)
     flash("regardez votre boite mail!")
     return redirect(url_for('auth.login'))
 
 @auth.route('/reset_password/<token>', methods =['GET'])
 def reset_password(token):
+    """ renders the template of the reset_password page"""
     return render_template('reset_password.html',token=token)
         
 @auth.route('/reset_password/<token>', methods =['POST'])
 def reset_password_post(token):
+    """ post method for reset password"""
+
     values = confirm_token(token)
     if not values:
         return redirect(url_for('auth.sign_up'))
