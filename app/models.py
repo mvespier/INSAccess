@@ -80,7 +80,7 @@ class Association(db.Model):
     __tablename__ = 'association'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     name = db.Column(db.String(255), primary_key = True)
-    unique_color = db.Column(ForeignKey('enum_color.name'), nullable = False)
+    unique_color = db.Column(ForeignKey('enum_color.value'), nullable = False)
     type = db.Column(ForeignKey('enum_type.name'), nullable = False)
     sector = db.Column(ForeignKey('enum_sector'), nullable = False)
 
@@ -97,8 +97,9 @@ class EnumSector(db.Model):
 class EnumColor(db.Model):
     """ the possible value for the color of the association """
     __tablename__ = 'enum_color'
-    name = db.Column(db.String(255), primary_key= True)
-
+    value = db.Column(db.Text, primary_key= True)
+    user_friendly_name = db.Column(db.String(255))
+    
 class GroupTD(db.Model):
     """ GroupTD definition """
     __tablename__ = 'td_group'

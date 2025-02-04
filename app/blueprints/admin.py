@@ -30,9 +30,8 @@ Notes:
     else where.
 
 """
-from sqlalchemy.orm import joinedload
-from flask import Blueprint, jsonify, render_template, request
-from flask_login import current_user, login_required
+from flask import Blueprint, render_template, request
+from flask_login import login_required
 
 from ..utils.decorator import admin_required
 
@@ -54,6 +53,14 @@ def create_association():
     """ Create an association in the website"""
 
     request_dict = request.form
-    name = request_dict.get('name')
+    name = request_dict.get('name_assos')
+    color = request_dict.get('color')
+    type = request_dict.get('type')
+    sector = request_dict.get('secteur')
+    
+    #if color in enum ok else refaire
+    #if name dont exist ok else refaire
+    
     return "success"
+
 
