@@ -39,7 +39,7 @@ from flask_login import current_user, login_required
 
 from ..utils.db_insertion import insert_list_record
 from ..utils.fetch import fetch_entire_year
-from ..models import InsaClass, UserLinkTD, ClassLinkTD, db
+from ..models import EnumColor, EnumSector, EnumType, InsaClass, UserLinkTD, ClassLinkTD, db
 
 
 api = Blueprint('api', __name__,url_prefix='/api/')
@@ -140,6 +140,26 @@ def fetch():
         return "successfully fetched"
 
     return render_template('404_Not_Found.html')
+
+
+@api.route('/enums/<enum_name>')
+def get_enums(enum_name):
+    model_mapping = {
+        "type": EnumType,
+        "sector": EnumSector,
+        "color": EnumColor
+    }
+    
+    model = model_mapping.get(enum_name.lower())
+    if not model:
+        return jsonify({"error": "Invalid enum type"}), 400
+
+    if enum_name.lower() == "color":
+        enums = [{"value": c.value, "label": c.user_friendly_name} for c in model.query.all()]
+    else:
+        enums = [{"value": e.name, "label": e.name} for e in model.query.all()]
+
+    return jsonify(enums)
 
 
 

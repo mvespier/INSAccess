@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import constantes from './constants.js'
 import { useWindowDimensions } from './randomUtils.js'
 import {NavLink} from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const getEventSize = (start_index, end_index, nb_div) => {
   return ((end_index-start_index)/(nb_div+1))*100
@@ -98,24 +98,54 @@ const EventsOfDay = ({date, data}) => {
   );
 }
 
-function fetchData(data_path){
-  const data = [
-    {
-      label:"CAPT",
-      start_time:"0800",
-      end_time:"0930",
-      room:["Ma-H-R1-1"],
-      teacher:["VAUGEOIS Antoine"],
-      date:"2025-01-31",
-      link:"#"
+const fetchData = async (data_path) => {
+  const initConfig = {
+    method:'GET',
+    headers:{'Content-Type':'application/json'}
+  }
+  try {
+    const response = await fetch(data_path, initConfig);
+    if (!response.ok) {
+      throw new Error("Erreur lors du fetch, allez voir les deux bg pour qu'ils règlent le problème");
     }
-  ]
-  return data
+    const json = await response.json();
+    return { data: json, error: null };
+  } catch (error) {
+    return { data: null, error: error.message };
+  }
+};
+
+function LoadData(data_path){
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const result = await fetchData(data_path);
+      setData(result.data);
+      setError(result.error);
+      setLoading(false);
+    };
+
+    loadData();
+  }, []);
+
+  return {data, error, loading}
 }
 
-const AllEvents = (props) => {
-  let day = new Day(props.start);
+const AllEvents = ({start, data_path}) => {
+  let dimensions = useWindowDimensions();
+  let day = new Day(start);
   const [first_day, setDay] = useState(day);
+
+  let {data, error, loading} = LoadData(data_path);
+
+  if (loading) return <p>Chargement...</p>;
+  if (error) {
+    console.log("Error : "+error);
+    return <p>Erreur lors du fetch, allez voir les deux bg pour qu&#39;ils règlent le problème</p>;
+  }
 
   function handleDay(direction, value){
     if (direction === "prev"){
@@ -126,12 +156,9 @@ const AllEvents = (props) => {
   }
   
   let list_days = []
-  let dimensions = useWindowDimensions()
   let minWidth = constantes.minWidth;
   let nb_days =  ((minWidth < dimensions.width) ? 5 : 1);
   let current_day = first_day.copy();
-
-  const data = fetchData(props.data_path)
 
   for (let i = 0; i < nb_days; i++){
     list_days.push(<EventsOfDay key={i} date={current_day.getDate()} data={data}/>);

@@ -33,9 +33,11 @@ from flask_login import current_user
 
 
 def logout_required(func):
+    """ the decorator for routes where the user shouldnt be logged"""
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if current_user.is_authenticated:
+            flash("vous êtes deja connecté")
             redirect(url_for('auth.login'))
             return redirect(url_for("main.default_page"))
         return func(*args, **kwargs)
@@ -43,6 +45,7 @@ def logout_required(func):
     return decorated_function
 
 def admin_required(func):
+    """ the decorator for routes where the user should be an admin"""
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if not current_user.admin:
