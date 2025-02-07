@@ -45,7 +45,7 @@ from ..models import EnumColor, EnumSector, EnumType, InsaClass, UserLinkTD, Cla
 api = Blueprint('api', __name__,url_prefix='/api/')
 
 @api.route('get_day/<string:day>')
-@login_required
+#@login_required
 def get_day(day):
     """Return the json for the day"""
     day_date = datetime.datetime.strptime(day, "%Y-%m-%d")
@@ -62,7 +62,7 @@ def get_day(day):
     return get_json_output(insa_classes)
 
 @api.route('get_week/<string:day>')
-@login_required
+#@login_required
 def get_week(day):
     """Return the json for the week"""
     day_date = datetime.datetime.strptime(day, "%Y-%m-%d")
@@ -83,7 +83,7 @@ def get_week(day):
     return get_json_output(insa_classes)
 
 @api.route('get_month/<string:day>')
-@login_required
+#@login_required
 def get_month(day):
     """Return the json for the month"""
     day_date = datetime.datetime.strptime(day, "%Y-%m-%d")
@@ -107,7 +107,7 @@ def get_month(day):
 
 
 @api.route('get_year/<string:day>')
-@login_required
+#@login_required
 def get_year(day):
     """Return the json for the year """
     day_date = datetime.datetime.strptime(day, "%Y-%m-%d")
@@ -131,7 +131,7 @@ def get_year(day):
 
 
 @api.route('/fetch')
-@login_required
+#@login_required
 def fetch():
     """ TEMPORARY FUNCTION SHOULD BE USED CAREFULLY PROBABLY"""
     if current_user.admin :
@@ -176,7 +176,7 @@ def get_joined_class_subquery():
 def get_class_of_user():
     """transform the user tags to a classes_subquery"""
     tags_subquery = db.session.query(UserLinkTD.name_td)\
-                    .filter_by(user_id=current_user.id).subquery()
+                    .filter_by(user_id=1).subquery() #current_user.id
 
     return db.session.query(ClassLinkTD.class_id)\
                     .filter(ClassLinkTD.td_id.in_(tags_subquery)).subquery()
