@@ -97,7 +97,7 @@ class EnumSector(db.Model):
 class EnumColor(db.Model):
     """ the possible value for the color of the association """
     __tablename__ = 'enum_color'
-    value = db.Column(db.Text, primary_key= True)
+    value = db.Column(db.String(255), primary_key= True)
     user_friendly_name = db.Column(db.String(255))
     
 class GroupTD(db.Model):

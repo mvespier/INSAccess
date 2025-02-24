@@ -8,7 +8,7 @@ from ..models import User
 from flask_mail import Message
 from .. import db, mail, serializer
 from ..utils.fetch import get_calendar_data
-from ..utils.token import confirm_token, generate_token
+from ..utils.token_handler import confirm_token, generate_token
 
 main = Blueprint('main', __name__, static_folder='static/react/static', template_folder='static/react')
 

@@ -36,7 +36,7 @@ from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
 
-from ..utils.token import confirm_token, generate_token, send_email
+from ..utils.token_handler import confirm_token, generate_token, send_email
 
 from ..utils.decorator import logout_required
 
