@@ -101,7 +101,8 @@ const EventsOfDay = ({date, data}) => {
 const fetchData = async (data_path) => {
   const initConfig = {
     method:'GET',
-    headers:{'Content-Type':'application/json'}
+    headers:{'Content-Type':'application/json', 'Accept':'application/json'},
+    mode:'cors'
   }
   try {
     const response = await fetch(data_path, initConfig);
@@ -109,6 +110,7 @@ const fetchData = async (data_path) => {
       throw new Error("Erreur lors du fetch, allez voir les deux bg pour qu'ils règlent le problème");
     }
     const json = await response.json();
+    console.log(json);
     return { data: json, error: null };
   } catch (error) {
     return { data: null, error: error.message };
