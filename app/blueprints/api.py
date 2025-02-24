@@ -186,8 +186,8 @@ def get_json_output(insa_classes):
     return jsonify([
         {
             "date": insa_class.date.strftime("%Y-%m-%d"),
-            "start": insa_class.start_hour.strftime('%H:%M:%S'),
-            "end": insa_class.end_hour.strftime('%H:%M:%S'),
+            "start": insa_class.start_hour.strftime('%H%M'),
+            "end": insa_class.end_hour.strftime('%H%M'),
             "desc": insa_class.desc,
             "td": [td.td.name for td in insa_class.link_td],
             "teacher": [teacher.teacher.name for teacher in insa_class.link_teacher],
