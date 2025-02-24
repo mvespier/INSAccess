@@ -9,7 +9,8 @@ import minWidth from './js/constants.js'
 import { useWindowDimensions } from './js/randomUtils.js'
 
 const Main = () => {
-  let first_day = new Day("2025-02-03");
+  const current_date = new Date()
+  let first_day = new Day(current_date)
   let dimensions = useWindowDimensions();
 
   const data = 'http://localhost:3000/api/get_year/'+first_day.getDate();

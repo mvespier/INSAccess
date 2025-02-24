@@ -6,18 +6,20 @@ const Day = class Day{
   day = 1;
   month = 1;
   year = 1970;
-
   
   constructor(date){
     if (date instanceof Date){
       this.day = date.getDate()
       this.month = date.getMonth()+1
-      this.year = date.getYear()
-      this.date = this.year+"-"+this.month+"-"+this.day
+      this.year = date.getFullYear()
+      let monthZero = (this.month < 10) ? "0" : ""
+      let dayZero = (this.day < 10) ? "0" : ""
+      this.date = this.year+"-"+monthZero+this.month+"-"+dayZero+this.day
     } else {
       this.date = date;
+      this.update();
     }
-    this.update();
+    
   }
 
   setDay(date){

@@ -80,7 +80,7 @@ const EventsOfDay = ({date, data}) => {
   for (let element in events_of_day){
     const object = events_of_day[element]
     events_list.push(
-      <SingleEvent key={i} start_time={object.start_time} end_time={object.end_time} label={object.label} teacher={object.teacher} room={object.room} link={object.link} />
+      <SingleEvent key={i} start_time={object.start} end_time={object.end} label={object.desc} teacher={object.teacher} room={object.room} link={object.link} />
     );
     i += 1;
   } 
@@ -110,7 +110,6 @@ const fetchData = async (data_path) => {
       throw new Error("Erreur lors du fetch, allez voir les deux bg pour qu'ils règlent le problème");
     }
     const json = await response.json();
-    console.log(json);
     return { data: json, error: null };
   } catch (error) {
     return { data: null, error: error.message };
