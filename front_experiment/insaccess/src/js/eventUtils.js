@@ -101,7 +101,7 @@ const EventsOfDay = ({date, data}) => {
 const fetchData = async (data_path) => {
   const initConfig = {
     method:'GET',
-    headers:{'Content-Type':'application/json'},
+    headers:{'Content-Type':'application/json', 'Accept':'application/json'},
     mode:'cors'
   }
   try {
