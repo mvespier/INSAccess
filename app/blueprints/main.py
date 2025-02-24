@@ -10,18 +10,12 @@ from .. import db, mail, serializer
 from ..utils.fetch import get_calendar_data
 from ..utils.token_handler import confirm_token, generate_token
 
-main = Blueprint('main', __name__, static_folder='static/react/static', template_folder='static/react')
+main = Blueprint('main', __name__)
 
 @main.route('/')
-@main.route('/<path:path>')
-def serve_react(path="index.html"):
-    return send_from_directory('static/react', path)
-
-
-# @main.route('/')
-# @login_required
-# def default_page():
-#     return render_template('index.html')
+@login_required
+def default_page():
+    return render_template('index.html')
 
 # @main.route('/redirect')
 # def redirect_test():

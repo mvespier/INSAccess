@@ -82,7 +82,7 @@ class Association(db.Model):
     name = db.Column(db.String(255), primary_key = True)
     unique_color = db.Column(ForeignKey('enum_color.value'), nullable = False)
     type = db.Column(ForeignKey('enum_type.name'), nullable = False)
-    sector = db.Column(ForeignKey('enum_sector'), nullable = False)
+    sector = db.Column(ForeignKey('enum_sector.name'), nullable = False)
 
 class EnumType(db.Model):
     """ the possible value for the type in association """
