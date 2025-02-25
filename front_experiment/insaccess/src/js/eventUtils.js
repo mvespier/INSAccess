@@ -159,7 +159,7 @@ const AllEvents = ({start, data_path}) => {
   let list_days = []
   let minWidth = constantes.minWidth;
   let nb_days =  ((minWidth < dimensions.width) ? 5 : 1);
-  let current_day = first_day.copy();
+  let current_day = (nb_days == 5) ? first_day.copy().startOfWeek() : first_day.copy();
 
   for (let i = 0; i < nb_days; i++){
     list_days.push(<EventsOfDay key={i} date={current_day.getDate()} data={data}/>);
