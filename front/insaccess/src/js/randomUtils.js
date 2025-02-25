@@ -17,16 +17,4 @@ const useWindowDimensions = () => {
   return dimensions;
 };
 
-class DataContainer{
-  data = null;
-
-  constructor(data){
-    this.data = data
-  }
-
-  getData(){
-    return this.data
-  }
-}
-
-export { useWindowDimensions, DataContainer };
+export { useWindowDimensions };

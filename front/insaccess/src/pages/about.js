@@ -1,5 +1,6 @@
 import coincoin from '../images/coincoin.png'
 import coincoin2 from '../images/coincoin2.png'
+import coincoin3 from '../images/coincoin3.png'
 
 const Card = ({title, img_src, content, column, link}) => {
     const styleCard = {
@@ -37,10 +38,12 @@ const Home = () => {
         "margin":"3vh",
         "height":"100%"
     }
+
     return (
         <div style={styleCard}>
-            <Card title="Raph" img_src={coincoin} content="Programmeur de génie" column={1} link="https://github.com/ImJustCookie"/>
-            <Card title="Jules" img_src={coincoin2} content="Programmeur de génie (mais plus petit)" column={2} link="https://github.com/Onniryss"/>
+            <Card title="Raphaël" img_src={coincoin} content="Programmeur de génie (juste plus grand)" column={1} link="https://github.com/ImJustCookie"/>
+            <Card title="Jules" img_src={coincoin2} content="Programmeur de génie" column={2} link="https://github.com/Onniryss"/>
+            <Card title="Michel" img_src={coincoin3} content="Conseiller technique irremplaçable" column={3} link="https://github.com/Filoji"/>
         </div>
     )
 }
