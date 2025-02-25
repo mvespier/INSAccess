@@ -302,23 +302,42 @@ def print_all(output):
     """ print all the tuples from the output"""
     for item in output :
         print(item)
+    
+import calendar
+from datetime import datetime, timedelta
+
+def get_last_week_start(year, month):
+    """Return the date string (YYYYMMDD) for the start of the last week of the given month."""
+    last_day = calendar.monthrange(year, int(month))[1]  # Get last day of the month
+    last_day_date = datetime(year, int(month), last_day)
+    start_of_last_week = last_day_date - timedelta(days=6)  # Start of the last week
+    return start_of_last_week.strftime("%Y%m%d")
+
+def get_yearly_calendar_data(start_year, department, depart_year, months):
+    data_list = []
+    for month in months:
+        # Fetch the entire month
+        data_list += get_calendar_data(
+            str(start_year), department, depart_year, f"{start_year}{month}01", "month"
+        )
+        # Fetch the last week of the month
+        data_list += get_calendar_data(
+            str(start_year), department, depart_year, get_last_week_start(start_year, month), "week"
+        )
+    return data_list
 
 def fetch_entire_year(year_of_start, department, depart_year):
     """ a crude but working method to fetch the entire year of
     year_of_start, department, depart_year"""
-    total_list=[]
-    sequence_1st_year = {"08", "09", "10", "11", "12"}
-    for i in sequence_1st_year:
-        date = year_of_start + i + "01"
-        total_list = total_list + get_calendar_data(year_of_start,\
-                                                     department, depart_year, date, "month")
 
-    sequence_2nd_year = {"01", "02", "03", "04", "05", "06", "07","08"}
-    for i in sequence_2nd_year:
-        date = str(int(year_of_start)+1) + i + "01"
-        total_list = total_list + get_calendar_data(year_of_start,\
-                                                     department, depart_year, date, "month")
+    year_of_start_int = int(year_of_start)
+    sequence_1st_year = ["08", "09", "10", "11", "12"]
+    sequence_2nd_year = ["01", "02", "03", "04", "05", "06", "07", "08"]
 
+    total_list = (
+        get_yearly_calendar_data(year_of_start_int, department, depart_year, sequence_1st_year)
+        + get_yearly_calendar_data(year_of_start_int + 1, department, depart_year, sequence_2nd_year)
+    )
     return total_list
 
 if __name__== "__main__" :

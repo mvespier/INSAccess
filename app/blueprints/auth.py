@@ -148,7 +148,7 @@ def sign_up_post():
 @auth.route('/confirm_sign_up/<token>', methods =['GET'])
 @logout_required
 def confirm_sign_up(token):
-
+    """ route given by email for confirming the account"""
     values = confirm_token(token)
     if not values:
         return redirect(url_for('auth.sign_up'))
