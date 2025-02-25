@@ -39,6 +39,8 @@ import re
 import html
 import itertools
 import requests
+import calendar
+from datetime import datetime, timedelta
 
 ERROR_FAILED_TO_PARSE = 666
 ERROR_WRONG_ARG = 42
@@ -293,7 +295,7 @@ def print_unique_date(output):
     """ prints all the unique dates in output"""
     unique = set()
     for item in output :
-        unique.add(item[0][:-3])
+        unique.add(item[0])
     for i in sorted(unique,reverse=True):
         print(i)
 
@@ -302,9 +304,7 @@ def print_all(output):
     """ print all the tuples from the output"""
     for item in output :
         print(item)
-    
-import calendar
-from datetime import datetime, timedelta
+
 
 def get_last_week_start(year, month):
     """Return the date string (YYYYMMDD) for the start of the last week of the given month."""
@@ -313,16 +313,17 @@ def get_last_week_start(year, month):
     start_of_last_week = last_day_date - timedelta(days=6)  # Start of the last week
     return start_of_last_week.strftime("%Y%m%d")
 
-def get_yearly_calendar_data(start_year, department, depart_year, months):
+def get_yearly_calendar_data(year, department, depart_year, months,remove_one_to_year):
     data_list = []
+    start_year = year -1 if remove_one_to_year else year
     for month in months:
         # Fetch the entire month
         data_list += get_calendar_data(
-            str(start_year), department, depart_year, f"{start_year}{month}01", "month"
+            str(start_year), department, depart_year, f"{year}{month}01", "month"
         )
         # Fetch the last week of the month
         data_list += get_calendar_data(
-            str(start_year), department, depart_year, get_last_week_start(start_year, month), "week"
+            str(start_year), department, depart_year, get_last_week_start(year, month), "week"
         )
     return data_list
 
@@ -335,8 +336,8 @@ def fetch_entire_year(year_of_start, department, depart_year):
     sequence_2nd_year = ["01", "02", "03", "04", "05", "06", "07", "08"]
 
     total_list = (
-        get_yearly_calendar_data(year_of_start_int, department, depart_year, sequence_1st_year)
-        + get_yearly_calendar_data(year_of_start_int + 1, department, depart_year, sequence_2nd_year)
+        get_yearly_calendar_data(year_of_start_int, department, depart_year, sequence_1st_year, False)
+        + get_yearly_calendar_data(year_of_start_int + 1, department, depart_year, sequence_2nd_year, True)
     )
     return total_list
 
@@ -355,7 +356,7 @@ if __name__== "__main__" :
         # print("-"*150)
     elif len(sys.argv)==4:
         out = fetch_entire_year(sys.argv[1], sys.argv[2], sys.argv[3])
-        print_unique_td(out)
+        print_all(out)
     else:
         print(f"ERROR : wrong number of arguments : must be 5 arguments\
             , were given {len(sys.argv)-1}")
