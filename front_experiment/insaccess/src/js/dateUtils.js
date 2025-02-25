@@ -97,6 +97,10 @@ const Day = class Day{
     return constantes.dayList[date.getDay()]
   }
 
+  getMonthOfYear(){
+    return constantes.monthList[this.month-1]
+  }
+
   getDay(){
     return this.day;
   }
@@ -119,7 +123,7 @@ const Day = class Day{
   }
   
   getDateInfo(){
-      return [this.getDayOfWeek(), this.getDay()];
+      return [this.getDayOfWeek(), this.getDay(), this.getMonthOfYear()];
   }
 
   toString(){

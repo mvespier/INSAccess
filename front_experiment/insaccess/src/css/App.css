@@ -5,7 +5,7 @@
   --calBgColor: #efc2f8;
   --eventBorderColor: #445374;
   --eventColor: #57caff;
-  --dateTextSize: 2vmax;
+  --dateTextSize: 1.5vmax;
 }
 
 .calendar {
@@ -105,8 +105,9 @@
   margin: 1vh;
 }
 
-.date-num, .date-day {
+.date-num, .date-day, .date-month {
   font-size: var(--dateTextSize);
+  display: flex;
 }
 
 .date {
@@ -116,11 +117,9 @@
 
 .date-num {
   font-weight: 600;
-  display: flex;
 }
 
-.date-day {
-  display: flex;
+.date-day, .date-month {
   font-weight: 100;
 }
 
