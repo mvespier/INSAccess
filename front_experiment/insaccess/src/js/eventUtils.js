@@ -90,6 +90,7 @@ const EventsOfDay = ({date, data}) => {
       <div className="date">
         <p className="date-day">{infos[0]}</p>
         <p className="date-num">{infos[1]}</p> 
+        <p className="date-month">{infos[2]}</p> 
       </div>
       <div className="events">
         {events_list}
