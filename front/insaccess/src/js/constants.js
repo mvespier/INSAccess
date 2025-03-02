@@ -3,6 +3,6 @@ const dayList = [ "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi",
 const nbDaysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 const minWidth = 850;
 const monthList = [ "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
+const baseEventWidth = 93
 
-
-export default { hours_timeline, dayList, minWidth, nbDaysPerMonth, monthList };
+export default { hours_timeline, dayList, minWidth, nbDaysPerMonth, monthList, baseEventWidth };

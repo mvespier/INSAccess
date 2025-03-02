@@ -5,7 +5,7 @@ import { useWindowDimensions } from './randomUtils.js'
 import {NavLink} from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-const getEventSize = (start_index, end_index, nb_div) => {
+const getEventHeight = (start_index, end_index, nb_div) => {
   return ((end_index-start_index)/(nb_div+1))*100
 }
 
@@ -17,12 +17,14 @@ const SingleEvent = (props) => {
   const hours_events = Day.createHours();
   let start_index = hours_events.indexOf(props.start_time);
   let end_index = hours_events.indexOf(props.end_time);
-  let eventHeight = getEventSize(start_index, end_index, hours_events.length);
+  let eventHeight = getEventHeight(start_index, end_index, hours_events.length);
   let eventPosY = getEventPos(start_index, hours_events.length);
 
   const eventStyle = {
     height: `${eventHeight}%`,
+    width: "93%",//`${props.width}%`,
     top: `${eventPosY}%`,
+    left: "0%",//`${props.left}%`,
     userSelect: "none"
   };
 
@@ -50,13 +52,21 @@ const TimeBar = () => {
   );
 }
 
-SingleEvent.propTypes = {
-  start_time: PropTypes.string.isRequired, 
-  end_time: PropTypes.string.isRequired, 
-  label: PropTypes.string.isRequired, 
-  teacher: PropTypes.string.isRequired, 
-  room: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired
+function getOverlappingEvents(event, events){
+  let nb_overlap = 0;
+  for (let element in events){
+    let case1 = events[element].end >= events[event].start && events[element].end <= events[event].end
+    let case2 = events[element].start >= events[event].start && events[element].start <= events[event].end
+    if ((case1 || case2)  && (element != event)){
+      console.log(element+"-"+event)
+      nb_overlap++;
+    }
+  }
+  return nb_overlap;
+}
+
+function getEventColumns(){
+
 }
 
 function getEventsOfDay(date, data){
@@ -78,9 +88,10 @@ const EventsOfDay = ({date, data}) => {
   const infos = day.getDateInfo();
 
   for (let element in events_of_day){
+    const nb_overlap = getOverlappingEvents(element, events_of_day, i);
     const object = events_of_day[element]
     events_list.push(
-      <SingleEvent key={i} start_time={object.start} end_time={object.end} label={object.desc} teacher={object.teacher} room={object.room} link={object.link} />
+      <SingleEvent key={i} start_time={object.start} end_time={object.end} label={object.desc} teacher={object.teacher} room={object.room} link={object.link} width={constantes.baseEventWidth/(nb_overlap+1)} left={100-100/(nb_overlap+1)} />
     );
     i += 1;
   } 
