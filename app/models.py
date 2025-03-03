@@ -49,31 +49,45 @@ class User(UserMixin, db.Model):
     link_td = db.relationship("UserLinkTD", back_populates = "link_group_td")
 
 
-class InsaClass(db.Model):
-    """INSA Class definition,to store class from insa"""
-    __tablename__ = 'insa_class'
+class Event(db.Model):
+    """ Generic Class for defining evenement in calendar"""
+    __abstract__= True
+    
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-
     date = db.Column(Date, nullable = False)
     start_hour = db.Column(Time)
     end_hour = db.Column(Time)
     desc = db.Column(db.String(255))
 
-    is_custom = db.Column(db.Boolean, default = False)
-    associated_link = db.Column(db.String(510))
 
 
+class InsaClass(Event):
+    """INSA Class definition,to store class from insa"""
+    __tablename__ = 'insa_class'
+
+    link_room = db.relationship("ClassLinkRoom", back_populates = "insa_class")
     link_td = db.relationship("ClassLinkTD", back_populates = "insa_class")
     link_teacher = db.relationship("ClassLinkTeacher", back_populates = "insa_class")
-    link_room = db.relationship("ClassLinkRoom", back_populates = "insa_class")
     link_depart = db.relationship("ClassLinkDepart", back_populates = "insa_class")
 
+class InsaEvenement(Event):
+    """INSA Event definition to store custom event from insa"""
+    __tablename__ = 'insa_evenement'
+    
+    associated_link = db.Column(db.String(510))
+    association_id = db.Column(ForeignKey("association.id"), nullable = False)
+    
+    evenement_link_evenement_room = db.relationship("EvenementLinkEventRoom", back_populates = "insa_evenement")
 
-class EventCreator(db.Model):
+    
+
+class EvenementCreator(db.Model):
     """ Student definition"""
-    __tablename__ = 'event_creator'
+    __tablename__ = 'evenement_creator'
+    
     user_email = db.Column(ForeignKey("user.email"), primary_key = True)
     association_id = db.Column(ForeignKey("association.id"), nullable = False)
+    
 
 class Association(db.Model):
     """ the association profile for the club and association of INSA Rouen """
@@ -121,6 +135,20 @@ class Room(db.Model):
     __tablename__ = 'room'
     name = db.Column(db.String(100), primary_key = True)
 
+class EvenementRoom(db.Model):
+    """ Special room for event definition"""
+    __tablename__ = 'evenement_room'
+    name = db.Column(db.String(100), primary_key = True)
+
+class EvenementLinkEventRoom(db.Model):
+    """ 1 to Many link between classINSA and Room tables"""
+    __tablename__ = 'evenement_link_evenement_room'
+
+    evenement_id = db.Column(db.Integer, ForeignKey('insa_evenement.id'), primary_key = True)
+    insa_evenement = db.relationship("InsaEvenement", back_populates="evenement_link_evenement_room")
+
+    room_id = db.Column(ForeignKey('evenement_room.name'), primary_key = True)
+    room = db.relationship("EvenementRoom")
 
 class ClassLinkTD(db.Model):
     """ 1 to Many link between classINSA and TD tables"""
