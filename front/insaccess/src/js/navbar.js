@@ -19,11 +19,6 @@ const items = [
   href: "/associations" },
 
 {
-  name: "Tests",
-  color: "#9FD4F4",
-  href: "/tests" },
-
-{
   name: "Settings",
   color: "#70D1F9",
   href: "/settings" },

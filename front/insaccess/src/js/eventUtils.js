@@ -58,7 +58,7 @@ function getOverlappingEvents(event, events){
     let case1 = events[element].end >= events[event].start && events[element].end <= events[event].end
     let case2 = events[element].start >= events[event].start && events[element].start <= events[event].end
     if ((case1 || case2)  && (element != event)){
-      console.log(element+"-"+event)
+      //console.log(element+"-"+event)
       nb_overlap++;
     }
   }

@@ -62,7 +62,7 @@ def get_day(day):
     return get_json_output(insa_classes)
 
 @api.route('get_week/<string:day>')
-#@login_required
+@login_required
 def get_week(day):
     """Return the json for the week"""
     day_date = datetime.datetime.strptime(day, "%Y-%m-%d")
@@ -131,7 +131,7 @@ def get_year(day):
 
 
 @api.route('/fetch')
-#@login_required
+@login_required
 def fetch():
     """ TEMPORARY FUNCTION SHOULD BE USED CAREFULLY PROBABLY"""
     if current_user.admin :
