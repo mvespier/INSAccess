@@ -2,10 +2,9 @@ import './css/App.css';
 import NavBar from './js/navbar.js'
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Settings from './components/settings.js';
 import Calendar from './components/calendar.js';
-import Login from './components/signup.js';
 import About from './components/about.js';
 import Day from './js/dateUtils.js';
 import minWidth from './js/constants.js';
@@ -27,11 +26,10 @@ function App() {
       <NavBar.NavBar items={NavBar.items}/>
       <AuthProvider>
           <Routes> 
-            <Route exact path='/login' element={<Login/>}></Route>
-            <Route exact path='' element={<Calendar start={day} data_path={data}/>}></Route >
-            <Route exact path='/about' element={<About />}></Route>
+            <Route exact path='' element={<ProtectedRoute><Calendar start={day} data_path={data}/></ProtectedRoute>}></Route >
+            <Route exact path='/about' element={<ProtectedRoute><About /></ProtectedRoute>}></Route>
             <Route exact path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>}></Route>
-            <Route exact path='/associations' element={<Calendar start={day} data_path={data_asso}/>}></Route>
+            <Route exact path='/associations' element={<ProtectedRoute><Calendar start={day} data_path={data_asso}/></ProtectedRoute>}></Route>
           </Routes>
       </AuthProvider>
     </div>

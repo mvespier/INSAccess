@@ -107,7 +107,7 @@ def get_month(day):
 
 @api.route('is_connected',methods =["GET"])
 def get_is_connected():
-    return current_user.is_authenticated;
+    return jsonify({"is_connected":current_user.is_authenticated});
 
 
 @api.route('get_year/<string:day>',methods =["GET"])

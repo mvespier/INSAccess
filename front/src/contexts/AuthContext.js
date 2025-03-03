@@ -1,47 +1,46 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-// Crée un contexte d'authentification
+const fetchData = async (data_path) => {
+    const initConfig = {
+        method:'GET',
+        headers:{'Content-Type':'application/json', 'Accept':'application/json'},
+        mode:'cors'
+    }
+    try {
+        const response = await fetch(data_path, initConfig);
+        if (!response.ok) {
+        throw new Error("Erreur, vérification de la connection de l'utilisateur impossible");
+        }
+        const json = await response.json();
+        return { data: json, error: null };
+    } catch (error) {
+        return { data: null, error: error.message };
+    }
+};
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(false);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    // Vérifier si l'utilisateur est déjà connecté (ex: via un token en cookie)
     useEffect(() => {
-        fetch("/api/me", { credentials: "include" }) // Flask doit gérer la session
-            .then((res) => res.ok ? res.json() : Promise.reject())
-            .then((data) => setUser(data))
-            .catch(() => setUser(null));
+        const loadData = async () => {
+          const result = await fetchData("/api/is_connected");
+          setToken(result.data.is_connected);
+          setError(result.error);
+          setLoading(false);
+        };
+    
+        loadData();
     }, []);
 
-    const login = async (username, password) => {
-        const res = await fetch("/api/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include", // Important pour Flask et les sessions
-            body: JSON.stringify({ username, password }),
-        });
-
-        if (res.ok) {
-            const data = await res.json();
-            setUser(data);
-            return true;
-        } else {
-            return false;
-        }
-    };
-
-    const logout = async () => {
-        await fetch("/api/logout", { method: "POST", credentials: "include" });
-        setUser(null);
-    };
-
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ token, loading, error }}>
             {children}
         </AuthContext.Provider>
     );
 };
 
-// Hook pour accéder facilement au contexte
 export const useAuth = () => useContext(AuthContext);

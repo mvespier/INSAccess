@@ -1,5 +1,4 @@
 import Day from './dateUtils.js'
-import PropTypes from 'prop-types';
 import constantes from './constants.js'
 import { useWindowDimensions } from './randomUtils.js'
 import {NavLink} from 'react-router-dom'
@@ -119,7 +118,7 @@ const fetchData = async (data_path) => {
   try {
     const response = await fetch(data_path, initConfig);
     if (!response.ok) {
-      throw new Error("Erreur lors du fetch, allez voir les deux bg pour qu'ils règlent le problème");
+      throw new Error("Erreur lors du fetch");
     }
     const json = await response.json();
     return { data: json, error: null };
@@ -157,7 +156,7 @@ const AllEvents = ({start, data_path}) => {
   if (loading) return <p>Chargement...</p>;
   if (error) {
     console.log("Error : "+error);
-    return <p>Erreur lors du fetch, allez voir les deux bg pour qu&#39;ils règlent le problème</p>;
+    return <p>Erreur lors de la récupération des cours, vérifiez que vous êtes bien connectés. Si le problème persiste, envoyez nous un message.</p>;
   }
 
   function handleDay(direction, value){
