@@ -45,7 +45,6 @@ from ..models import User
 from .. import db
 
 auth = Blueprint('auth', __name__)
-""""""
 
 """////////////////////////////////////////////////////////////////////////"""
 
@@ -89,8 +88,8 @@ def login_post():
 
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
-    return redirect(url_for('main.default_page'))
-
+    return redirect("http://localhost:3000", code=302)
+    
 """////////////////////////////////////////////////////////////////////////"""
 
 @auth.route('/sign_up')

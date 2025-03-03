@@ -44,7 +44,7 @@ from ..models import EnumColor, EnumSector, EnumType, InsaClass, UserLinkTD, Cla
 
 api = Blueprint('api', __name__,url_prefix='/api/')
 
-@api.route('get_day/<string:day>')
+@api.route('get_day/<string:day>',methods =["GET"])
 @login_required
 def get_day(day):
     """Return the json for the day"""
@@ -61,7 +61,7 @@ def get_day(day):
 
     return get_json_output(insa_classes)
 
-@api.route('get_week/<string:day>')
+@api.route('get_week/<string:day>',methods =["GET"])
 @login_required
 def get_week(day):
     """Return the json for the week"""
@@ -82,7 +82,7 @@ def get_week(day):
 
     return get_json_output(insa_classes)
 
-@api.route('get_month/<string:day>')
+@api.route('get_month/<string:day>',methods =["GET"])
 @login_required
 def get_month(day):
     """Return the json for the month"""
@@ -105,8 +105,12 @@ def get_month(day):
 
     return get_json_output(insa_classes)
 
+@api.route('is_connected',methods =["GET"])
+def get_is_connected():
+    return current_user.is_authenticated;
 
-@api.route('get_year/<string:day>')
+
+@api.route('get_year/<string:day>',methods =["GET"])
 @login_required
 def get_year(day):
     """Return the json for the year """
@@ -142,7 +146,7 @@ def fetch():
     return render_template('404_Not_Found.html')
 
 
-@api.route('/enums/<enum_name>')
+@api.route('/enums/<enum_name>',methods =["GET"])
 def get_enums(enum_name):
     model_mapping = {
         "type": EnumType,

@@ -78,7 +78,7 @@ def create_app(test_config=None):
 
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))# use the primary key of the User database as the user_id
+        return User.query.get(user_id)# use the primary key of the User database as the user_id
 
 
     # utilities
