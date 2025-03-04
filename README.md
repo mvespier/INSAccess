@@ -72,6 +72,6 @@ The factory for the Flask application is defined in `app/__init.py__` and is cal
 	- `InsaClass` for storing the various classes done at INSA as well as the custom event created by the clubs and associations
 	- `Teacher`,`Room`,`Department`,`GroupTD` for storing the names of the teacher, rooms, department and td groups.
 	- `...Link...` for storing the various one to many table links.
-
+	![models.svg](models.svg)
 # Production<div id='prod'/>
 Deployment instructions are yet to be completed. :)
