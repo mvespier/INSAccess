@@ -1,8 +1,8 @@
 import Day from './dateUtils.js'
 import constantes from './constants.js'
-import { useWindowDimensions } from './randomUtils.js'
+import { useWindowDimensions, LoadData } from './randomUtils.js'
 import {NavLink} from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const getEventHeight = (start_index, end_index, nb_div) => {
   return ((end_index-start_index)/(nb_div+1))*100
@@ -107,43 +107,6 @@ const EventsOfDay = ({date, data}) => {
       </div>
     </div>
   );
-}
-
-const fetchData = async (data_path) => {
-  const initConfig = {
-    method:'GET',
-    headers:{'Content-Type':'application/json', 'Accept':'application/json'},
-    mode:'cors'
-  }
-  try {
-    const response = await fetch(data_path, initConfig);
-    if (!response.ok) {
-      throw new Error("Erreur lors du fetch");
-    }
-    const json = await response.json();
-    return { data: json, error: null };
-  } catch (error) {
-    return { data: null, error: error.message };
-  }
-};
-
-function LoadData(data_path){
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const result = await fetchData(data_path);
-      setData(result.data);
-      setError(result.error);
-      setLoading(false);
-    };
-
-    loadData();
-  }, []);
-
-  return {data, error, loading}
 }
 
 const AllEvents = ({start, data_path}) => {
