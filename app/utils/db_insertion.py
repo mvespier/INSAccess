@@ -32,9 +32,7 @@ import datetime
 from tqdm import tqdm
 
 from sqlalchemy.exc import IntegrityError 
-from ..models import InsaClass, Teacher, GroupTD, Room, Department\
-                        , ClassLinkDepart, ClassLinkRoom, ClassLinkTD, ClassLinkTeacher
-
+from ..models import *
 
 def insert_list_record(session, list_of_records):
     """
@@ -248,6 +246,46 @@ def insert_classlink_teacher_in_db(session, insa_class_object, name):
     else :
         print(f"Couldnt create link because {name} if not found in Teacher")
 
+def insert_enum_sector_in_db(session, name):
+    """ function for inserting record in sector of association table"""
+    exists = session.query(EnumSector).filter_by(
+        name=name,
+    ).first()
+
+    new_class = EnumSector(
+        name=name,
+    )
+    insert_generic_in_db(session, exists, new_class)
+
+def insert_enum_type_in_db(session, name):
+    """ function for inserting record in type of associationtable"""
+    exists = session.query(EnumType).filter_by(
+        name=name,
+    ).first()
+
+    new_class = EnumType(
+        name=name,
+    )
+    insert_generic_in_db(session, exists, new_class)
+    
+
+def insert_enum_color_in_db(session, value):
+    """ function for inserting record in color of association table"""
+    exists = session.query(EnumColor).filter_by(
+        value=value,
+    ).first()
+
+    new_class = EnumColor(
+        value=value,
+    )
+    insert_generic_in_db(session, exists, new_class)
+    
+
+def insert_association_in_db(session, name, user_email, color_value, type, sector):
+    """function for inserting association in db"""
+    linked_user = session.query(User).filter_by(email=user_email).first()
+    linked_color = session.query(EnumColor).filter_by(value = color_value).first()
+    
 
 def insert_generic_in_db(session, exists, new_class):
     """

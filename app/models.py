@@ -79,21 +79,15 @@ class InsaEvenement(Event):
     
     evenement_link_evenement_room = db.relationship("EvenementLinkEventRoom", back_populates = "insa_evenement")
 
-    
 
-class EvenementCreator(db.Model):
-    """ Student definition"""
-    __tablename__ = 'evenement_creator'
-    
-    user_email = db.Column(ForeignKey("user.email"), primary_key = True)
-    association_id = db.Column(ForeignKey("association.id"), nullable = False)
-    
 
 class Association(db.Model):
     """ the association profile for the club and association of INSA Rouen """
     __tablename__ = 'association'
+    
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     name = db.Column(db.String(255), primary_key = True)
+    user_email = db.Column(ForeignKey("user.email"))
     unique_color = db.Column(ForeignKey('enum_color.value'), nullable = False)
     type = db.Column(ForeignKey('enum_type.name'), nullable = False)
     sector = db.Column(ForeignKey('enum_sector.name'), nullable = False)
