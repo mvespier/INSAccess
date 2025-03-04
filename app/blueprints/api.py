@@ -39,7 +39,7 @@ from flask_login import current_user, login_required
 
 from ..utils.db_insertion import insert_list_record
 from ..utils.fetch import fetch_entire_year
-from ..models import EnumColor, EnumSector, EnumType, InsaClass, UserLinkTD, ClassLinkTD, db
+from ..models import EnumColor, EnumSector, EnumType, GroupTD, InsaClass, UserLinkTD, ClassLinkTD, db
 
 
 api = Blueprint('api', __name__,url_prefix='/api/')
@@ -107,6 +107,7 @@ def get_month(day):
 
 @api.route('is_connected',methods =["GET"])
 def get_is_connected():
+    """return a json bool for front"""
     return jsonify({"is_connected":current_user.is_authenticated});
 
 
@@ -197,7 +198,13 @@ def get_json_output(insa_classes):
             "teacher": [teacher.teacher.name for teacher in insa_class.link_teacher],
             "room": [room.room.name for room in insa_class.link_room]
         }
-        for insa_class in insa_classes
+        for insa_class in insa_classes  
     ])
     
-    
+@api.route('/get_tds', methods=['GET'])
+@login_required
+def manage_td():
+    user_tds = [link.name_td for link in current_user.link_td]
+    all_tds = [td.name for td in GroupTD.query.all()]
+
+    return jsonify({ "user_tds" : user_tds, "all_tds" : all_tds})
