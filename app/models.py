@@ -85,7 +85,6 @@ class Association(db.Model):
     """ the association profile for the club and association of INSA Rouen """
     __tablename__ = 'association'
     
-    id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     name = db.Column(db.String(255), primary_key = True)
     user_email = db.Column(ForeignKey("user.email"))
     unique_color = db.Column(ForeignKey('enum_color.value'), nullable = False)

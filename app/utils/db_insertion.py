@@ -285,7 +285,24 @@ def insert_association_in_db(session, name, user_email, color_value, type, secto
     """function for inserting association in db"""
     linked_user = session.query(User).filter_by(email=user_email).first()
     linked_color = session.query(EnumColor).filter_by(value = color_value).first()
-    
+    linked_type = session.query(EnumType).filter_by(name = type).first()
+    linked_sector = session.query(EnumSector).filter_by(name = sector).first()
+    if linked_color and linked_sector and linked_type and linked_user:
+        exists = session.query(Association).filter_by(
+            name=name,
+        ).first()
+
+        new_class = EnumType(
+            name=name,
+            user_email = user_email,
+            unique_color = color_value,
+            type = type,
+            sector = sector
+        )
+        insert_generic_in_db(session, exists, new_class)
+    else :
+        print(f"Couldnt create link because of the foreign key doesnt exist")
+
 
 def insert_generic_in_db(session, exists, new_class):
     """
