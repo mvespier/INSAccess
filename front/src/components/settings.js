@@ -1,10 +1,13 @@
 //import { useMediaQuery } from 'react-responsive'
 import { LoadData, TDSelection } from '../js/randomUtils.js'
 import { useEffect, useState } from 'react';
+import constants from '../js/constants.js'
+
+const API_URL = constants.API_URL
 
 const Settings = () => {
 
-    let {data, error, loading} = LoadData("/api/get_tds");
+    let {data, error, loading} = LoadData(API_URL+"/api/get_tds");
     let [user_tds, setUserTD] = useState(null);
     let [all_tds, setAllTD] = useState(null);
 
