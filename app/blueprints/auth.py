@@ -49,12 +49,15 @@ auth = Blueprint('auth', __name__)
 """////////////////////////////////////////////////////////////////////////"""
 
 @auth.route('/login')
+@logout_required
 def login():
     """route for login"""
-    logout_user()
+    #logout_user()
     return render_template('login.html')
 
 @auth.route('/login', methods=['POST'])
+@logout_required
+
 def login_post():
     """ route for login"""
 
@@ -93,16 +96,20 @@ def login_post():
 """////////////////////////////////////////////////////////////////////////"""
 
 @auth.route('/sign_up')
+@logout_required
+
 def sign_up():
     """ route for loading the signing up html"""
-    logout_user()
+    #logout_user()
     return render_template('sign_up.html')
 
 
 @auth.route('/sign_up', methods =['POST'])
+@logout_required
+
 def sign_up_post():
     """ route for signing up"""
-    logout_user()
+    #logout_user()
     #check if email is valid
 
     request_dict = request.form

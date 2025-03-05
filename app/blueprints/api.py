@@ -43,8 +43,8 @@ from ..utils.fetch import fetch_entire_year
 from ..models import EnumColor, EnumSector, EnumType, GroupTD, InsaClass, UserLinkTD, ClassLinkTD, db
 
 
-api = Blueprint('api', __name__,url_prefix='/api/')
-CORS(api, origins=["http://localhost:3000", "http://172.18.30.157:3000"], supports_credentials=True)
+api = Blueprint('api', __name__, url_prefix = '/api/')
+CORS(api, origins = ["http://localhost:3000", "http://172.18.26.13:3000"], supports_credentials=True)
 
 @api.route('get_day/<string:day>',methods =["GET"])
 @login_required
@@ -135,40 +135,6 @@ def get_year(day):
     )
 
     return get_json_output(insa_classes)
-
-
-@api.route('/fetch')
-@login_required
-def fetch():
-    """ TEMPORARY FUNCTION SHOULD BE USED CAREFULLY PROBABLY"""
-    if current_user.admin :
-        list_of_records = fetch_entire_year("2024", "ITI", "3")
-        insert_list_record(db.session, list_of_records)
-        return "successfully fetched"
-
-    return render_template('404_Not_Found.html')
-
-
-@api.route('/enums/<enum_name>',methods =["GET"])
-def get_enums(enum_name):
-    model_mapping = {
-        "type": EnumType,
-        "sector": EnumSector,
-        "color": EnumColor
-    }
-    
-    model = model_mapping.get(enum_name.lower())
-    if not model:
-        return jsonify({"error": "Invalid enum type"}), 400
-
-    if enum_name.lower() == "color":
-        enums = [{"value": c.value, "label": c.user_friendly_name} for c in model.query.all()]
-    else:
-        enums = [{"value": e.name, "label": e.name} for e in model.query.all()]
-
-    return jsonify(enums)
-
-
 
 def get_joined_class_subquery():
     """ return the joined table subquery """

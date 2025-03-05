@@ -16,20 +16,3 @@ main = Blueprint('main', __name__)
 @login_required
 def default_page():
     return render_template('index.html')
-
-# @main.route('/redirect')
-# def redirect_test():
-#     return redirect(url_for('main.default_page'))
-
-# @main.route('/<test>/redirect')
-# def var_test(test):
-#     return 'TOTO'
-
-
-# @main.route('/calendar')
-# def calendar():
-#     return render_template('calendar_example.html')
-
-# @main.route('/robots.txt')
-# def robots():
-#     return send_from_directory('static', 'robots.txt')

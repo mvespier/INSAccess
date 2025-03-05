@@ -53,6 +53,7 @@ def association_register():
 @login_required
 @admin_required
 def create_association():
+    """post route for registering the association"""
     name = request.form['name']
     user_email = request.form['user_email']
     unique_color = request.form['unique_color']
@@ -67,6 +68,7 @@ def create_association():
 @login_required
 @admin_required
 def create_association_get():
+    """get route for rendering template of the assocation creating"""
     # Fetching dropdown options from database
     colors = EnumColor.query.all()
     types = EnumType.query.all()

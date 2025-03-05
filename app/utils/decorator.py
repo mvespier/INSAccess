@@ -39,7 +39,7 @@ def logout_required(func):
         if current_user.is_authenticated:
             flash("vous êtes deja connecté")
             redirect(url_for('auth.login'))
-            return redirect(url_for("main.default_page"))
+            return redirect("http://localhost:3000", code=302)
         return func(*args, **kwargs)
 
     return decorated_function
@@ -50,7 +50,7 @@ def admin_required(func):
     def decorated_function(*args, **kwargs):
         if not current_user.admin:
             flash("non.")
-            return redirect(url_for("main.default_page"))
+            return redirect("http://localhost:3000", code=302)
         return func(*args, **kwargs)
 
     return decorated_function
