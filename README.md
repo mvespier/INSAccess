@@ -21,9 +21,11 @@ This web app is designed for INSA Rouen Normandie, aiming to provide a simple cl
 	```
 - Launch the `test_insertion.py` file for initializing the app (this file is only temporary)
 
+- In the front folder, run `npm install` to install locally all dependencies related to node and react
+
 # Development <div id='dev'/>
 -  launch the flask server
-```
+```bash
 flask run --debug
 ```
 -  if you're using mariadb you can access the tables by doing the following
@@ -31,6 +33,12 @@ flask run --debug
 sudo mariadb
 >>> USE app;
 ```
+- launch the react server (in the /front folder)
+```bash
+npm start
+```
+
+- alternatively you can use `./run_servers.sh` to launch both at the same time. The only downside is that the flask server will only be visible via a screen. You can still view it with `screen -r flask`
 ## Code Structure<div id='struct'/>
 - `app/blueprints` contains various modules that defines the available routes organized by `blueprint` (https://flask.palletsprojects.com/en/stable/blueprints/)
 	- `main.py` defines the main routes.
@@ -74,4 +82,7 @@ The factory for the Flask application is defined in `app/__init.py__` and is cal
 	- `...Link...` for storing the various one to many table links.
 	![models.svg](models.svg)
 # Production<div id='prod'/>
+## Front
+First run the command `npm run build` to create the production build. Then run `serve -s build` to launch the server.
+## Back
 Deployment instructions are yet to be completed. :)
