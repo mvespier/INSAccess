@@ -34,8 +34,8 @@ Notes:
 import datetime
 
 from sqlalchemy.orm import joinedload
-from flask import Blueprint, jsonify, render_template
-from flask_login import current_user, login_required
+from flask import Blueprint, jsonify, redirect, render_template, url_for
+from flask_login import current_user, login_required, logout_user
 from flask_cors import CORS
 
 from ..utils.db_insertion import insert_list_record
@@ -179,6 +179,8 @@ def manage_td():
 #//////////// API FOR CONNECTION //////////////#
 
 @api.route('is_connected',methods =["GET"])
+@login_required
 def get_is_connected():
     """return a json bool for front"""
     return jsonify({"is_connected":current_user.is_authenticated});
+
