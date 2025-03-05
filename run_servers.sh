@@ -2,6 +2,9 @@
 
 screen -X -S flask kill
 
+cd ./backend/
+
 screen -dmS flask flask run --debug
 
-cd ./front/ && npm start
+
+cd ../front/ && npm start
