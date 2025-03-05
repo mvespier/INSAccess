@@ -1,6 +1,7 @@
 flask
 flask_login
 flask_sqlalchemy
+flask_cors
 Pillow
 flask_mail
 pytz
