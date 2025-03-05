@@ -1,5 +1,6 @@
 import { useAuth } from "../contexts/AuthContext";
 import constants from '../js/constants.js'
+import { Error, Loading } from './templates.js'
 
 const API_URL = constants.API_URL;
 
@@ -10,7 +11,7 @@ const ProtectedRoute = ({ children }) => {
 
 
     if (loading) {
-        return <div>Chargement ...</div>
+        return <Loading />
     } else if (!token){
         window.location.replace(url_login)
     }
@@ -22,7 +23,7 @@ const ProtectedRoute = ({ children }) => {
     if (error){
         window.location.replace(url_login)
 
-        return <div> { error } </div>
+        return <Error message={error}/>
     }
 };
 
