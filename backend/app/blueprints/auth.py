@@ -57,7 +57,6 @@ def login():
 
 @auth.route('/login', methods=['POST'])
 @logout_required
-
 def login_post():
     """ route for login"""
 
@@ -97,7 +96,6 @@ def login_post():
 
 @auth.route('/sign_up')
 @logout_required
-
 def sign_up():
     """ route for loading the signing up html"""
     #logout_user()
@@ -106,7 +104,6 @@ def sign_up():
 
 @auth.route('/sign_up', methods =['POST'])
 @logout_required
-
 def sign_up_post():
     """ route for signing up"""
     #logout_user()
