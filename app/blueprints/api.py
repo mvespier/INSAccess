@@ -36,6 +36,7 @@ import datetime
 from sqlalchemy.orm import joinedload
 from flask import Blueprint, jsonify, render_template
 from flask_login import current_user, login_required
+from flask_cors import CORS
 
 from ..utils.db_insertion import insert_list_record
 from ..utils.fetch import fetch_entire_year
@@ -43,6 +44,7 @@ from ..models import EnumColor, EnumSector, EnumType, GroupTD, InsaClass, UserLi
 
 
 api = Blueprint('api', __name__,url_prefix='/api/')
+CORS(api, origins=["http://localhost:3000", "http://172.18.30.157:3000"], supports_credentials=True)
 
 @api.route('get_day/<string:day>',methods =["GET"])
 @login_required

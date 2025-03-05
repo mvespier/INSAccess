@@ -1,11 +1,11 @@
 [
     {
-        "label":"CONCERT DE DECEMBRE",
-        "start_time":"1520",
-        "end_time":"1815",
-        "room":["Amphi TILLON"],
-        "teacher":["AMIR"],
-        "date":"2025-01-29",
+        "desc":"CONCERT DE DECEMBRE",
+        "start":"1520",
+        "end":"1815",
+        "room":["Amphi TILLON, Hall Magellan"],
+        "teacher":["AMIR, INS'à Table"],
+        "date":"2025-03-05",
         "link":"https://linktr.ee/amirinsarouen"
 
     },

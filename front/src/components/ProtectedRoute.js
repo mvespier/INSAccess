@@ -1,9 +1,12 @@
 import { useAuth } from "../contexts/AuthContext";
+import constants from '../js/constants.js'
+
+const API_URL = constants.API_URL;
 
 const ProtectedRoute = ({ children }) => {
     const { token, loading, error } = useAuth();
 
-    const url_login = "http://localhost:5000/login"
+    const url_login = API_URL+"/login"
 
 
     if (loading) {
@@ -19,7 +22,7 @@ const ProtectedRoute = ({ children }) => {
     if (error){
         window.location.replace(url_login)
 
-        return <div>Eoozverkjnervkjne</div>
+        return <div> { error } </div>
     }
 };
 

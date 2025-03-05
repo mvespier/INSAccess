@@ -7,7 +7,7 @@ import Settings from './components/settings.js';
 import Calendar from './components/calendar.js';
 import About from './components/about.js';
 import Day from './js/dateUtils.js';
-import minWidth from './js/constants.js';
+import constants from './js/constants.js';
 import { useWindowDimensions } from './js/randomUtils.js';
 
 function App() {
@@ -16,10 +16,10 @@ function App() {
   let first_day = new Day(current_date)
   let dimensions = useWindowDimensions();
 
-  const data = 'http://localhost:3000/api/get_year/'+first_day.getDate();
+  const data = constants.API_URL+'/api/get_year/'+first_day.getDate();
   const data_asso = 'http://localhost:3000/data_asso.json'
 
-  let day = (minWidth < dimensions.width) ? first_day.getDate() : first_day.startOfWeek().getDate()
+  let day = (constants.minWidth < dimensions.width) ? first_day.getDate() : first_day.startOfWeek().getDate()
   
   return (
     <div className="App">

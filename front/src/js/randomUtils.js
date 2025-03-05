@@ -21,7 +21,8 @@ const fetchData = async (data_path) => {
   const initConfig = {
     method:'GET',
     headers:{'Content-Type':'application/json', 'Accept':'application/json'},
-    mode:'cors'
+    mode:'cors',
+    credentials:'include'
   }
   try {
     const response = await fetch(data_path, initConfig);
