@@ -75,7 +75,7 @@ class InsaEvenement(Event):
     __tablename__ = 'insa_evenement'
     
     associated_link = db.Column(db.String(510))
-    association_id = db.Column(ForeignKey("association.id"), nullable = False)
+    association_id = db.Column(ForeignKey("association.name"), nullable = False)
     
     evenement_link_evenement_room = db.relationship("EvenementLinkEventRoom", back_populates = "insa_evenement")
 
@@ -90,6 +90,7 @@ class Association(db.Model):
     unique_color = db.Column(ForeignKey('enum_color.value'), nullable = False)
     type = db.Column(ForeignKey('enum_type.name'), nullable = False)
     sector = db.Column(ForeignKey('enum_sector.name'), nullable = False)
+    
 
 class EnumType(db.Model):
     """ the possible value for the type in association """

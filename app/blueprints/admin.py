@@ -30,8 +30,11 @@ Notes:
     else where.
 
 """
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required
+
+from ..utils.db_insertion import insert_association_in_db
+from ..models import *
 
 from ..utils.decorator import admin_required
 
@@ -39,28 +42,34 @@ from ..utils.decorator import admin_required
 admin = Blueprint('admin', __name__,url_prefix='/admin/')
 
 @admin.route('/', methods = ['GET'])
-@admin_required
 @login_required
+@admin_required
 def association_register():
     """ render the association creator"""
     return render_template('admin.html')
 
 
-@admin.route('/', methods = ['POST'])
-@admin_required
+@admin.route('/create_association', methods=['POST'])
 @login_required
+@admin_required
 def create_association():
-    """ Create an association in the website"""
+    name = request.form['name']
+    user_email = request.form['user_email']
+    unique_color = request.form['unique_color']
+    type = request.form['type']
+    sector = request.form['sector']
 
-    request_dict = request.form
-    name = request_dict.get('name_assos')
-    color = request_dict.get('color')
-    type = request_dict.get('type')
-    sector = request_dict.get('secteur')
-    
-    #if color in enum ok else refaire
-    #if name dont exist ok else refaire
-    
-    return "success"
+    insert_association_in_db(name,user_email,unique_color,type,sector)
 
+    return redirect(url_for('admin.create_association'))
+
+@admin.route('/create_association', methods=['GET'])
+@login_required
+@admin_required
+def create_association_get():
+    # Fetching dropdown options from database
+    colors = EnumColor.query.all()
+    types = EnumType.query.all()
+    sectors = EnumSector.query.all()
+    return render_template('create_association.html', colors=colors, types=types, sectors=sectors)
 

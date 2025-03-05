@@ -29,6 +29,7 @@ Notes:
 
 """
 import datetime
+from flask import flash
 from tqdm import tqdm
 
 from sqlalchemy.exc import IntegrityError 
@@ -281,32 +282,9 @@ def insert_enum_color_in_db(session, value):
     insert_generic_in_db(session, exists, new_class)
     
 
-def insert_association_in_db(session, name, user_email, color_value, type, sector):
-    """function for inserting association in db"""
-    linked_user = session.query(User).filter_by(email=user_email).first()
-    linked_color = session.query(EnumColor).filter_by(value = color_value).first()
-    linked_type = session.query(EnumType).filter_by(name = type).first()
-    linked_sector = session.query(EnumSector).filter_by(name = sector).first()
-    if linked_color and linked_sector and linked_type and linked_user:
-        exists = session.query(Association).filter_by(
-            name=name,
-        ).first()
-
-        new_class = EnumType(
-            name=name,
-            user_email = user_email,
-            unique_color = color_value,
-            type = type,
-            sector = sector
-        )
-        insert_generic_in_db(session, exists, new_class)
-    else :
-        print(f"Couldnt create link because of the foreign key doesnt exist")
-
-
 def insert_generic_in_db(session, exists, new_class):
     """
-    ###insert_generic_in_db:
+    ### insert_generic_in_db:
     Method use by the others inserting methods in update_db\n
     Tries to insert in the database and if it create an Integrity error
     rollsback the database to the given instance
@@ -320,12 +298,41 @@ def insert_generic_in_db(session, exists, new_class):
         try:
             session.add(new_class)
             session.commit()
-            #print("Inserted successfully.")
+            #flash("Inserted successfully.")
         except IntegrityError:
             session.rollback()
-            #print("Failed to insert due to integrity constraints.")
+            #flash("Failed to insert due to integrity constraints.")
             return False
 
-        #print("Record already exists. No insertion performed.")
+        #flash("Record already exists. No insertion performed.")
 
     return True
+
+def insert_association_in_db(name, user_email, color_value, type, sector):
+    """function for inserting association in db"""
+    linked_user = User.query.filter_by(email=user_email).first()
+    linked_color = EnumColor.query.filter_by(value=color_value).first()
+    linked_type = EnumType.query.filter_by(name=type).first()
+    linked_sector = EnumSector.query.filter_by(name=sector).first()
+    if linked_color and linked_sector and linked_type and linked_user:
+        exists = Association.query.filter_by(name=name).first()
+        exists_user = Association.query.filter_by(user_email= user_email).first()
+        if not(exists):
+            if not(exists_user):
+                new_association = Association(
+                    name=name,
+                    user_email=user_email,
+                    unique_color=color_value,
+                    type=type,
+                    sector=sector
+                )
+                db.session.add(new_association)
+                db.session.commit()
+                flash("Association created successfully!", "success")
+            else:
+                flash("user already associated with another association!", "danger")
+        else:
+            flash("Association already exists!", "danger")
+    else:
+        flash("Invalid foreign key reference!", "danger")
+
