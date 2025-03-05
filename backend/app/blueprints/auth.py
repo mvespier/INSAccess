@@ -53,7 +53,7 @@ auth = Blueprint('auth', __name__)
 def login():
     """route for login"""
     #logout_user()
-    return render_template('login.html')
+    return render_template('auth/login.html')
 
 @auth.route('/login', methods=['POST'])
 @logout_required
@@ -87,7 +87,7 @@ def login_post():
     #  and compare it to the hashed password in the database
     if not user or not check_password_hash(user.password, password):
         flash('Mot de passe incorrect')
-        return render_template('login.html', email = email)
+        return render_template('auth/login.html', email = email)
 
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
@@ -101,7 +101,7 @@ def login_post():
 def sign_up():
     """ route for loading the signing up html"""
     #logout_user()
-    return render_template('sign_up.html')
+    return render_template('auth/sign_up.html')
 
 
 @auth.route('/sign_up', methods =['POST'])
@@ -132,18 +132,18 @@ def sign_up_post():
 
     if user:
         flash('cet email est déja utilisé')
-        return render_template('sign_up.html', name=name, email=email)
+        return render_template('auth/sign_up.html', name=name, email=email)
 
     if new_password != confirmed_password:
         flash("les mots de passe ne sont pas égaux")
-        return render_template('sign_up.html', name=name, email=email)
+        return render_template('auth/sign_up.html', name=name, email=email)
 
     token = generate_token({'email' : email,
                             'name' : name,
                             'password' : new_password
                             })
     confirm_url = url_for("auth.confirm_sign_up", token=token, _external=True)
-    html = render_template("email_confirmation.html", confirm_url=confirm_url)
+    html = render_template("auth/email/email_confirmation.html", confirm_url=confirm_url)
     subject = "Validation du compte INSAccess"
     send_email(email, subject, html)
 
@@ -201,7 +201,7 @@ def logout():
 @logout_required
 def forgot_password():
     """ renders the template of the forgot_password page"""
-    return render_template('forgot_password.html')
+    return render_template('auth/forgot_password.html')
 
 @auth.route('/forgot_password',methods =['POST'])
 @logout_required
@@ -214,7 +214,7 @@ def forgot_password_post():
     if user:
         token = generate_token({'email' : email})
         reset_url = url_for("auth.reset_password", token=token, _external=True)
-        html = render_template("email_password.html", reset_url=reset_url)
+        html = render_template("auth/email/email_password.html", reset_url=reset_url)
         subject = "Rénitialisation du mot de passe du compte INSAccess"
         send_email(email, subject, html)
     flash("regardez votre boite mail!")
@@ -223,7 +223,7 @@ def forgot_password_post():
 @auth.route('/reset_password/<token>', methods =['GET'])
 def reset_password(token):
     """ renders the template of the reset_password page"""
-    return render_template('reset_password.html',token=token)
+    return render_template('auth/reset_password.html',token=token)
         
 @auth.route('/reset_password/<token>', methods =['POST'])
 def reset_password_post(token):

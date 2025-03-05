@@ -38,15 +38,7 @@ from ..models import *
 
 from ..utils.decorator import admin_required
 
-
 admin = Blueprint('admin', __name__,url_prefix='/admin/')
-
-@admin.route('/', methods = ['GET'])
-@login_required
-@admin_required
-def association_register():
-    """ render the association creator"""
-    return render_template('admin.html')
 
 
 @admin.route('/create_association', methods=['POST'])
@@ -62,16 +54,16 @@ def create_association():
 
     insert_association_in_db(name,user_email,unique_color,type,sector)
 
-    return redirect(url_for('admin.create_association'))
+    return redirect(url_for('admin.root'))
 
-@admin.route('/create_association', methods=['GET'])
+@admin.route('/', methods=['GET'])
 @login_required
 @admin_required
-def create_association_get():
+def root():
     """get route for rendering template of the assocation creating"""
     # Fetching dropdown options from database
     colors = EnumColor.query.all()
     types = EnumType.query.all()
     sectors = EnumSector.query.all()
-    return render_template('create_association.html', colors=colors, types=types, sectors=sectors)
+    return render_template('admin.html', colors=colors, types=types, sectors=sectors)
 

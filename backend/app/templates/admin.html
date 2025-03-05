@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin {% endblock %}
+{% block link %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/param.css' )}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/utils.css' )}}">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> -->
+
+{% endblock %}
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/babel-standalone/babel.min.js"></script>
+
+<script>
+    function showPage(pageId) {
+        document.querySelectorAll('.content').forEach(page => {
+            page.classList.remove('active');
+        });
+        document.getElementById(pageId).classList.add('active');
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+
+    <h1>Modif Admin</h1>
+
+    <nav>
+        <button class="button-50" onclick="showPage('simple')">Simple</button>
+        <button class="button-50" onclick="showPage('liste_td')">Liste TD</button>
+        <button class="button-50" onclick="showPage('contact')">Contact</button>
+    </nav>
+
+    <div id="simple" class="content active">
+        <div class="container mt-5">
+            <h2>Create an Association</h2>
+            <form action="{{url_for('admin.create_association')}}" method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Association Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="user_email" class="form-label">User Email</label>
+                    <input type="email" class="form-control" id="user_email" name="user_email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="unique_color" class="form-label">Unique Color</label>
+                    <select class="form-control" id="unique_color" name="unique_color" required>
+                        {% for color in colors %}
+                        <option value="{{ color.value }}">{{ color.value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="type" class="form-label">Type</label>
+                    <select class="form-control" id="type" name="type" required>
+                        {% for t in types %}
+                        <option value="{{ t.name }}">{{ t.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="sector" class="form-label">Sector</label>
+                    <select class="form-control" id="sector" name="sector" required>
+                        {% for s in sectors %}
+                        <option value="{{ s.name }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Association</button>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="text-center">
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+                {% endwith %}
+            </form>
+        </div>
+    </div>
+
+    <div id="liste_td" class="content">
+        <h3>Liste des groupes</h3>
+        <div id="app"></div>
+    </div>
+
+    <div id="contact" class="content">
+        <h2>Contactez nous</h2>
+        <p>Endroit pour signaler bug / proposer des trucs</p>
+    </div>
+
+
+
+
+
+{% endblock %}
+
+
