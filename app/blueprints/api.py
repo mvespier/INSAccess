@@ -46,6 +46,8 @@ from ..models import EnumColor, EnumSector, EnumType, GroupTD, InsaClass, UserLi
 api = Blueprint('api', __name__, url_prefix = '/api/')
 CORS(api, origins = ["http://localhost:3000", "http://172.18.26.13:3000"], supports_credentials=True)
 
+
+#//////////// API FOR CLASS FETCHING //////////////#
 @api.route('get_day/<string:day>',methods =["GET"])
 @login_required
 def get_day(day):
@@ -107,12 +109,6 @@ def get_month(day):
 
     return get_json_output(insa_classes)
 
-@api.route('is_connected',methods =["GET"])
-def get_is_connected():
-    """return a json bool for front"""
-    return jsonify({"is_connected":current_user.is_authenticated});
-
-
 @api.route('get_year/<string:day>',methods =["GET"])
 @login_required
 def get_year(day):
@@ -168,7 +164,10 @@ def get_json_output(insa_classes):
         }
         for insa_class in insa_classes  
     ])
-    
+
+#//////////// API FOR PARAMETERS //////////////#
+
+
 @api.route('/get_tds', methods=['GET'])
 @login_required
 def manage_td():
@@ -176,3 +175,10 @@ def manage_td():
     all_tds = [td.name for td in GroupTD.query.all()]
 
     return jsonify({ "user_tds" : user_tds, "all_tds" : all_tds})
+
+#//////////// API FOR CONNECTION //////////////#
+
+@api.route('is_connected',methods =["GET"])
+def get_is_connected():
+    """return a json bool for front"""
+    return jsonify({"is_connected":current_user.is_authenticated});

@@ -2,13 +2,11 @@ flask
 flask_login
 flask_sqlalchemy
 flask_cors
-Pillow
 flask_mail
 pytz
 pymysql
 Flask-WTF 
 flask-bootstrap
-pandas
 PyYAML
 mysqlclient
 Jinja2
