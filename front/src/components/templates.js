@@ -17,7 +17,7 @@ const Loading = () => {
     }
     return (
         <div style={style}>
-            <img src={coincoin} alt={'image not found'} style={{"width":"30vh", "alignSelf":"center"}}></img>
+            <img id="rotating-logo" src={coincoin} alt={'image not found'} style={{"width":"30vh", "alignSelf":"center"}}></img>
         </div>
     )
 }
