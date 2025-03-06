@@ -3,6 +3,7 @@ import constantes from './constants.js'
 import { useWindowDimensions, LoadData } from './randomUtils.js'
 import {NavLink} from 'react-router-dom'
 import { useState } from 'react'
+import { Loading, Error } from '../components/templates.js'
 
 const getEventHeight = (start_index, end_index, nb_div) => {
   return ((end_index-start_index)/(nb_div+1))*100
@@ -115,10 +116,9 @@ const AllEvents = ({start, data_path}) => {
 
   let {data, error, loading} = LoadData(data_path);
 
-  if (loading) return <p>Chargement...</p>;
+  if (loading) return <Loading />;
   if (error) {
-    console.log("Error : "+error);
-    return <p>Erreur lors de la récupération des cours, vérifiez que vous êtes bien connectés. Si le problème persiste, envoyez nous un message.</p>;
+    return <Error message={"Erreur lors de la récupération des cours, vérifiez que vous êtes bien connectés. Si le problème persiste, envoyez nous un message."}/>;
   }
 
   function handleDay(direction, value){
